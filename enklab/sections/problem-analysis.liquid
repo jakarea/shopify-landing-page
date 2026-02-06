@@ -1,0 +1,278 @@
+<section class="section section-muted">
+	<div class="container">
+		<div class="max-w-6xl">
+			<div class="section-header">
+				<span class="section-label" data-translate="problem_section_label">{{ section.settings.section_label }}</span>
+				<h2 class="section-title" data-translate="problem_section_title">{{ section.settings.title }}</h2>
+			</div>
+			<div class="problem-grid">
+				<div class="problem-card">
+					<div class="icon"><i class="fas {{ section.settings.card_1_icon }}"></i></div>
+					<h3 data-translate="problem_card_1_title">{{ section.settings.card_1_title }}</h3>
+					<p data-translate="problem_card_1_desc">{{ section.settings.card_1_desc }}</p>
+				</div>
+				<div class="problem-card">
+					<div class="icon"><i class="fas {{ section.settings.card_2_icon }}"></i></div>
+					<h3 data-translate="problem_card_2_title">{{ section.settings.card_2_title }}</h3>
+					<p data-translate="problem_card_2_desc">{{ section.settings.card_2_desc }}</p>
+				</div>
+				<div class="problem-card">
+					<div class="icon"><i class="fas {{ section.settings.card_3_icon }}"></i></div>
+					<h3 data-translate="problem_card_3_title">{{ section.settings.card_3_title }}</h3>
+					<p data-translate="problem_card_3_desc">{{ section.settings.card_3_desc }}</p>
+				</div>
+				<div class="problem-card">
+					<div class="icon"><i class="fas {{ section.settings.card_4_icon }}"></i></div>
+					<h3 data-translate="problem_card_4_title">{{ section.settings.card_4_title }}</h3>
+					<p data-translate="problem_card_4_desc">{{ section.settings.card_4_desc }}</p>
+				</div>
+				<div class="problem-card">
+					<div class="icon"><i class="fas {{ section.settings.card_5_icon }}"></i></div>
+					<h3 data-translate="problem_card_5_title">{{ section.settings.card_5_title }}</h3>
+					<p data-translate="problem_card_5_desc">{{ section.settings.card_5_desc }}</p>
+				</div>
+				<div class="problem-card">
+					<div class="icon"><i class="fas {{ section.settings.card_6_icon }}"></i></div>
+					<h3 data-translate="problem_card_6_title">{{ section.settings.card_6_title }}</h3>
+					<p data-translate="problem_card_6_desc">{{ section.settings.card_6_desc }}</p>
+				</div>
+			</div>
+			<div class="solution-box">
+				<div>
+					<div class="solution-badge"><i class="fas fa-lightbulb"></i> <span data-translate="problem_solution_badge">{{ section.settings.solution_badge }}</span></div>
+					<h3 data-translate="problem_solution_title">{{ section.settings.solution_title }}</h3>
+					<p data-translate="problem_solution_desc">{{ section.settings.solution_desc }}</p>
+					<ul class="solution-features">
+						<li><i class="fas fa-check-circle"></i> <span data-translate="problem_solution_feature_1">{{ section.settings.solution_feature_1 }}</span></li>
+						<li><i class="fas fa-check-circle"></i> <span data-translate="problem_solution_feature_2">{{ section.settings.solution_feature_2 }}</span></li>
+						<li><i class="fas fa-check-circle"></i> <span data-translate="problem_solution_feature_3">{{ section.settings.solution_feature_3 }}</span></li>
+						<li><i class="fas fa-check-circle"></i> <span data-translate="problem_solution_feature_4">{{ section.settings.solution_feature_4 }}</span></li>
+					</ul>
+				</div>
+				<div class="solution-image">
+					{% if section.settings.preview_image %}
+					<img src="{{ section.settings.preview_image | image_url: width: 800 }}" alt="{{ section.settings.preview_alt }}" data-translate-alt="problem_preview_alt" loading="lazy">
+					{% else %}
+					<img src="{{ 'images/jp_3_1.webp' | asset_url }}" alt="{{ section.settings.preview_alt }}" data-translate-alt="problem_preview_alt" loading="lazy">
+					{% endif %}
+					<div class="badge" data-translate="problem_preview_badge">{{ section.settings.preview_badge }}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% schema %}
+{
+  "name": "Problem Analysis",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "section_label",
+      "label": "Section Label",
+      "default": "The Problem"
+    },
+    {
+      "type": "html",
+      "id": "title",
+      "label": "Section Title",
+      "default": "You Invested in an E-Ink Tablet.<br><span style=\"color: var(--muted-foreground);\">But Is It Really Working for You?</span>"
+    },
+    {
+      "type": "header",
+      "content": "Problem Cards"
+    },
+    {
+      "type": "text",
+      "id": "card_1_icon",
+      "label": "Card 1 Icon",
+      "default": "fa-exclamation-triangle",
+      "info": "Font Awesome icon class (e.g., fa-exclamation-triangle)"
+    },
+    {
+      "type": "text",
+      "id": "card_1_title",
+      "label": "Card 1 Title",
+      "default": "Blank Page Syndrome"
+    },
+    {
+      "type": "textarea",
+      "id": "card_1_desc",
+      "label": "Card 1 Description",
+      "default": "You open your tablet and stare at an empty screen, unsure where to start."
+    },
+    {
+      "type": "text",
+      "id": "card_2_icon",
+      "label": "Card 2 Icon",
+      "default": "fa-clock",
+      "info": "Font Awesome icon class (e.g., fa-clock)"
+    },
+    {
+      "type": "text",
+      "id": "card_2_title",
+      "label": "Card 2 Title",
+      "default": "Hours Wasted on Setup"
+    },
+    {
+      "type": "textarea",
+      "id": "card_2_desc",
+      "label": "Card 2 Description",
+      "default": "Creating templates from scratch takes forever. By the time you finish, your motivation is gone."
+    },
+    {
+      "type": "text",
+      "id": "card_3_icon",
+      "label": "Card 3 Icon",
+      "default": "fa-sync-alt",
+      "info": "Font Awesome icon class (e.g., fa-sync-alt)"
+    },
+    {
+      "type": "text",
+      "id": "card_3_title",
+      "label": "Card 3 Title",
+      "default": "Lost After Updates"
+    },
+    {
+      "type": "textarea",
+      "id": "card_3_desc",
+      "label": "Card 3 Description",
+      "default": "Firmware updates break your carefully organized notebooks. You're back to square one."
+    },
+    {
+      "type": "text",
+      "id": "card_4_icon",
+      "label": "Card 4 Icon",
+      "default": "fa-bullseye",
+      "info": "Font Awesome icon class (e.g., fa-bullseye)"
+    },
+    {
+      "type": "text",
+      "id": "card_4_title",
+      "label": "Card 4 Title",
+      "default": "No Clear System"
+    },
+    {
+      "type": "textarea",
+      "id": "card_4_desc",
+      "label": "Card 4 Description",
+      "default": "Without structure, your notes become a disorganized mess that's impossible to navigate."
+    },
+    {
+      "type": "text",
+      "id": "card_5_icon",
+      "label": "Card 5 Icon",
+      "default": "fa-chart-line",
+      "info": "Font Awesome icon class (e.g., fa-chart-line)"
+    },
+    {
+      "type": "text",
+      "id": "card_5_title",
+      "label": "Card 5 Title",
+      "default": "Productivity Plateau"
+    },
+    {
+      "type": "textarea",
+      "id": "card_5_desc",
+      "label": "Card 5 Description",
+      "default": "You bought the tablet to be more productive, but you're still struggling with the same problems."
+    },
+    {
+      "type": "text",
+      "id": "card_6_icon",
+      "label": "Card 6 Icon",
+      "default": "fa-coffee",
+      "info": "Font Awesome icon class (e.g., fa-coffee)"
+    },
+    {
+      "type": "text",
+      "id": "card_6_title",
+      "label": "Card 6 Title",
+      "default": "Overwhelmed & Frustrated"
+    },
+    {
+      "type": "textarea",
+      "id": "card_6_desc",
+      "label": "Card 6 Description",
+      "default": "The learning curve is steep. You're spending more time figuring out the tool than using it."
+    },
+    {
+      "type": "header",
+      "content": "Solution Box"
+    },
+    {
+      "type": "text",
+      "id": "solution_badge",
+      "label": "Solution Badge",
+      "default": "The Solution"
+    },
+    {
+      "type": "text",
+      "id": "solution_title",
+      "label": "Solution Title",
+      "default": "What If Your Tablet Came Pre-Loaded With Everything You Need?"
+    },
+    {
+      "type": "textarea",
+      "id": "solution_desc",
+      "label": "Solution Description",
+      "default": "Imagine opening your tablet to find professionally designed planners, trackers, and notebooks ready to use. No setup. No frustration. Just pure productivity from day one."
+    },
+    {
+      "type": "text",
+      "id": "solution_feature_1",
+      "label": "Solution Feature 1",
+      "default": "5-second setup"
+    },
+    {
+      "type": "text",
+      "id": "solution_feature_2",
+      "label": "Solution Feature 2",
+      "default": "200+ designs"
+    },
+    {
+      "type": "text",
+      "id": "solution_feature_3",
+      "label": "Solution Feature 3",
+      "default": "Update-proof"
+    },
+    {
+      "type": "text",
+      "id": "solution_feature_4",
+      "label": "Solution Feature 4",
+      "default": "All devices"
+    },
+    {
+      "type": "header",
+      "content": "Preview Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "preview_image",
+      "label": "Preview Image"
+    },
+    {
+      "type": "text",
+      "id": "preview_alt",
+      "label": "Preview Image Alt Text",
+      "default": "e-ink Lab Templates Preview"
+    },
+    {
+      "type": "text",
+      "id": "preview_badge",
+      "label": "Preview Badge",
+      "default": "200+ Designs"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Problem Analysis",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,488 @@
+<section class="section" style="background: var(--background); border-top: 1px solid var(--border);">
+  <div class="container">
+    <div class="max-w-6xl">
+      <div class="section-header">
+        <div class="section-badge accent"><i class="fas fa-infinity"></i> <span data-translate="generator_section_badge">{{ section.settings.section_badge }}</span></div>
+        <h2 class="section-title" data-translate="generator_section_title">{{ section.settings.title }}</h2>
+        <p class="section-subtitle" data-translate="generator_section_subtitle">{{ section.settings.subtitle }}</p>
+      </div>
+      <div class="generator-grid">
+        <div class="generator-demo" style="order: 1;">
+          <div class="live-badge" data-translate="generator_live_badge">{{ section.settings.live_badge }}</div>
+          <div class="generator-counter">
+            <div class="count" id="generation-count" data-target="{{ section.settings.counter_value }}">0</div>
+            <p data-translate="generator_counter_label">{{ section.settings.counter_label }}</p>
+          </div>
+          <div class="generator-preview">
+            <div class="header">
+              <span data-translate="generator_preview_header">{{ section.settings.preview_header }}</span
+              ><span class="label" data-translate="generator_preview_live_demo">{{ section.settings.preview_live_demo }}</span>
+            </div>
+            <div class="generator-option">
+              <div class="label"><i class="fas fa-calendar"></i> <span data-translate="generator_option_year_label">{{ section.settings.option_year_label }}</span></div>
+              <div class="value active-value" id="gen-year">2026</div>
+            </div>
+            <div class="generator-option">
+              <div class="label"><i class="fas fa-th-large"></i> <span data-translate="generator_option_layout_label">{{ section.settings.option_layout_label }}</span></div>
+              <div class="value" id="gen-layout">Minimal</div>
+            </div>
+            <div class="generator-option">
+              <div class="label"><i class="fas fa-circle"></i> <span data-translate="generator_option_start_label">{{ section.settings.option_start_label }}</span></div>
+              <div class="value" id="gen-start">Monday</div>
+            </div>
+            <div class="generator-option">
+              <div class="label"><i class="fas fa-palette"></i> <span data-translate="generator_option_style_label">{{ section.settings.option_style_label }}</span></div>
+              <div class="value" id="gen-style">Clean</div>
+            </div>
+            <div class="generator-status heartbeat"><i class="fas fa-magic"></i> <span data-translate="generator_generating_status">{{ section.settings.generating_status }}</span></div>
+          </div>
+        </div>
+        <div class="generator-features">
+          <div class="generator-feature">
+            <div class="icon primary"><i class="fas fa-random"></i></div>
+            <div>
+              <h3 data-translate="generator_feature1_title">{{ section.settings.feature_1_title }}</h3>
+              <p data-translate="generator_feature1_desc">{{ section.settings.feature_1_desc }}</p>
+            </div>
+          </div>
+          <div class="generator-feature">
+            <div class="icon accent"><i class="fas fa-cog"></i></div>
+            <div>
+              <h3 data-translate="generator_feature2_title">{{ section.settings.feature_2_title }}</h3>
+              <p data-translate="generator_feature2_desc">{{ section.settings.feature_2_desc }}</p>
+            </div>
+          </div>
+          <div class="generator-feature">
+            <div class="icon yellow"><i class="fas fa-sync-alt"></i></div>
+            <div>
+              <h3 data-translate="generator_feature3_title">{{ section.settings.feature_3_title }}</h3>
+              <p data-translate="generator_feature3_desc">{{ section.settings.feature_3_desc }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="generator-stats">
+        <div class="gen-stat">
+          <div class="value primary">{{ section.settings.stat_1_value }}</div>
+          <h3 data-translate="generator_stat1_title">{{ section.settings.stat_1_title }}</h3>
+          <p data-translate="generator_stat1_desc">{{ section.settings.stat_1_desc }}</p>
+        </div>
+        <div class="gen-stat">
+          <div class="value accent">{{ section.settings.stat_2_value }}</div>
+          <h3 data-translate="generator_stat2_title">{{ section.settings.stat_2_title }}</h3>
+          <p data-translate="generator_stat2_desc">{{ section.settings.stat_2_desc }}</p>
+        </div>
+        <div class="gen-stat">
+          <div class="value yellow">{{ section.settings.stat_3_value }}</div>
+          <h3 data-translate="generator_stat3_title">{{ section.settings.stat_3_title }}</h3>
+          <p data-translate="generator_stat3_desc">{{ section.settings.stat_3_desc }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Heartbeat animation for generating status */
+  @keyframes heartbeat {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.8;
+    }
+  }
+
+  .generator-status.heartbeat {
+    animation: heartbeat 4s ease-in-out infinite;
+  }
+
+  /* Active value highlight animation */
+  @keyframes valuePulse {
+    0% {
+      transform: scale(1);
+      text-shadow: 0 0 0 rgba(255, 107, 53, 0);
+    }
+    50% {
+      transform: scale(1.1);
+      text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+    }
+    100% {
+      transform: scale(1);
+      text-shadow: 0 0 0 rgba(255, 107, 53, 0);
+    }
+  }
+
+  .generator-option .value.active-value {
+    animation: valuePulse 2s ease-in-out;
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  /* Counter increment flash */
+  @keyframes counterFlash {
+    0% {
+      color: var(--foreground);
+    }
+    50% {
+      color: var(--primary);
+      text-shadow: 0 0 30px rgba(255, 107, 53, 0.8);
+    }
+    100% {
+      color: var(--foreground);
+    }
+  }
+
+  .count.counter-updating {
+    animation: counterFlash 0.3s ease-out;
+  }
+</style>
+
+<script>
+(function() {
+  // Easing function for smooth analog meter-like animation (easeOutCubic)
+  function easeOutCubic(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  // Parse counter value to extract number and suffix
+  function parseCounterValue(value) {
+    const match = value.match(/^([0-9,]+)(.*)$/);
+    if (match) {
+      return {
+        number: parseInt(match[1].replace(/,/g, ''), 10),
+        suffix: match[2]
+      };
+    }
+    return { number: parseInt(value, 10) || 0, suffix: '' };
+  }
+
+  // Format number with commas
+  function formatNumber(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  // Animate the counter
+  function animateCounter(element, targetNumber, suffix, duration = 2500) {
+    const startTime = performance.now();
+    const startNumber = 0;
+
+    function update(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = easeOutCubic(progress);
+
+      const currentNumber = Math.floor(startNumber + (targetNumber - startNumber) * easedProgress);
+      element.textContent = formatNumber(currentNumber) + suffix;
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      }
+    }
+
+    requestAnimationFrame(update);
+  }
+
+  // Live counter increment - continuous real-time generations
+  function startLiveCounter(counterElement) {
+    let currentCount = parseInt(counterElement.textContent.replace(/,/g, '').replace(/\+.*/, ''), 10);
+
+    // Recursive function with random delays for realistic feel
+    function incrementCounter() {
+      currentCount += 2; // Add 2
+      counterElement.classList.add('counter-updating');
+      counterElement.textContent = formatNumber(currentCount) + '+';
+
+      // Remove flash animation after it completes
+      setTimeout(() => {
+        counterElement.classList.remove('counter-updating');
+      }, 300);
+
+      // Schedule next increment with random delay (0.5 to 3 seconds)
+      const randomDelay = 500 + Math.random() * 2500;
+      setTimeout(incrementCounter, randomDelay);
+    }
+
+    // Start the increment cycle
+    incrementCounter();
+  }
+
+  // Cycle through demo options
+  function startDemoCycling() {
+    const options = {
+      layout: ['Minimal', 'Productivity', 'Journal', 'Compact'],
+      start: ['Monday', 'Sunday', 'Saturday'],
+      style: ['Clean', 'Modern', 'Classic', 'Bold']
+    };
+
+    const elements = {
+      layout: document.getElementById('gen-layout'),
+      start: document.getElementById('gen-start'),
+      style: document.getElementById('gen-style')
+    };
+
+    let activeIndex = 0;
+    const optionKeys = Object.keys(options);
+
+    // Cycle through each option every 2 seconds
+    setInterval(() => {
+      // Remove active class from all
+      Object.values(elements).forEach(el => el.classList.remove('active-value'));
+
+      // Activate current option
+      const currentKey = optionKeys[activeIndex];
+      const currentElement = elements[currentKey];
+      const currentValue = currentElement.textContent;
+      const currentOptions = options[currentKey];
+
+      // Get next value in the array
+      const currentIndex = currentOptions.indexOf(currentValue);
+      const nextIndex = (currentIndex + 1) % currentOptions.length;
+      currentElement.textContent = currentOptions[nextIndex];
+      currentElement.classList.add('active-value');
+
+      // Move to next option
+      activeIndex = (activeIndex + 1) % optionKeys.length;
+    }, 2000);
+  }
+
+  // Initialize counter when section is visible
+  function initCounter() {
+    const counter = document.getElementById('generation-count');
+    if (!counter) return;
+
+    const targetValue = counter.dataset.target || counter.textContent;
+    const { number: targetNumber, suffix } = parseCounterValue(targetValue);
+
+    // Check if element is in viewport
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Start initial animation (300 seconds for ultra-smooth analog meter effect)
+          animateCounter(counter, targetNumber, suffix, 300000);
+
+          // Start live counter increments after initial animation
+          setTimeout(() => {
+            startLiveCounter(counter);
+          }, 300000);
+
+          // Start demo cycling
+          startDemoCycling();
+
+          // Stop observing after animation starts
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 }); // Trigger when 50% visible
+
+    observer.observe(counter);
+  }
+
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCounter);
+  } else {
+    initCounter();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Generator Section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "section_badge",
+      "label": "Section Badge",
+      "default": "Exclusive Technology"
+    },
+    {
+      "type": "html",
+      "id": "title",
+      "label": "Title",
+      "default": "Not Just Templates.<br><span class=\"text-primary\">Infinite Generators.</span>"
+    },
+    {
+      "type": "html",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Unlike static templates, our revolutionary generation system creates <strong style=\"color: var(--foreground);\">unique, personalized layouts</strong> every single time."
+    },
+    {
+      "type": "header",
+      "content": "Features (3 items)"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_title",
+      "label": "Feature 1 Title",
+      "default": "Unlimited Variations"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_1_desc",
+      "label": "Feature 1 Description",
+      "default": "Each template can be regenerated infinitely. Change the date range, layout style, or preferences."
+    },
+    {
+      "type": "text",
+      "id": "feature_2_title",
+      "label": "Feature 2 Title",
+      "default": "Your Preferences, Your Planner"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_2_desc",
+      "label": "Feature 2 Description",
+      "default": "Choose your start day, date format, layout density, and more."
+    },
+    {
+      "type": "text",
+      "id": "feature_3_title",
+      "label": "Feature 3 Title",
+      "default": "Never Pay Again"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_3_desc",
+      "label": "Feature 3 Description",
+      "default": "Buy once, generate forever. Need a new planner for 2027? Just regenerate."
+    },
+    {
+      "type": "header",
+      "content": "Live Demo"
+    },
+    {
+      "type": "text",
+      "id": "live_badge",
+      "label": "Live Badge",
+      "default": "LIVE"
+    },
+    {
+      "type": "text",
+      "id": "counter_value",
+      "label": "Counter Value",
+      "default": "47,832+"
+    },
+    {
+      "type": "text",
+      "id": "counter_label",
+      "label": "Counter Label",
+      "default": "Unique planners generated worldwide"
+    },
+    {
+      "type": "text",
+      "id": "preview_header",
+      "label": "Preview Header",
+      "default": "Generator Preview"
+    },
+    {
+      "type": "text",
+      "id": "preview_live_demo",
+      "label": "Preview Live Demo",
+      "default": "Live Demo"
+    },
+    {
+      "type": "text",
+      "id": "option_year_label",
+      "label": "Option Year Label",
+      "default": "Year"
+    },
+    {
+      "type": "text",
+      "id": "option_layout_label",
+      "label": "Option Layout Label",
+      "default": "Layout"
+    },
+    {
+      "type": "text",
+      "id": "option_start_label",
+      "label": "Option Start Label",
+      "default": "Start Day"
+    },
+    {
+      "type": "text",
+      "id": "option_style_label",
+      "label": "Option Style Label",
+      "default": "Style"
+    },
+    {
+      "type": "text",
+      "id": "generating_status",
+      "label": "Generating Status",
+      "default": "Generating unique planner..."
+    },
+    {
+      "type": "header",
+      "content": "Stats (3 items)"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_value",
+      "label": "Stat 1 Value",
+      "default": "∞"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_title",
+      "label": "Stat 1 Title",
+      "default": "Infinite Generations"
+    },
+    {
+      "type": "textarea",
+      "id": "stat_1_desc",
+      "label": "Stat 1 Description",
+      "default": "No limits, ever"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_value",
+      "label": "Stat 2 Value",
+      "default": "0"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_title",
+      "label": "Stat 2 Title",
+      "default": "Additional Costs"
+    },
+    {
+      "type": "textarea",
+      "id": "stat_2_desc",
+      "label": "Stat 2 Description",
+      "default": "One purchase, forever access"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_value",
+      "label": "Stat 3 Value",
+      "default": "100%"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_title",
+      "label": "Stat 3 Title",
+      "default": "Customizable"
+    },
+    {
+      "type": "textarea",
+      "id": "stat_3_desc",
+      "label": "Stat 3 Description",
+      "default": "Every detail, your choice"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Generator Section",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}

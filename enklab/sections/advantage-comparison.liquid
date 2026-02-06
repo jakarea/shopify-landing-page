@@ -1,0 +1,257 @@
+<section class="section" style="background: var(--background); padding-top: 6rem;">
+  <div class="container"><div class="max-w-6xl">
+    <div class="section-header"><div class="section-badge"><i class="fas fa-award"></i> <span data-translate="advantage_comparison_badge">{{ section.settings.section_badge }}</span></div><h2 class="section-title" data-translate="advantage_comparison_title">{{ section.settings.title }}</h2><p class="section-subtitle" data-translate="advantage_comparison_subtitle">{{ section.settings.subtitle }}</p></div>
+    <div class="comparison-grid">
+      <div class="comparison-card others"><div class="comparison-badge" data-translate="advantage_comparison_others_badge">{{ section.settings.others_badge }}</div><div class="comparison-list">
+        <div class="comparison-item"><div class="icon"><i class="fas fa-times"></i></div><div><div class="text" data-translate="advantage_comparison_others_point1">{{ section.settings.others_point_1 }}</div><div class="detail" data-translate="advantage_comparison_others_detail1">{{ section.settings.others_detail_1 }}</div></div></div>
+        <div class="comparison-item"><div class="icon"><i class="fas fa-times"></i></div><div><div class="text" data-translate="advantage_comparison_others_point2">{{ section.settings.others_point_2 }}</div><div class="detail" data-translate="advantage_comparison_others_detail2">{{ section.settings.others_detail_2 }}</div></div></div>
+        <div class="comparison-item"><div class="icon"><i class="fas fa-times"></i></div><div><div class="text" data-translate="advantage_comparison_others_point3">{{ section.settings.others_point_3 }}</div><div class="detail" data-translate="advantage_comparison_others_detail3">{{ section.settings.others_detail_3 }}</div></div></div>
+        <div class="comparison-item"><div class="icon"><i class="fas fa-times"></i></div><div><div class="text" data-translate="advantage_comparison_others_point4">{{ section.settings.others_point_4 }}</div><div class="detail" data-translate="advantage_comparison_others_detail4">{{ section.settings.others_detail_4 }}</div></div></div>
+        <div class="comparison-item"><div class="icon"><i class="fas fa-times"></i></div><div><div class="text" data-translate="advantage_comparison_others_point5">{{ section.settings.others_point_5 }}</div><div class="detail" data-translate="advantage_comparison_others_detail5">{{ section.settings.others_detail_5 }}</div></div></div>
+        <div class="comparison-item"><div class="icon"><i class="fas fa-times"></i></div><div><div class="text" data-translate="advantage_comparison_others_point6">{{ section.settings.others_point_6 }}</div><div class="detail" data-translate="advantage_comparison_others_detail6">{{ section.settings.others_detail_6 }}</div></div></div>
+      </div></div>
+      <div class="comparison-card highlight"><div class="comparison-badge"><i class="fas fa-magic"></i> <span data-translate="advantage_comparison_us_badge">{{ section.settings.us_badge }}</span></div><div class="comparison-list">
+        <div class="comparison-item"><div class="icon"><i class="fas fa-check"></i></div><div><div class="text" data-translate="advantage_comparison_us_point1">{{ section.settings.us_point_1 }}</div><div class="detail" data-translate="advantage_comparison_us_detail1">{{ section.settings.us_detail_1 }}</div></div></div>
+        <div class="comparison-item"><div class="icon"><i class="fas fa-check"></i></div><div><div class="text" data-translate="advantage_comparison_us_point2">{{ section.settings.us_point_2 }}</div><div class="detail" data-translate="advantage_comparison_us_detail2">{{ section.settings.us_detail_2 }}</div></div></div>
+        <div class="comparison-item"><div class="icon"><i class="fas fa-check"></i></div><div><div class="text" data-translate="advantage_comparison_us_point3">{{ section.settings.us_point_3 }}</div><div class="detail" data-translate="advantage_comparison_us_detail3">{{ section.settings.us_detail_3 }}</div></div></div>
+        <div class="comparison-item"><div class="icon"><i class="fas fa-check"></i></div><div><div class="text" data-translate="advantage_comparison_us_point4">{{ section.settings.us_point_4 }}</div><div class="detail" data-translate="advantage_comparison_us_detail4">{{ section.settings.us_detail_4 }}</div></div></div>
+        <div class="comparison-item"><div class="icon"><i class="fas fa-check"></i></div><div><div class="text" data-translate="advantage_comparison_us_point5">{{ section.settings.us_point_5 }}</div><div class="detail" data-translate="advantage_comparison_us_detail5">{{ section.settings.us_detail_5 }}</div></div></div>
+        <div class="comparison-item"><div class="icon"><i class="fas fa-check"></i></div><div><div class="text" data-translate="advantage_comparison_us_point6">{{ section.settings.us_point_6 }}</div><div class="detail" data-translate="advantage_comparison_us_detail6">{{ section.settings.us_detail_6 }}</div></div></div>
+      </div><div class="comparison-footer"><div class="comparison-stat"><div class="value" data-translate="advantage_comparison_footer_rating">{{ section.settings.footer_rating }}</div><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div></div><div class="comparison-divider"></div><div class="comparison-stat"><div class="value" data-translate="advantage_comparison_footer_customers">{{ section.settings.footer_customers }}</div><div class="label" data-translate="advantage_comparison_footer_customers_label">{{ section.settings.footer_customers_label }}</div></div><div class="comparison-divider"></div><div class="comparison-stat"><div class="value" data-translate="advantage_comparison_footer_countries">{{ section.settings.footer_countries }}</div><div class="label" data-translate="advantage_comparison_footer_countries_label">{{ section.settings.footer_countries_label }}</div></div></div></div>
+    </div>
+  </div></div>
+</section>
+
+{% schema %}
+{
+  "name": "Advantage Comparison",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "section_badge",
+      "label": "Section Badge",
+      "default": "The e-ink Lab Advantage"
+    },
+    {
+      "type": "html",
+      "id": "title",
+      "label": "Title",
+      "default": "Why <span class=\"text-primary\">12,000+ Customers</span><br>Choose Us"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "We're not just selling templates. We're providing a complete productivity transformation."
+    },
+    {
+      "type": "header",
+      "content": "Others Column (6 items)"
+    },
+    {
+      "type": "text",
+      "id": "others_badge",
+      "label": "Others Badge",
+      "default": "❌ Others"
+    },
+    {
+      "type": "text",
+      "id": "others_point_1",
+      "label": "Others Point 1",
+      "default": "Basic designs with no structure"
+    },
+    {
+      "type": "textarea",
+      "id": "others_detail_1",
+      "label": "Others Detail 1",
+      "default": "One generic file fits nobody"
+    },
+    {
+      "type": "text",
+      "id": "others_point_2",
+      "label": "Others Point 2",
+      "default": "One-size-fits-all approach"
+    },
+    {
+      "type": "textarea",
+      "id": "others_detail_2",
+      "label": "Others Detail 2",
+      "default": "No customization options"
+    },
+    {
+      "type": "text",
+      "id": "others_point_3",
+      "label": "Others Point 3",
+      "default": "No updates after purchase"
+    },
+    {
+      "type": "textarea",
+      "id": "others_detail_3",
+      "label": "Others Detail 3",
+      "default": "Outdated within months"
+    },
+    {
+      "type": "text",
+      "id": "others_point_4",
+      "label": "Others Point 4",
+      "default": "Limited device support"
+    },
+    {
+      "type": "textarea",
+      "id": "others_detail_4",
+      "label": "Others Detail 4",
+      "default": "Works on 1-2 devices only"
+    },
+    {
+      "type": "text",
+      "id": "others_point_5",
+      "label": "Others Point 5",
+      "default": "No bonus materials"
+    },
+    {
+      "type": "textarea",
+      "id": "others_detail_5",
+      "label": "Others Detail 5",
+      "default": "Just the bare minimum"
+    },
+    {
+      "type": "text",
+      "id": "others_point_6",
+      "label": "Others Point 6",
+      "default": "Generic customer support"
+    },
+    {
+      "type": "textarea",
+      "id": "others_detail_6",
+      "label": "Others Detail 6",
+      "default": "Days to get a response"
+    },
+    {
+      "type": "header",
+      "content": "e-ink Lab Column (6 items)"
+    },
+    {
+      "type": "text",
+      "id": "us_badge",
+      "label": "Us Badge",
+      "default": "e-ink Lab"
+    },
+    {
+      "type": "text",
+      "id": "us_point_1",
+      "label": "Us Point 1",
+      "default": "200+ professionally designed templates"
+    },
+    {
+      "type": "textarea",
+      "id": "us_detail_1",
+      "label": "Us Detail 1",
+      "default": "Every category covered"
+    },
+    {
+      "type": "text",
+      "id": "us_point_2",
+      "label": "Us Point 2",
+      "default": "Infinite customization options"
+    },
+    {
+      "type": "textarea",
+      "id": "us_detail_2",
+      "label": "Us Detail 2",
+      "default": "Generate unlimited variations"
+    },
+    {
+      "type": "text",
+      "id": "us_point_3",
+      "label": "Us Point 3",
+      "default": "Lifetime updates included free"
+    },
+    {
+      "type": "textarea",
+      "id": "us_detail_3",
+      "label": "Us Detail 3",
+      "default": "New features forever"
+    },
+    {
+      "type": "text",
+      "id": "us_point_4",
+      "label": "Us Point 4",
+      "default": "Works on ALL e-ink devices"
+    },
+    {
+      "type": "textarea",
+      "id": "us_detail_4",
+      "label": "Us Detail 4",
+      "default": "reMarkable, Supernote, Boox, Kindle & more"
+    },
+    {
+      "type": "text",
+      "id": "us_point_5",
+      "label": "Us Point 5",
+      "default": "$100+ worth of bonus materials"
+    },
+    {
+      "type": "textarea",
+      "id": "us_detail_5",
+      "label": "Us Detail 5",
+      "default": "Stickers, covers, guides included"
+    },
+    {
+      "type": "text",
+      "id": "us_point_6",
+      "label": "Us Point 6",
+      "default": "Priority email support"
+    },
+    {
+      "type": "textarea",
+      "id": "us_detail_6",
+      "label": "Us Detail 6",
+      "default": "Response within 24 hours"
+    },
+    {
+      "type": "header",
+      "content": "Footer Stats"
+    },
+    {
+      "type": "text",
+      "id": "footer_rating",
+      "label": "Footer Rating",
+      "default": "4.9/5"
+    },
+    {
+      "type": "text",
+      "id": "footer_customers",
+      "label": "Footer Customers",
+      "default": "12K+"
+    },
+    {
+      "type": "text",
+      "id": "footer_customers_label",
+      "label": "Footer Customers Label",
+      "default": "Customers"
+    },
+    {
+      "type": "text",
+      "id": "footer_countries",
+      "label": "Footer Countries",
+      "default": "50+"
+    },
+    {
+      "type": "text",
+      "id": "footer_countries_label",
+      "label": "Footer Countries Label",
+      "default": "Countries"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Advantage Comparison",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}

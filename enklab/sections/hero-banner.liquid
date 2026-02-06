@@ -1,0 +1,317 @@
+<section class="hero">
+  <div class="hero-image">
+    {% if section.settings.hero_image %}
+      <img src="{{ section.settings.hero_image | image_url: width: 1600 }}" alt="{{ section.settings.image_alt }}" data-translate-alt="hero_banner_image_alt" loading="eager">
+    {% else %}
+      <img src="{{ 'images/jp_1.webp' | asset_url }}" alt="{{ section.settings.image_alt }}" data-translate-alt="hero_banner_image_alt" loading="eager">
+    {% endif %}
+    <div class="hero-stats">
+      <div class="stat-badge"><div class="value" data-translate="stat_1_value">{{ section.settings.stat_1_value }}</div><div class="label" data-translate="stat_1_label">{{ section.settings.stat_1_label }}</div></div>
+      <div class="stat-badge accent"><div class="value" style="color: var(--accent);" data-translate="stat_2_value">{{ section.settings.stat_2_value }}</div><div class="label" data-translate="stat_2_label">{{ section.settings.stat_2_label }}</div></div>
+      <div class="stat-badge yellow"><div style="display: flex; align-items: center; gap: 0.25rem;"><i class="fas fa-star" style="color: #eab308;"></i><span class="value" style="color: var(--foreground);" data-translate="stat_3_value">{{ section.settings.stat_3_value }}</span></div><div class="label" data-translate="stat_3_label">{{ section.settings.stat_3_label }}</div></div>
+    </div>
+  </div>
+  <div class="hero-content">
+    <div class="brand-line"><span data-translate="brand_text">{{ section.settings.brand_text }}</span></div>
+    <h1><span data-translate="headline_before">{{ section.settings.headline_before }}</span><br><span class="highlight" data-translate="headline_highlight">{{ section.settings.headline_highlight }}</span><br><span data-translate="headline_after">{{ section.settings.headline_after }}</span></h1>
+    <p class="hero-desc" data-translate="description">{{ section.settings.description }}</p>
+    <ul class="feature-list">
+      <li><span class="icon"><i class="fas fa-check"></i></span><span data-translate="feature_1">{{ section.settings.feature_1 }}</span></li>
+      <li><span class="icon"><i class="fas fa-check"></i></span><span data-translate="feature_2">{{ section.settings.feature_2 }}</span></li>
+      <li><span class="icon"><i class="fas fa-check"></i></span><span data-translate="feature_3">{{ section.settings.feature_3 }}</span></li>
+      <li><span class="icon"><i class="fas fa-check"></i></span><span data-translate="feature_4">{{ section.settings.feature_4 }}</span></li>
+    </ul>
+    <div>
+      {% assign product_1 = all_products[section.settings.product_1] %}
+      {% assign product_2 = all_products[section.settings.product_2] %}
+      {% assign product_3 = all_products[section.settings.product_3] %}
+      {% if product_1 != blank and product_2 != blank and product_3 != blank %}
+        {% assign variant_1 = product_1.selected_or_first_available_variant %}
+        {% assign variant_2 = product_2.selected_or_first_available_variant %}
+        {% assign variant_3 = product_3.selected_or_first_available_variant %}
+        <button type="button" class="btn-primary hero-add-to-cart"
+          data-variant-1="{{ variant_1.id }}"
+          data-variant-2="{{ variant_2.id }}"
+          data-variant-3="{{ variant_3.id }}">
+          <i class="fas fa-download"></i> <span data-translate="cta_button">{{ section.settings.cta_button }}</span> <i class="fas fa-arrow-right"></i>
+        </button>
+      {% else %}
+        <div style="background: #fee; border: 2px solid #c00; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+          <div style="color: #c00; font-weight: bold; margin-bottom: 0.5rem;">
+            <i class="fas fa-exclamation-triangle"></i> <span data-translate="hero_banner_admin_warning_title">Admin: Products Not Selected</span>
+          </div>
+          <p style="color: #900; margin: 0;">
+            <span data-translate="hero_banner_admin_warning_desc">Please select 3 products in the section settings. Go to</span> <strong><span data-translate="hero_banner_admin_warning_path">Customize → Hero Banner → Select Products</span></strong>
+          </p>
+        </div>
+        <button class="btn-primary" onclick="alert(window.getTranslation('hero_banner_alert_configure_products') || 'Please configure 3 products in section settings (Customize → Hero Banner → Select Products)')">
+          <i class="fas fa-download"></i> <span data-translate="cta_button">{{ section.settings.cta_button }}</span> <i class="fas fa-arrow-right"></i>
+        </button>
+      {% endif %}
+    </div>
+    <div class="hero-social"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><div class="text"><strong data-translate="social_proof_count">{{ section.settings.social_proof_count }}</strong> <span data-translate="social_proof_text">{{ section.settings.social_proof_text }}</span></div></div>
+  </div>
+</section>
+<script>
+(function() {
+  const addToCartButton = document.querySelector('.hero-add-to-cart');
+  if (!addToCartButton) {
+    return;
+  }
+  // Get product IDs from button data attributes
+  const variant1Id = parseInt(addToCartButton.dataset.variant1);
+  const variant2Id = parseInt(addToCartButton.dataset.variant2);
+  const variant3Id = parseInt(addToCartButton.dataset.variant3);
+  const productsToAdd = [
+    {% assign product_1 = all_products[section.settings.product_1] %}
+    {% if product_1 != blank %}
+      {
+        id: {{ product_1.selected_or_first_available_variant.id }},
+        name: "{{ product_1.title | escape }}"
+      },
+    {% endif %}
+    {% assign product_2 = all_products[section.settings.product_2] %}
+    {% if product_2 != blank %}
+      {
+        id: {{ product_2.selected_or_first_available_variant.id }},
+        name: "{{ product_2.title | escape }}"
+      },
+    {% endif %}
+    {% assign product_3 = all_products[section.settings.product_3] %}
+    {% if product_3 != blank %}
+      {
+        id: {{ product_3.selected_or_first_available_variant.id }},
+        name: "{{ product_3.title | escape }}"
+      }
+    {% endif %}
+  ].filter(p => p.id);
+  // Handle add to cart - add all 3 products
+  addToCartButton.addEventListener('click', async function(e) {
+    e.preventDefault();
+    const originalButtonText = this.innerHTML;
+    if (productsToAdd.length === 0) {
+      alert(window.getTranslation('hero_banner_alert_configure_products') || 'Please configure the products in section settings');
+      return;
+    }
+    // Show loading state
+    const addingText = window.getTranslation('hero_banner_adding') || 'Adding...';
+    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + addingText;
+    this.disabled = true;
+    try {
+      // Add all products sequentially
+      for (const product of productsToAdd) {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: product.id,
+            quantity: 1
+          })
+        });
+        if (!response.ok) {
+        }
+      }
+      // Update cart UI
+      if (typeof updateCartUI === 'function') {
+        updateCartUI();
+      }
+      // Show success state
+      const addedText = window.getTranslation('hero_banner_added') || 'Added!';
+      this.innerHTML = '<i class="fas fa-check"></i> ' + addedText;
+      // Open cart drawer
+      setTimeout(() => {
+        if (typeof toggleCart === 'function') {
+          toggleCart();
+        }
+      }, 100);
+      // Reset button after delay
+      setTimeout(() => {
+        this.innerHTML = originalButtonText;
+        this.disabled = false;
+      }, 2000);
+    } catch (error) {
+      alert(window.getTranslation('hero_banner_alert_add_failed') || 'Failed to add products to cart. Please try again.');
+      this.innerHTML = originalButtonText;
+      this.disabled = false;
+    }
+  });
+})();
+</script>
+{% schema %}
+{
+  "name": "Hero Banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product Selection (3 Products)"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product 1",
+      "info": "First product to add to cart when CTA is clicked"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product 2",
+      "info": "Second product to add to cart when CTA is clicked"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product 3",
+      "info": "Third product to add to cart when CTA is clicked"
+    },
+    {
+      "type": "header",
+      "content": "Hero Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image Alt Text",
+      "default": "E-ink tablet with professional templates"
+    },
+    {
+      "type": "header",
+      "content": "Hero Stats"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_value",
+      "label": "Stat 1 Value",
+      "default": "200+"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "label": "Stat 1 Label",
+      "default": "Layouts"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_value",
+      "label": "Stat 2 Value",
+      "default": "12K+"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "label": "Stat 2 Label",
+      "default": "Users"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_value",
+      "label": "Stat 3 Value",
+      "default": "4.9"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "label": "Stat 3 Label",
+      "default": "Rating"
+    },
+    {
+      "type": "header",
+      "content": "Hero Content"
+    },
+    {
+      "type": "text",
+      "id": "brand_text",
+      "label": "Brand Text",
+      "default": "e-ink Lab"
+    },
+    {
+      "type": "text",
+      "id": "headline_before",
+      "label": "Headline (Before Highlight)",
+      "default": "Unlock Your"
+    },
+    {
+      "type": "text",
+      "id": "headline_highlight",
+      "label": "Headline (Highlighted)",
+      "default": "Productivity"
+    },
+    {
+      "type": "text",
+      "id": "headline_after",
+      "label": "Headline (After Highlight)",
+      "default": "Potential"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Transform your reMarkable, Supernote, or Boox tablet with professionally designed planners. One-time purchase, lifetime access, instant download."
+    },
+    {
+      "type": "header",
+      "content": "Features"
+    },
+    {
+      "type": "text",
+      "id": "feature_1",
+      "label": "Feature 1",
+      "default": "Works on ALL major e-ink tablets"
+    },
+    {
+      "type": "text",
+      "id": "feature_2",
+      "label": "Feature 2",
+      "default": "Instant PDF download after purchase"
+    },
+    {
+      "type": "text",
+      "id": "feature_3",
+      "label": "Feature 3",
+      "default": "Free lifetime updates included"
+    },
+    {
+      "type": "text",
+      "id": "feature_4",
+      "label": "Feature 4",
+      "default": "ADHD-friendly design system"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "text",
+      "id": "cta_button",
+      "label": "CTA Button Text",
+      "default": "Get Full Collection"
+    },
+    {
+      "type": "header",
+      "content": "Social Proof"
+    },
+    {
+      "type": "text",
+      "id": "social_proof_count",
+      "label": "Social Proof Count",
+      "default": "12,000+"
+    },
+    {
+      "type": "text",
+      "id": "social_proof_text",
+      "label": "Social Proof Text",
+      "default": "satisfied customers worldwide"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}

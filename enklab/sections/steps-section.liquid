@@ -1,0 +1,94 @@
+<section class="section section-muted">
+  <div class="container"><div class="max-w-6xl">
+    <div class="section-header"><span class="section-label" data-translate="steps_label">{{ section.settings.section_label }}</span><h2 class="section-title" data-translate="steps_title">{{ section.settings.title }}</h2><p class="section-subtitle" data-translate="steps_subtitle">{{ section.settings.subtitle }}</p></div>
+    <div class="steps-grid">
+      <div class="step-card"><div class="number">1</div><h3 data-translate="steps_step1_title">{{ section.settings.step_1_title }}</h3><p data-translate="steps_step1_desc">{{ section.settings.step_1_desc }}</p><div class="step-arrow"><i class="fas fa-arrow-right"></i></div></div>
+      <div class="step-card"><div class="number">2</div><h3 data-translate="steps_step2_title">{{ section.settings.step_2_title }}</h3><p data-translate="steps_step2_desc">{{ section.settings.step_2_desc }}</p><div class="step-arrow"><i class="fas fa-arrow-right"></i></div></div>
+      <div class="step-card"><div class="number">3</div><h3 data-translate="steps_step3_title">{{ section.settings.step_3_title }}</h3><p data-translate="steps_step3_desc">{{ section.settings.step_3_desc }}</p></div>
+    </div>
+  </div></div>
+</section>
+
+{% schema %}
+{
+  "name": "Steps Section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "section_label",
+      "label": "Section Label",
+      "default": "How It Works"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Get Started in 3 Simple Steps"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "From purchase to productivity in under 5 minutes"
+    },
+    {
+      "type": "header",
+      "content": "Step 1"
+    },
+    {
+      "type": "text",
+      "id": "step_1_title",
+      "label": "Step 1 Title",
+      "default": "Choose Your Collection"
+    },
+    {
+      "type": "textarea",
+      "id": "step_1_desc",
+      "label": "Step 1 Description",
+      "default": "Select the Ultimate Collection for all 200+ templates, or pick individual categories."
+    },
+    {
+      "type": "header",
+      "content": "Step 2"
+    },
+    {
+      "type": "text",
+      "id": "step_2_title",
+      "label": "Step 2 Title",
+      "default": "Instant Download"
+    },
+    {
+      "type": "textarea",
+      "id": "step_2_desc",
+      "label": "Step 2 Description",
+      "default": "Get immediate access to your templates. No waiting, no shipping."
+    },
+    {
+      "type": "header",
+      "content": "Step 3"
+    },
+    {
+      "type": "text",
+      "id": "step_3_title",
+      "label": "Step 3 Title",
+      "default": "Start Being Productive"
+    },
+    {
+      "type": "textarea",
+      "id": "step_3_desc",
+      "label": "Step 3 Description",
+      "default": "Transfer to your device and start using. Each template takes less than 5 seconds to set up."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Steps Section",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}

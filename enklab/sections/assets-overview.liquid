@@ -1,0 +1,250 @@
+<section class="section section-muted">
+  <div class="container"><div class="max-w-6xl">
+    <div class="section-header"><span class="section-label" data-translate="assets_label">{{ section.settings.section_label }}</span><h2 class="section-title" data-translate="assets_title">{{ section.settings.title }}</h2><p class="section-subtitle" data-translate="assets_subtitle">{{ section.settings.subtitle }}</p></div>
+    <div class="whats-inside-grid">
+      <div class="inside-card"><div class="icon"><i class="fas fa-calendar"></i></div><div class="count" data-translate="assets_card1_count">{{ section.settings.card_1_count }}</div><h3 data-translate="assets_card1_title">{{ section.settings.card_1_title }}</h3><p data-translate="assets_card1_desc">{{ section.settings.card_1_desc }}</p></div>
+      <div class="inside-card"><div class="icon"><i class="fas fa-bullseye"></i></div><div class="count" data-translate="assets_card2_count">{{ section.settings.card_2_count }}</div><h3 data-translate="assets_card2_title">{{ section.settings.card_2_title }}</h3><p data-translate="assets_card2_desc">{{ section.settings.card_2_desc }}</p></div>
+      <div class="inside-card"><div class="icon"><i class="fas fa-file-alt"></i></div><div class="count" data-translate="assets_card3_count">{{ section.settings.card_3_count }}</div><h3 data-translate="assets_card3_title">{{ section.settings.card_3_title }}</h3><p data-translate="assets_card3_desc">{{ section.settings.card_3_desc }}</p></div>
+      <div class="inside-card"><div class="icon"><i class="fas fa-chart-bar"></i></div><div class="count" data-translate="assets_card4_count">{{ section.settings.card_4_count }}</div><h3 data-translate="assets_card4_title">{{ section.settings.card_4_title }}</h3><p data-translate="assets_card4_desc">{{ section.settings.card_4_desc }}</p></div>
+      <div class="inside-card"><div class="icon"><i class="fas fa-book-open"></i></div><div class="count" data-translate="assets_card5_count">{{ section.settings.card_5_count }}</div><h3 data-translate="assets_card5_title">{{ section.settings.card_5_title }}</h3><p data-translate="assets_card5_desc">{{ section.settings.card_5_desc }}</p></div>
+      <div class="inside-card"><div class="icon"><i class="fas fa-palette"></i></div><div class="count" data-translate="assets_card6_count">{{ section.settings.card_6_count }}</div><h3 data-translate="assets_card6_title">{{ section.settings.card_6_title }}</h3><p data-translate="assets_card6_desc">{{ section.settings.card_6_desc }}</p></div>
+      <div class="inside-card"><div class="icon"><i class="fas fa-globe"></i></div><div class="count" data-translate="assets_card7_count">{{ section.settings.card_7_count }}</div><h3 data-translate="assets_card7_title">{{ section.settings.card_7_title }}</h3><p data-translate="assets_card7_desc">{{ section.settings.card_7_desc }}</p></div>
+      <div class="inside-card"><div class="icon"><i class="fas fa-heart"></i></div><div class="count" data-translate="assets_card8_count">{{ section.settings.card_8_count }}</div><h3 data-translate="assets_card8_title">{{ section.settings.card_8_title }}</h3><p data-translate="assets_card8_desc">{{ section.settings.card_8_desc }}</p></div>
+    </div>
+    <div class="bonus-grid">
+      <div class="bonus-card"><div class="icon"><i class="fas fa-gift"></i></div><div><div class="label" data-translate="assets_bonus_label">{{ section.settings.bonus_label }}</div><h3 data-translate="assets_bonus1_title">{{ section.settings.bonus_1_title }}</h3><p data-translate="assets_bonus1_desc">{{ section.settings.bonus_1_desc }}</p></div></div>
+      <div class="bonus-card"><div class="icon"><i class="fas fa-brain"></i></div><div><div class="label" data-translate="assets_bonus_label">{{ section.settings.bonus_label }}</div><h3 data-translate="assets_bonus2_title">{{ section.settings.bonus_2_title }}</h3><p data-translate="assets_bonus2_desc">{{ section.settings.bonus_2_desc }}</p></div></div>
+      <div class="bonus-card"><div class="icon"><i class="fas fa-layer-group"></i></div><div><div class="label" data-translate="assets_bonus_label">{{ section.settings.bonus_label }}</div><h3 data-translate="assets_bonus3_title">{{ section.settings.bonus_3_title }}</h3><p data-translate="assets_bonus3_desc">{{ section.settings.bonus_3_desc }}</p></div></div>
+    </div>
+  </div></div>
+</section>
+
+{% schema %}
+{
+  "name": "Assets Overview",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "section_label",
+      "label": "Section Label",
+      "default": "What's Inside"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Everything You Get With e-ink Lab"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "A complete ecosystem of productivity tools for your e-ink device"
+    },
+    {
+      "type": "header",
+      "content": "Asset Cards (8 items)"
+    },
+    {
+      "type": "text",
+      "id": "card_1_count",
+      "label": "Card 1 Count",
+      "default": "40+"
+    },
+    {
+      "type": "text",
+      "id": "card_1_title",
+      "label": "Card 1 Title",
+      "default": "Daily Planners"
+    },
+    {
+      "type": "textarea",
+      "id": "card_1_desc",
+      "label": "Card 1 Description",
+      "default": "Productivity layouts, habit trackers"
+    },
+    {
+      "type": "text",
+      "id": "card_2_count",
+      "label": "Card 2 Count",
+      "default": "35+"
+    },
+    {
+      "type": "text",
+      "id": "card_2_title",
+      "label": "Card 2 Title",
+      "default": "Goal Trackers"
+    },
+    {
+      "type": "textarea",
+      "id": "card_2_desc",
+      "label": "Card 2 Description",
+      "default": "OKRs, vision boards, milestones"
+    },
+    {
+      "type": "text",
+      "id": "card_3_count",
+      "label": "Card 3 Count",
+      "default": "30+"
+    },
+    {
+      "type": "text",
+      "id": "card_3_title",
+      "label": "Card 3 Title",
+      "default": "Project Managers"
+    },
+    {
+      "type": "textarea",
+      "id": "card_3_desc",
+      "label": "Card 3 Description",
+      "default": "Kanban boards, timelines, tasks"
+    },
+    {
+      "type": "text",
+      "id": "card_4_count",
+      "label": "Card 4 Count",
+      "default": "25+"
+    },
+    {
+      "type": "text",
+      "id": "card_4_title",
+      "label": "Card 4 Title",
+      "default": "Finance Tools"
+    },
+    {
+      "type": "textarea",
+      "id": "card_4_desc",
+      "label": "Card 4 Description",
+      "default": "Budgets, expense logs, investments"
+    },
+    {
+      "type": "text",
+      "id": "card_5_count",
+      "label": "Card 5 Count",
+      "default": "20+"
+    },
+    {
+      "type": "text",
+      "id": "card_5_title",
+      "label": "Card 5 Title",
+      "default": "Study & Learning"
+    },
+    {
+      "type": "textarea",
+      "id": "card_5_desc",
+      "label": "Card 5 Description",
+      "default": "Note templates, flashcard systems"
+    },
+    {
+      "type": "text",
+      "id": "card_6_count",
+      "label": "Card 6 Count",
+      "default": "25+"
+    },
+    {
+      "type": "text",
+      "id": "card_6_title",
+      "label": "Card 6 Title",
+      "default": "Creative Spaces"
+    },
+    {
+      "type": "textarea",
+      "id": "card_6_desc",
+      "label": "Card 6 Description",
+      "default": "Sketch templates, design grids"
+    },
+    {
+      "type": "text",
+      "id": "card_7_count",
+      "label": "Card 7 Count",
+      "default": "15+"
+    },
+    {
+      "type": "text",
+      "id": "card_7_title",
+      "label": "Card 7 Title",
+      "default": "Travel Journals"
+    },
+    {
+      "type": "textarea",
+      "id": "card_7_desc",
+      "label": "Card 7 Description",
+      "default": "Trip planners, packing lists"
+    },
+    {
+      "type": "text",
+      "id": "card_8_count",
+      "label": "Card 8 Count",
+      "default": "20+"
+    },
+    {
+      "type": "text",
+      "id": "card_8_title",
+      "label": "Card 8 Title",
+      "default": "Wellness Logs"
+    },
+    {
+      "type": "textarea",
+      "id": "card_8_desc",
+      "label": "Card 8 Description",
+      "default": "Mood trackers, gratitude journals"
+    },
+    {
+      "type": "header",
+      "content": "Bonus Items (3 items)"
+    },
+    {
+      "type": "text",
+      "id": "bonus_label",
+      "label": "Bonus Label",
+      "default": "Free Bonus"
+    },
+    {
+      "type": "text",
+      "id": "bonus_1_title",
+      "label": "Bonus 1 Title",
+      "default": "500+ Bonus Stickers"
+    },
+    {
+      "type": "textarea",
+      "id": "bonus_1_desc",
+      "label": "Bonus 1 Description",
+      "default": "Traceable vector icons for your notes"
+    },
+    {
+      "type": "text",
+      "id": "bonus_2_title",
+      "label": "Bonus 2 Title",
+      "default": "Mental Models Guide"
+    },
+    {
+      "type": "textarea",
+      "id": "bonus_2_desc",
+      "label": "Bonus 2 Description",
+      "default": "Strategic thinking toolkit with 52 frameworks"
+    },
+    {
+      "type": "text",
+      "id": "bonus_3_title",
+      "label": "Bonus 3 Title",
+      "default": "Cover Collection"
+    },
+    {
+      "type": "textarea",
+      "id": "bonus_3_desc",
+      "label": "Bonus 3 Description",
+      "default": "22 exclusive covers to personalize notebooks"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Assets Overview",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}

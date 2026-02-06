@@ -1,0 +1,634 @@
+<section class="section section-muted">
+  <div class="container">
+    <div class="max-w-6xl">
+      <div class="section-header">
+        <span class="section-label" data-translate="footer_closure_section_label">{{ 'footer_closure.section_label' | t }}</span>
+        <h2 class="section-title" data-translate="footer_closure_title">{{ 'footer_closure.title' | t }}</h2>
+        <p class="section-subtitle" data-translate="footer_closure_subtitle">{{ 'footer_closure.subtitle' | t }}</p>
+      </div>
+      <div class="guarantees-grid">
+        <div class="guarantee-card">
+          <div class="icon"><i class="fas fa-shield-alt"></i></div>
+          <h3 data-translate="secure_payment">{{ section.settings.guarantee_1_title }}</h3>
+          <p data-translate="ssl_encrypted">{{ section.settings.guarantee_1_desc }}</p>
+        </div>
+        <div class="guarantee-card">
+          <div class="icon"><i class="fas fa-download"></i></div>
+          <h3 data-translate="instant_access">{{ section.settings.guarantee_2_title }}</h3>
+          <p data-translate="download_now">{{ section.settings.guarantee_2_desc }}</p>
+        </div>
+        <div class="guarantee-card">
+          <div class="icon"><i class="fas fa-sync-alt"></i></div>
+          <h3 data-translate="forever_yours">{{ section.settings.guarantee_3_title }}</h3>
+          <p data-translate="stat_lifetime">{{ section.settings.guarantee_3_desc }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section" style="background: var(--background);" id="faq">
+  <div class="container">
+    <div class="max-w-4xl">
+      <div class="section-header">
+        <span class="section-label" data-translate="footer_closure_faq_label">{{ 'footer_closure.faq_label' | t }}</span>
+        <h2 class="section-title" data-translate="footer_closure_faq_title">{{ 'footer_closure.faq_title' | t }}</h2>
+        <p class="section-subtitle" data-translate="footer_closure_faq_subtitle">{{ 'footer_closure.faq_subtitle' | t }}</p>
+      </div>
+      <div class="faq-list">
+        {% if section.blocks.size > 0 %}
+          {% for block in section.blocks %}
+            <div class="faq-item" {{ block.shopify_attributes }}>
+              <div
+                class="faq-question"
+                style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; gap: 1rem; cursor: pointer;"
+              >
+                <h3 style="font-size: 1.2rem; font-weight: 600; margin: 0; color: var(--foreground); flex: 1;">
+                  {{ block.settings.question }}
+                </h3>
+                <i
+                  class="fas fa-chevron-right"
+                  style="color: var(--muted-foreground); transition: transform 0.3s; flex-shrink: 0;"
+                ></i>
+              </div>
+              <div class="faq-answer" style="display: none; padding: 0 1.5rem 1.5rem;">
+                <p style="font-size: 0.875rem; color: var(--muted-foreground); line-height: 1.7; margin: 0;">
+                  {{ block.settings.answer }}
+                </p>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          {%- comment -%} Default FAQs shown when no blocks are added {%- endcomment -%}
+          {%- comment -%} Default FAQ 1 {%- endcomment -%}
+          <div class="faq-item">
+            <div
+              class="faq-question"
+              style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; gap: 1rem; cursor: pointer;"
+            >
+              <h3 style="font-size: 1.2rem; font-weight: 600; margin: 0; color: var(--foreground); flex: 1;" data-translate="footer_closure_faq_1_question">
+                {{ 'footer_closure.faq_1_question' | t }}
+              </h3>
+              <i
+                class="fas fa-chevron-right"
+                style="color: var(--muted-foreground); transition: transform 0.3s; flex-shrink: 0;"
+              ></i>
+            </div>
+            <div class="faq-answer" style="display: none; padding: 0 1.5rem 1.5rem;">
+              <p style="font-size: 0.875rem; color: var(--muted-foreground); line-height: 1.7; margin: 0;" data-translate="footer_closure_faq_1_answer">
+                {{ 'footer_closure.faq_1_answer' | t }}
+              </p>
+            </div>
+          </div>
+          {%- comment -%} Default FAQ 2 {%- endcomment -%}
+          <div class="faq-item">
+            <div
+              class="faq-question"
+              style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; gap: 1rem; cursor: pointer;"
+            >
+              <h3 style="font-size: 1.2rem; font-weight: 600; margin: 0; color: var(--foreground); flex: 1;" data-translate="footer_closure_faq_2_question">
+                {{ 'footer_closure.faq_2_question' | t }}
+              </h3>
+              <i
+                class="fas fa-chevron-right"
+                style="color: var(--muted-foreground); transition: transform 0.3s; flex-shrink: 0;"
+              ></i>
+            </div>
+            <div class="faq-answer" style="display: none; padding: 0 1.5rem 1.5rem;">
+              <p style="font-size: 0.875rem; color: var(--muted-foreground); line-height: 1.7; margin: 0;" data-translate="footer_closure_faq_2_answer">
+                {{ 'footer_closure.faq_2_answer' | t }}
+              </p>
+            </div>
+          </div>
+          {%- comment -%} Default FAQ 3 {%- endcomment -%}
+          <div class="faq-item">
+            <div
+              class="faq-question"
+              style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; gap: 1rem; cursor: pointer;"
+            >
+              <h3 style="font-size: 1.2rem; font-weight: 600; margin: 0; color: var(--foreground); flex: 1;" data-translate="footer_closure_faq_3_question">
+                {{ 'footer_closure.faq_3_question' | t }}
+              </h3>
+              <i
+                class="fas fa-chevron-right"
+                style="color: var(--muted-foreground); transition: transform 0.3s; flex-shrink: 0;"
+              ></i>
+            </div>
+            <div class="faq-answer" style="display: none; padding: 0 1.5rem 1.5rem;">
+              <p style="font-size: 0.875rem; color: var(--muted-foreground); line-height: 1.7; margin: 0;" data-translate="footer_closure_faq_3_answer">
+                {{ 'footer_closure.faq_3_answer' | t }}
+              </p>
+            </div>
+          </div>
+          {%- comment -%} Default FAQ 4 {%- endcomment -%}
+          <div class="faq-item">
+            <div
+              class="faq-question"
+              style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; gap: 1rem; cursor: pointer;"
+            >
+              <h3 style="font-size: 1.2rem; font-weight: 600; margin: 0; color: var(--foreground); flex: 1;" data-translate="footer_closure_faq_4_question">
+                {{ 'footer_closure.faq_4_question' | t }}
+              </h3>
+              <i
+                class="fas fa-chevron-right"
+                style="color: var(--muted-foreground); transition: transform 0.3s; flex-shrink: 0;"
+              ></i>
+            </div>
+            <div class="faq-answer" style="display: none; padding: 0 1.5rem 1.5rem;">
+              <p style="font-size: 0.875rem; color: var(--muted-foreground); line-height: 1.7; margin: 0;" data-translate="footer_closure_faq_4_answer">
+                {{ 'footer_closure.faq_4_answer' | t }}
+              </p>
+            </div>
+          </div>
+          {%- comment -%} Default FAQ 5 {%- endcomment -%}
+          <div class="faq-item">
+            <div
+              class="faq-question"
+              style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; gap: 1rem; cursor: pointer;"
+            >
+              <h3 style="font-size: 1.2rem; font-weight: 600; margin: 0; color: var(--foreground); flex: 1;" data-translate="footer_closure_faq_5_question">
+                {{ 'footer_closure.faq_5_question' | t }}
+              </h3>
+              <i
+                class="fas fa-chevron-right"
+                style="color: var(--muted-foreground); transition: transform 0.3s; flex-shrink: 0;"
+              ></i>
+            </div>
+            <div class="faq-answer" style="display: none; padding: 0 1.5rem 1.5rem;">
+              <p style="font-size: 0.875rem; color: var(--muted-foreground); line-height: 1.7; margin: 0;" data-translate="footer_closure_faq_5_answer">
+                {{ 'footer_closure.faq_5_answer' | t }}
+              </p>
+            </div>
+          </div>
+          {%- comment -%} Default FAQ 6 {%- endcomment -%}
+          <div class="faq-item">
+            <div
+              class="faq-question"
+              style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; gap: 1rem; cursor: pointer;"
+            >
+              <h3 style="font-size: 1.2rem; font-weight: 600; margin: 0; color: var(--foreground); flex: 1;" data-translate="footer_closure_faq_6_question">
+                {{ 'footer_closure.faq_6_question' | t }}
+              </h3>
+              <i
+                class="fas fa-chevron-right"
+                style="color: var(--muted-foreground); transition: transform 0.3s; flex-shrink: 0;"
+              ></i>
+            </div>
+            <div class="faq-answer" style="display: none; padding: 0 1.5rem 1.5rem;">
+              <p style="font-size: 0.875rem; color: var(--muted-foreground); line-height: 1.7; margin: 0;" data-translate="footer_closure_faq_6_answer">
+                {{ 'footer_closure.faq_6_answer' | t }}
+              </p>
+            </div>
+          </div>
+          {%- comment -%} Default FAQ 7 {%- endcomment -%}
+          <div class="faq-item">
+            <div
+              class="faq-question"
+              style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; gap: 1rem; cursor: pointer;"
+            >
+              <h3 style="font-size: 1.2rem; font-weight: 600; margin: 0; color: var(--foreground); flex: 1;" data-translate="footer_closure_faq_7_question">
+                {{ 'footer_closure.faq_7_question' | t }}
+              </h3>
+              <i
+                class="fas fa-chevron-right"
+                style="color: var(--muted-foreground); transition: transform 0.3s; flex-shrink: 0;"
+              ></i>
+            </div>
+            <div class="faq-answer" style="display: none; padding: 0 1.5rem 1.5rem;">
+              <p style="font-size: 0.875rem; color: var(--muted-foreground); line-height: 1.7; margin: 0;" data-translate="footer_closure_faq_7_answer">
+                {{ 'footer_closure.faq_7_answer' | t }}
+              </p>
+            </div>
+          </div>
+          {%- comment -%} Default FAQ 8 {%- endcomment -%}
+          <div class="faq-item">
+            <div
+              class="faq-question"
+              style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; gap: 1rem; cursor: pointer;"
+            >
+              <h3 style="font-size: 1.2rem; font-weight: 600; margin: 0; color: var(--foreground); flex: 1;" data-translate="footer_closure_faq_8_question">
+                {{ 'footer_closure.faq_8_question' | t }}
+              </h3>
+              <i
+                class="fas fa-chevron-right"
+                style="color: var(--muted-foreground); transition: transform 0.3s; flex-shrink: 0;"
+              ></i>
+            </div>
+            <div class="faq-answer" style="display: none; padding: 0 1.5rem 1.5rem;">
+              <p style="font-size: 0.875rem; color: var(--muted-foreground); line-height: 1.7; margin: 0;" data-translate="footer_closure_faq_8_answer">
+                {{ 'footer_closure.faq_8_answer' | t }}
+              </p>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+<section class="final-cta">
+  <div class="container">
+    <div class="content">
+      <h2 data-translate="footer_closure_final_cta_title">{{ 'footer_closure.final_cta_title' | t }}</h2>
+      <p data-translate="footer_closure_final_cta_desc">{{ 'footer_closure.final_cta_desc' | t }}</p>
+      {% assign product = all_products[section.settings.product] %}
+      {% if product != blank %}
+        {% assign current_variant = product.selected_or_first_available_variant %}
+        <button type="button" class="btn footer-add-to-cart" data-product-id="{{ current_variant.id }}" data-variant-id="{{ current_variant.id }}">
+          <i class="fas fa-gift"></i> <span data-translate="footer_closure_final_cta_button">{{ 'footer_closure.final_cta_button' | t }}</span> <span class="price price-loading" data-variant-id="{{ current_variant.id }}">
+            <span class="price-spinner"><i class="fas fa-spinner fa-spin"></i></span>
+          </span> <i class="fas fa-arrow-right"></i>
+        </button>
+      {% else %}
+        <div style="background: #fee; border: 2px solid #c00; border-radius: 8px; padding: 1rem; margin: 1rem 0;">
+          <div style="color: #c00; font-weight: bold; margin-bottom: 0.5rem;">
+            <i class="fas fa-exclamation-triangle"></i> {{ 'footer_closure.admin_title' | t }}
+          </div>
+          <p style="color: #900; margin: 0;">
+            {{ 'footer_closure.admin_desc' | t }}
+            <strong>{{ 'footer_closure.admin_customize' | t }}</strong>
+          </p>
+        </div>
+        <button class="btn" onclick="alert(window.getTranslation('footer_closure_admin_alert') || {{ 'footer_closure.admin_alert' | t | json }})">
+          <i class="fas fa-gift"></i> <span data-translate="footer_closure_final_cta_button">{{ 'footer_closure.final_cta_button' | t }}</span> <span class="price" data-price-eur="45">€45</span> <i class="fas fa-arrow-right"></i>
+        </button>
+      {% endif %}
+    </div>
+  </div>
+</section>
+<script>
+  (function() {
+    // FAQ Accordion Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(function(item) {
+        const question = item.querySelector('.faq-question');
+        const icon = item.querySelector('.faq-question i');
+        const answer = item.querySelector('.faq-answer');
+        question.addEventListener('click', function() {
+          const isOpen = item.classList.contains('open');
+          // Close all other FAQs
+          faqItems.forEach(function(otherItem) {
+            if (otherItem !== item) {
+              otherItem.classList.remove('open');
+              const otherIcon = otherItem.querySelector('.faq-question i');
+              const otherAnswer = otherItem.querySelector('.faq-answer');
+              if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+              if (otherAnswer) otherAnswer.style.display = 'none';
+            }
+          });
+          // Toggle current FAQ
+          if (!isOpen) {
+            item.classList.add('open');
+            if (icon) icon.style.transform = 'rotate(90deg)';
+            if (answer) answer.style.display = 'block';
+          } else {
+            item.classList.remove('open');
+            if (icon) icon.style.transform = 'rotate(0deg)';
+            if (answer) answer.style.display = 'none';
+          }
+        });
+      });
+    });
+    const addToCartButton = document.querySelector('.footer-add-to-cart');
+    if (!addToCartButton) {
+    }
+    // Get product data if button exists
+    {% assign product = all_products[section.settings.product] %}
+    {% if product != blank %}
+      {% assign current_variant = product.selected_or_first_available_variant %}
+      const productData = {
+        id: {{ current_variant.id }},
+        name: "{{ product.title | escape }}",
+        price: {{ current_variant.price | divided_by: 100.00 }},
+        variantTitle: "{{ current_variant.title | escape }}"
+      };
+      // ============================================================
+      // GET EUR PRICE FROM CENTRALIZED CACHE
+      // ============================================================
+      function getEurPrice(variantId) {
+        if (typeof window.EURPriceCache !== 'undefined') {
+          const cachedPrice = window.EURPriceCache.getPrice(variantId);
+          if (cachedPrice) {
+            return cachedPrice;
+          }
+        }
+        return {{ current_variant.price | divided_by: 100.00 }};
+      }
+      // Initialize the price on page load
+      const priceEl = addToCartButton ? addToCartButton.querySelector('.price[data-variant-id]') : null;
+      if (priceEl && priceEl.dataset.variantId) {
+        const variantId = priceEl.dataset.variantId;
+        const eurPrice = getEurPrice(variantId);
+        priceEl.dataset.priceEur = eurPrice;
+        priceEl.dataset.priceBase = 'EUR';
+        priceEl.classList.remove('price-loading');
+        if (typeof window.CurrencyManager !== 'undefined') {
+          const waitForRates = setInterval(() => {
+            const rates = window.CurrencyManager.getRates();
+            const currentCurrency = window.CurrencyManager.getCurrentCurrency();
+            // Check if rates are ready (either has multiple currencies or at least base rate)
+            if (rates && (Object.keys(rates).length > 1 || (rates.EUR && rates.EUR === 1) || currentCurrency === 'EUR')) {
+              clearInterval(waitForRates);
+              const formattedPrice = window.CurrencyManager.formatPrice(eurPrice, currentCurrency);
+              priceEl.textContent = formattedPrice;
+            }
+          }, 100);
+          // Timeout after 5 seconds - fallback to display anyway
+          setTimeout(() => {
+            clearInterval(waitForRates);
+            if (priceEl && priceEl.classList.contains('price-loading')) {
+              const currentCurrency = window.CurrencyManager.getCurrentCurrency();
+              const formattedPrice = window.CurrencyManager.formatPrice(eurPrice, currentCurrency);
+              priceEl.textContent = formattedPrice;
+            }
+          }, 5000);
+        } else {
+          // No CurrencyManager, display EUR price directly
+          if (priceEl) {
+            priceEl.textContent = '€' + eurPrice;
+            priceEl.classList.remove('price-loading');
+          }
+        }
+      }
+      // Handle add to cart
+      if (addToCartButton) {
+        addToCartButton.addEventListener('click', function(e) {
+          e.preventDefault();
+          const originalButtonText = this.innerHTML;
+          if (typeof productData === 'undefined') {
+            alert({{ 'footer_closure.configure_warning' | t | json }});
+            return;
+          }
+          // Show loading state
+          this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {{ 'footer_closure.adding' | t }}';
+          this.disabled = true;
+          // Use new Shopify AJAX addToCart function (variant ID only)
+          if (typeof addToCart === 'function') {
+            addToCart(productData.id);
+            // Show success state
+            setTimeout(function() {
+              addToCartButton.innerHTML = '<i class="fas fa-check"></i> {{ 'footer_closure.added' | t }}';
+            }, 500);
+            setTimeout(function() {
+              addToCartButton.innerHTML = originalButtonText;
+              addToCartButton.disabled = false;
+            }, 2000);
+          } else {
+            alert({{ 'footer_closure.add_error' | t | json }});
+            this.innerHTML = originalButtonText;
+            this.disabled = false;
+          }
+        });
+      }
+    {% endif %}
+  })();
+</script>
+<style>
+  .faq-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+    margin-bottom: 1rem;
+  }
+  .faq-item:hover {
+    border-color: rgba(255, 107, 53, 0.3);
+  }
+  .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+  .faq-question h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--foreground);
+  }
+  .faq-question i {
+    color: var(--muted-foreground);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+  .faq-item.open .faq-question i {
+    transform: rotate(90deg);
+  }
+  .faq-answer {
+    display: none;
+    padding: 0 1.5rem 1.5rem;
+  }
+  .faq-item.open .faq-answer {
+    display: block;
+  }
+  .faq-answer p {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    line-height: 1.7;
+    margin: 0;
+  }
+</style>
+{% schema %}
+{
+  "name": "Footer Closure",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product Selection"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Select Product",
+      "info": "Required: Select a product to enable add-to-cart functionality for the Final CTA button."
+    },
+    {
+      "type": "header",
+      "content": "Guarantees Section"
+    },
+    {
+      "type": "text",
+      "id": "section_label",
+      "label": "Section Label",
+      "default": "Guarantees"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Your Purchase is Protected"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "We stand behind our products with these guarantees"
+    },
+    {
+      "type": "text",
+      "id": "guarantee_1_title",
+      "label": "Guarantee 1 Title",
+      "default": "Secure Payment"
+    },
+    {
+      "type": "textarea",
+      "id": "guarantee_1_desc",
+      "label": "Guarantee 1 Description",
+      "default": "256-bit SSL encryption. Powered by Stripe & PayPal."
+    },
+    {
+      "type": "text",
+      "id": "guarantee_2_title",
+      "label": "Guarantee 2 Title",
+      "default": "Instant Access"
+    },
+    {
+      "type": "textarea",
+      "id": "guarantee_2_desc",
+      "label": "Guarantee 2 Description",
+      "default": "Get your templates immediately after purchase. Download anytime."
+    },
+    {
+      "type": "text",
+      "id": "guarantee_3_title",
+      "label": "Guarantee 3 Title",
+      "default": "Lifetime Updates"
+    },
+    {
+      "type": "textarea",
+      "id": "guarantee_3_desc",
+      "label": "Guarantee 3 Description",
+      "default": "New templates and improvements? You get them free. Forever."
+    },
+    {
+      "type": "header",
+      "content": "FAQ Section"
+    },
+    {
+      "type": "text",
+      "id": "faq_label",
+      "label": "FAQ Label",
+      "default": "FAQ"
+    },
+    {
+      "type": "text",
+      "id": "faq_title",
+      "label": "FAQ Title",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "textarea",
+      "id": "faq_subtitle",
+      "label": "FAQ Subtitle",
+      "default": "Everything you need to know before you buy"
+    },
+    {
+      "type": "header",
+      "content": "Final CTA"
+    },
+    {
+      "type": "text",
+      "id": "final_cta_title",
+      "label": "Final CTA Title",
+      "default": "Ready to Transform Your E-Ink Experience?"
+    },
+    {
+      "type": "textarea",
+      "id": "final_cta_desc",
+      "label": "Final CTA Description",
+      "default": "Join 12,000+ customers who have already upgraded their productivity. One-time purchase, lifetime access."
+    },
+    {
+      "type": "text",
+      "id": "final_cta_button_text",
+      "label": "Final CTA Button Text (before price)",
+      "default": "Get the Complete Bundle —"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Will these templates work on my device?"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "Yes! Our templates are in industry-standard PDF format and work on ALL major e-ink tablets including reMarkable 2, Paper Pro, Supernote, Boox, Kindle Scribe, Kobo, and even iPad apps like GoodNotes and Notability."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer Closure",
+      "category": "Custom Sections",
+      "blocks": [
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Will these templates work on my device?",
+            "answer": "Yes! Our templates are in industry-standard PDF format and work on ALL major e-ink tablets including reMarkable 2, Paper Pro, Supernote, Boox, Kindle Scribe, Kobo, and even iPad apps like GoodNotes and Notability."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How do I transfer the templates to my device?",
+            "answer": "After purchase, you'll receive an instant download link. Simply download the PDF files and transfer them to your device via USB, cloud sync, or email. Each device has different methods - we include step-by-step instructions for all major devices."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What's included in the Ultimate Collection?",
+            "answer": "You get 200+ premium templates across 10 categories: Daily Planners, Goal Trackers, Project Management, Finance Tools, Study Templates, Creative Spaces, Travel Journals, Wellness Logs, plus 500+ bonus stickers, 22 notebook covers, and our Mental Models guide."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Are updates really free forever?",
+            "answer": "Absolutely! When we release new templates or improvements, you get them free. No subscription fees, no expiration dates. One purchase = lifetime access to all current and future templates."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How quickly will I receive my templates?",
+            "answer": "Instantly! After purchase, you'll receive an email with your download link within 2 minutes. No waiting, no shipping. You can start using your templates immediately."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What if I have questions after purchase?",
+            "answer": "We offer priority email support with response times under 24 hours. Plus, we include detailed setup guides and video tutorials. If you ever need help, we're here for you."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Can I use these templates commercially?",
+            "answer": "Yes! You can use our templates for personal or commercial purposes. This includes using them for client work, business planning, content creation, and more. The only restriction is reselling or redistributing the template files themselves."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Do you offer refunds?",
+            "answer": "Due to the digital nature of our products, we generally don't offer refunds. However, if you experience any technical issues, we'll work with you to resolve them. Contact us if you have any concerns before purchasing."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

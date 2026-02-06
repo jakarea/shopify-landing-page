@@ -1,0 +1,349 @@
+<section class="section" style="background: var(--background);">
+  <div class="container"><div class="max-w-6xl">
+    <div class="section-header"><span class="section-label" data-translate="inventory_grid_label">{{ section.settings.section_label }}</span><h2 class="section-title" data-translate="inventory_grid_title">{{ section.settings.title }}</h2><p class="section-subtitle" data-translate="inventory_grid_subtitle">{{ section.settings.subtitle }}</p></div>
+    <div class="devices-grid">
+      <div class="device-card"><div class="icon"><i class="fas fa-tablet-alt"></i></div><h3 data-translate="inventory_grid_device1_title">{{ section.settings.device_1_title }}</h3><ul><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device1_item1">{{ section.settings.device_1_item_1 }}</span></li><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device1_item2">{{ section.settings.device_1_item_2 }}</span></li><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device1_item3">{{ section.settings.device_1_item_3 }}</span></li></ul></div>
+      <div class="device-card"><div class="icon"><i class="fas fa-tablet-alt"></i></div><h3 data-translate="inventory_grid_device2_title">{{ section.settings.device_2_title }}</h3><ul><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device2_item1">{{ section.settings.device_2_item_1 }}</span></li><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device2_item2">{{ section.settings.device_2_item_2 }}</span></li><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device2_item3">{{ section.settings.device_2_item_3 }}</span></li></ul></div>
+      <div class="device-card"><div class="icon"><i class="fas fa-tablet-alt"></i></div><h3 data-translate="inventory_grid_device3_title">{{ section.settings.device_3_title }}</h3><ul><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device3_item1">{{ section.settings.device_3_item_1 }}</span></li><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device3_item2">{{ section.settings.device_3_item_2 }}</span></li><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device3_item3">{{ section.settings.device_3_item_3 }}</span></li></ul></div>
+      <div class="device-card"><div class="icon"><i class="fas fa-tablet-alt"></i></div><h3 data-translate="inventory_grid_device4_title">{{ section.settings.device_4_title }}</h3><ul><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device4_item1">{{ section.settings.device_4_item_1 }}</span></li><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device4_item2">{{ section.settings.device_4_item_2 }}</span></li></ul></div>
+      <div class="device-card"><div class="icon"><i class="fas fa-tablet-alt"></i></div><h3 data-translate="inventory_grid_device5_title">{{ section.settings.device_5_title }}</h3><ul><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device5_item1">{{ section.settings.device_5_item_1 }}</span></li><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device5_item2">{{ section.settings.device_5_item_2 }}</span></li></ul></div>
+      <div class="device-card"><div class="icon"><i class="fas fa-tablet-alt"></i></div><h3 data-translate="inventory_grid_device6_title">{{ section.settings.device_6_title }}</h3><ul><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device6_item1">{{ section.settings.device_6_item_1 }}</span></li><li><i class="fas fa-check"></i> <span data-translate="inventory_grid_device6_item2">{{ section.settings.device_6_item_2 }}</span></li></ul></div>
+    </div>
+    <div class="compatibility-cta"><div class="content"><i class="fas fa-award"></i><div><h3 data-translate="inventory_grid_cta_title">{{ section.settings.compatibility_cta_title }}</h3><p data-translate="inventory_grid_cta_desc">{{ section.settings.compatibility_cta_desc }}</p></div></div>
+      {% assign product_1 = all_products[section.settings.product_1] %}
+      {% assign product_2 = all_products[section.settings.product_2] %}
+      {% assign product_3 = all_products[section.settings.product_3] %}
+      {% if product_1 != blank and product_2 != blank and product_3 != blank %}
+        {% assign variant_1 = product_1.selected_or_first_available_variant %}
+        {% assign variant_2 = product_2.selected_or_first_available_variant %}
+        {% assign variant_3 = product_3.selected_or_first_available_variant %}
+        <button class="btn-white inventory-add-to-cart"
+          data-variant-1="{{ variant_1.id }}"
+          data-variant-2="{{ variant_2.id }}"
+          data-variant-3="{{ variant_3.id }}">
+          <span data-translate="inventory_grid_cta_button">{{ section.settings.compatibility_cta_button }}</span> <i class="fas fa-arrow-right"></i>
+        </button>
+      {% else %}
+        <button class="btn-white" onclick="alert(window.getTranslation('inventory_grid_admin_warning') || 'Please configure 3 products in section settings (Customize → Inventory Grid → Select Products)')">
+          <span data-translate="inventory_grid_cta_button">{{ section.settings.compatibility_cta_button }}</span> <i class="fas fa-arrow-right"></i>
+        </button>
+      {% endif %}
+    </div>
+  </div></div>
+</section>
+<script>
+(function() {
+  const addToCartButton = document.querySelector('.inventory-add-to-cart');
+  if (!addToCartButton) {
+    return;
+  }
+  // Get product IDs from button data attributes
+  const variant1Id = parseInt(addToCartButton.dataset.variant1);
+  const variant2Id = parseInt(addToCartButton.dataset.variant2);
+  const variant3Id = parseInt(addToCartButton.dataset.variant3);
+  const productsToAdd = [
+    {% assign product_1 = all_products[section.settings.product_1] %}
+    {% if product_1 != blank %}
+      {
+        id: {{ product_1.selected_or_first_available_variant.id }},
+        name: "{{ product_1.title | escape }}"
+      },
+    {% endif %}
+    {% assign product_2 = all_products[section.settings.product_2] %}
+    {% if product_2 != blank %}
+      {
+        id: {{ product_2.selected_or_first_available_variant.id }},
+        name: "{{ product_2.title | escape }}"
+      },
+    {% endif %}
+    {% assign product_3 = all_products[section.settings.product_3] %}
+    {% if product_3 != blank %}
+      {
+        id: {{ product_3.selected_or_first_available_variant.id }},
+        name: "{{ product_3.title | escape }}"
+      }
+    {% endif %}
+  ].filter(p => p.id);
+  // Handle add to cart - add all 3 products
+  addToCartButton.addEventListener('click', async function(e) {
+    e.preventDefault();
+    const originalButtonText = this.innerHTML;
+    if (productsToAdd.length === 0) {
+      const warningMsg = window.getTranslation('inventory_grid_configure_warning') || 'Please configure the products in section settings';
+      alert(warningMsg);
+      return;
+    }
+    // Show loading state
+    const addingText = window.getTranslation('inventory_grid_adding') || 'Adding...';
+    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + addingText;
+    this.disabled = true;
+    try {
+      // Add all products sequentially
+      for (const product of productsToAdd) {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: product.id,
+            quantity: 1
+          })
+        });
+        if (!response.ok) {
+        }
+      }
+      // Update cart UI
+      if (typeof updateCartUI === 'function') {
+        updateCartUI();
+      }
+      // Show success state
+      const addedText = window.getTranslation('inventory_grid_added') || 'Added!';
+      this.innerHTML = '<i class="fas fa-check"></i> ' + addedText;
+      // Open cart drawer
+      setTimeout(() => {
+        if (typeof toggleCart === 'function') {
+          toggleCart();
+        }
+      }, 100);
+      // Reset button after delay
+      setTimeout(() => {
+        this.innerHTML = originalButtonText;
+        this.disabled = false;
+      }, 2000);
+    } catch (error) {
+      const errorMsg = window.getTranslation('inventory_grid_error') || 'Failed to add products to cart. Please try again.';
+      alert(errorMsg);
+      this.innerHTML = originalButtonText;
+      this.disabled = false;
+    }
+  });
+})();
+</script>
+{% schema %}
+{
+  "name": "Inventory Grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product Selection (3 Products)"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product 1",
+      "info": "First product to add to cart when CTA is clicked"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product 2",
+      "info": "Second product to add to cart when CTA is clicked"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product 3",
+      "info": "Third product to add to cart when CTA is clicked"
+    },
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "section_label",
+      "label": "Section Label",
+      "default": "Compatibility"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Works on Every E-Ink Device"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "One format that works seamlessly across all major e-ink tablets"
+    },
+    {
+      "type": "header",
+      "content": "Device 1: reMarkable"
+    },
+    {
+      "type": "text",
+      "id": "device_1_title",
+      "label": "Device 1 Title",
+      "default": "reMarkable"
+    },
+    {
+      "type": "text",
+      "id": "device_1_item_1",
+      "label": "Device 1 Item 1",
+      "default": "reMarkable 2"
+    },
+    {
+      "type": "text",
+      "id": "device_1_item_2",
+      "label": "Device 1 Item 2",
+      "default": "Paper Pro"
+    },
+    {
+      "type": "text",
+      "id": "device_1_item_3",
+      "label": "Device 1 Item 3",
+      "default": "Paper Pro Move"
+    },
+    {
+      "type": "header",
+      "content": "Device 2: Supernote"
+    },
+    {
+      "type": "text",
+      "id": "device_2_title",
+      "label": "Device 2 Title",
+      "default": "Supernote"
+    },
+    {
+      "type": "text",
+      "id": "device_2_item_1",
+      "label": "Device 2 Item 1",
+      "default": "A6 X2 Nomad"
+    },
+    {
+      "type": "text",
+      "id": "device_2_item_2",
+      "label": "Device 2 Item 2",
+      "default": "A5 X2 Manta"
+    },
+    {
+      "type": "text",
+      "id": "device_2_item_3",
+      "label": "Device 2 Item 3",
+      "default": "A5 X"
+    },
+    {
+      "type": "header",
+      "content": "Device 3: Boox"
+    },
+    {
+      "type": "text",
+      "id": "device_3_title",
+      "label": "Device 3 Title",
+      "default": "Boox"
+    },
+    {
+      "type": "text",
+      "id": "device_3_item_1",
+      "label": "Device 3 Item 1",
+      "default": "Tab Ultra"
+    },
+    {
+      "type": "text",
+      "id": "device_3_item_2",
+      "label": "Device 3 Item 2",
+      "default": "Note Air"
+    },
+    {
+      "type": "text",
+      "id": "device_3_item_3",
+      "label": "Device 3 Item 3",
+      "default": "Note Max"
+    },
+    {
+      "type": "header",
+      "content": "Device 4: Kindle"
+    },
+    {
+      "type": "text",
+      "id": "device_4_title",
+      "label": "Device 4 Title",
+      "default": "Kindle"
+    },
+    {
+      "type": "text",
+      "id": "device_4_item_1",
+      "label": "Device 4 Item 1",
+      "default": "Scribe 2024"
+    },
+    {
+      "type": "text",
+      "id": "device_4_item_2",
+      "label": "Device 4 Item 2",
+      "default": "Scribe 2022"
+    },
+    {
+      "type": "header",
+      "content": "Device 5: Kobo"
+    },
+    {
+      "type": "text",
+      "id": "device_5_title",
+      "label": "Device 5 Title",
+      "default": "Kobo"
+    },
+    {
+      "type": "text",
+      "id": "device_5_item_1",
+      "label": "Device 5 Item 1",
+      "default": "Elipsa 2E"
+    },
+    {
+      "type": "text",
+      "id": "device_5_item_2",
+      "label": "Device 5 Item 2",
+      "default": "Libra Colour"
+    },
+    {
+      "type": "header",
+      "content": "Device 6: Others"
+    },
+    {
+      "type": "text",
+      "id": "device_6_title",
+      "label": "Device 6 Title",
+      "default": "Others"
+    },
+    {
+      "type": "text",
+      "id": "device_6_item_1",
+      "label": "Device 6 Item 1",
+      "default": "GoodNotes"
+    },
+    {
+      "type": "text",
+      "id": "device_6_item_2",
+      "label": "Device 6 Item 2",
+      "default": "Notability"
+    },
+    {
+      "type": "header",
+      "content": "CTA Section"
+    },
+    {
+      "type": "text",
+      "id": "compatibility_cta_title",
+      "label": "CTA Title",
+      "default": "Universal Compatibility Guaranteed"
+    },
+    {
+      "type": "textarea",
+      "id": "compatibility_cta_desc",
+      "label": "CTA Description",
+      "default": "Industry-standard PDF format works on any device"
+    },
+    {
+      "type": "text",
+      "id": "compatibility_cta_button",
+      "label": "CTA Button",
+      "default": "Get All Templates"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Inventory Grid",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,2428 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='32' y2='32'%3E%3Cstop offset='0%25' stop-color='%23FF8C00'/%3E%3Cstop offset='100%25' stop-color='%231A9B8F'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='4' y='3' width='18' height='26' rx='2' fill='white' fill-opacity='0.9'/%3E%3Crect x='7' y='7' width='12' height='2' rx='1' fill='%23FF8C00'/%3E%3Crect x='7' y='11' width='10' height='1.5' rx='0.75' fill='%23999'/%3E%3Crect x='7' y='14' width='12' height='1.5' rx='0.75' fill='%23999'/%3E%3Crect x='7' y='17' width='8' height='1.5' rx='0.75' fill='%23999'/%3E%3Ccircle cx='24' cy='10' r='7' fill='white'/%3E%3Ctext x='24' y='14' font-family='Arial' font-size='10' font-weight='bold' fill='%23FF8C00' text-anchor='middle'%3Ee%3C/text%3E%3C/svg%3E">
+  <title>e-ink Lab - Premium Digital Planners for E-Ink Devices</title>
+  <meta name="description" content="Transform your re-ink tablet with 200+ premium digital planners. Instant download, lifetime updates. Works on reMarkable, Supernote, Boox, Kindle Scribe & more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#ff6b35',
+            'primary-foreground': '#FFFFFF',
+            accent: '#20b2aa',
+            'accent-foreground': '#FFFFFF',
+            background: '#0d1117',
+            foreground: '#fafafa',
+            card: '#161b22',
+            'card-foreground': '#fafafa',
+            popover: '#161b22',
+            'popover-foreground': '#fafafa',
+            secondary: '#21262d',
+            'secondary-foreground': '#fafafa',
+            muted: '#161b22',
+            'muted-foreground': '#7d8590',
+            destructive: '#e53935',
+            'destructive-foreground': '#FFFFFF',
+            border: '#30363d',
+            input: '#30363d',
+            ring: '#ff6b35',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            heading: ['Outfit', 'system-ui', 'sans-serif'],
+          },
+          borderRadius: {
+            DEFAULT: '0.5rem',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  {{ 'application.css' | asset_url | stylesheet_tag }}
+  {{ content_for_header }}
+  {{ 'application.js' | asset_url | script_tag }}
+  <!-- Translation System - loads from translations.js (no defer - must load before TranslationLoader) -->
+  <script src="{{ 'translations.js' | asset_url }}"></script>
+  <script>
+    (function() {
+      'use strict';
+      window.TranslationLoader = {
+        loaded: {},
+        translations: {},
+        load: async function(langCode) {
+          if (this.loaded[langCode]) {
+            return this.translations[langCode];
+          }
+          // Use embedded translations
+          if (window.EmbeddedTranslations && window.EmbeddedTranslations[langCode]) {
+            this.translations[langCode] = window.EmbeddedTranslations[langCode];
+            this.loaded[langCode] = true;
+            return this.translations[langCode];
+          }
+          if (langCode !== 'en' && !this.loaded['en']) {
+            return this.load('en');
+          }
+          return this.translations['en'] || {};
+        },
+        get: function(langCode) {
+          if (!this.loaded[langCode] && window.EmbeddedTranslations && window.EmbeddedTranslations[langCode]) {
+            this.translations[langCode] = window.EmbeddedTranslations[langCode];
+            this.loaded[langCode] = true;
+          }
+          return this.translations[langCode] || {};
+        },
+        isLoaded: function(langCode) {
+          return !!(window.EmbeddedTranslations && window.EmbeddedTranslations[langCode]) || this.loaded[langCode];
+        }
+      };
+      // Note: applyTranslations is defined in the second script block (CLIENT-SIDE TRANSLATION SYSTEM)
+      // Load English immediately - translations will be applied by the second script block
+      TranslationLoader.load('en');
+      Object.defineProperty(window, 'translations', {
+        get: function() {
+          const currentLang = localStorage.getItem('selectedLanguage') || 'en';
+          return TranslationLoader.translations[currentLang] || TranslationLoader.translations['en'] || {};
+        },
+        configurable: true
+      });
+    })();
+  </script>
+  <!-- Shopify Markets & Geolocation Data -->
+  <script>
+    // Pass Liquid data to JavaScript
+    window.Shopify = window.Shopify || {};
+    window.Shopify.country = '{{ localization.country.iso_code }}';
+    window.Shopify.currency = window.Shopify.currency || {};
+    window.Shopify.currency.active = '{{ localization.currency.iso_code }}';
+    window.Shopify.locale = '{{ localization.language.iso_code }}';
+    // Available markets from Shopify
+    window.Shopify.markets = {
+      available: [
+        {% for market in localization.available_countries %}
+          {
+            iso_code: '{{ market.iso_code }}',
+            name: '{{ market.name }}',
+            currency: '{{ market.currency.iso_code }}',
+            languages: [
+              {% for language in market.languages %}
+                {
+                  iso_code: '{{ language.iso_code }}',
+                  name: '{{ language.name }}',
+                  endonym_name: '{{ language.endonym_name }}'
+                }{% unless forloop.last %},{% endunless %}
+              {% endfor %}
+            ]
+          }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ]
+    };
+    // CURRENCY_CONFIG - defined here for comparison
+    const CURRENCY_CONFIG = {
+      EUR: { symbol: '€', decimals: 2, symbolPosition: 'before' },
+      USD: { symbol: '$', decimals: 2, symbolPosition: 'before' },
+      GBP: { symbol: '£', decimals: 2, symbolPosition: 'before' },
+      CAD: { symbol: 'C$', decimals: 2, symbolPosition: 'before' },
+      AUD: { symbol: 'A$', decimals: 2, symbolPosition: 'before' },
+      JPY: { symbol: '¥', decimals: 0, symbolPosition: 'before' },
+      CHF: { symbol: 'CHF', decimals: 2, symbolPosition: 'after' },
+      SEK: { symbol: 'kr', decimals: 2, symbolPosition: 'after' },
+      NOK: { symbol: 'kr', decimals: 2, symbolPosition: 'after' },
+      DKK: { symbol: 'kr', decimals: 2, symbolPosition: 'after' },
+      PLN: { symbol: 'zł', decimals: 2, symbolPosition: 'after' },
+      INR: { symbol: '₹', decimals: 2, symbolPosition: 'before' }
+    };
+    // Log all marketplace currencies with names
+    const marketplaceCurrencies = {};
+    window.Shopify.markets.available.forEach(market => {
+      if (!marketplaceCurrencies[market.currency]) {
+        marketplaceCurrencies[market.currency] = [];
+      }
+      marketplaceCurrencies[market.currency].push(market.name);
+    });
+    // Header dropdown currencies
+    const headerCurrencies = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'JPY', 'CHF', 'SEK', 'NOK', 'DKK', 'PLN', 'INR'];
+    // CURRENCY_CONFIG currencies
+    const configCurrencies = Object.keys(CURRENCY_CONFIG);
+    // Find mismatches
+    const headerSet = new Set(headerCurrencies);
+    const configSet = new Set(configCurrencies);
+    const marketplaceSet = new Set(Object.keys(marketplaceCurrencies));
+    const inHeaderNotInConfig = [...headerSet].filter(x => !configSet.has(x));
+    const inConfigNotInHeader = [...configSet].filter(x => !headerSet.has(x));
+    const inHeaderNotInMarketplace = [...headerSet].filter(x => !marketplaceSet.has(x));
+    const inMarketplaceNotInHeader = [...marketplaceSet].filter(x => !headerSet.has(x));
+  </script>
+  <!-- Currency Manager (Shopify Real Prices - EUR Base) -->
+  <script>
+    (function() {
+      'use strict';
+      // Currency formatting config (symbols, decimals, etc.)
+      const CURRENCY_CONFIG = {
+        EUR: { symbol: '€', decimals: 2, symbolPosition: 'before' },
+        USD: { symbol: '$', decimals: 2, symbolPosition: 'before' },
+        GBP: { symbol: '£', decimals: 2, symbolPosition: 'before' },
+        CAD: { symbol: 'C$', decimals: 2, symbolPosition: 'before' },
+        AUD: { symbol: 'A$', decimals: 2, symbolPosition: 'before' },
+        JPY: { symbol: '¥', decimals: 0, symbolPosition: 'before' },
+        CHF: { symbol: 'CHF', decimals: 2, symbolPosition: 'after' },
+        SEK: { symbol: 'kr', decimals: 2, symbolPosition: 'after' },
+        NOK: { symbol: 'kr', decimals: 2, symbolPosition: 'after' },
+        DKK: { symbol: 'kr', decimals: 2, symbolPosition: 'after' },
+        PLN: { symbol: 'zł', decimals: 2, symbolPosition: 'after' },
+        INR: { symbol: '₹', decimals: 2, symbolPosition: 'before' }
+      };
+      // State - Default to EUR always (unless user previously selected another currency manually)
+      let currentCurrency = 'EUR';
+      let baseCurrency = 'EUR';  // Your admin default currency
+      let shopifyRates = { [baseCurrency]: 1 };  // Initialize with base rate
+      // Fallback hardcoded rates (updated 2025) - used when Shopify rates fail to fetch
+      const FALLBACK_RATES = {
+        EUR: 1,
+        USD: 1.09,      // 1 EUR = 1.09 USD
+        GBP: 0.85,      // 1 EUR = 0.85 GBP
+        CAD: 1.48,      // 1 EUR = 1.48 CAD
+        AUD: 1.65,      // 1 EUR = 1.65 AUD
+        JPY: 162.50,    // 1 EUR = 162.50 JPY
+        CHF: 0.94,      // 1 EUR = 0.94 CHF
+        SEK: 11.45,     // 1 EUR = 11.45 SEK
+        NOK: 11.75,     // 1 EUR = 11.75 NOK
+        DKK: 7.46,      // 1 EUR = 7.46 DKK
+        PLN: 4.28,      // 1 EUR = 4.28 PLN
+        INR: 90.50      // 1 EUR = 90.50 INR
+      };
+      let basePricesEUR = {};  // Store base EUR prices from page
+      let isInitialized = false;
+      // Cache configuration
+      const RATES_CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+      // Fetch Shopify's exchange rates by comparing cart totals
+      async function fetchShopifyRates() {
+        const rates = {};
+        rates[baseCurrency] = 1;
+        // Step 1: Get current cart state
+        let currentCart = { items: [], total_price: 0 };
+        try {
+          currentCart = await fetch('/cart.js').then(r => r.json());
+        } catch (e) {
+          // Cart fetch failed
+        }
+        // Step 2: If cart is empty, add a test item
+        let testVariantId = null;
+        let testAdded = false;
+        if (currentCart.total_price === 0) {
+          // Find any variant ID from the page
+          const priceElWithVariant = document.querySelector('[data-variant-id]');
+          if (priceElWithVariant) {
+            testVariantId = priceElWithVariant.dataset.variantId;
+          }
+          if (testVariantId) {
+            try {
+              const addResponse = await fetch(`/cart/add.js`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  id: testVariantId,
+                  quantity: 1
+                })
+              });
+              if (addResponse.ok) {
+                testAdded = true;
+                // Re-fetch cart to get updated state
+                currentCart = await fetch('/cart.js').then(r => r.json());
+              }
+            } catch (e) {
+              // Add to cart failed
+            }
+          }
+        }
+        // Step 3: Get cart in base currency
+        let baseTotal = 0;
+        try {
+          const baseCart = await fetch(`/cart.js?currency=${baseCurrency}`).then(r => r.json());
+          baseTotal = baseCart.total_price;
+        } catch (e) {
+          // Base cart fetch failed
+        }
+        // Step 4: If still empty, return fallback rates
+        if (baseTotal === 0) {
+          // Clean up test item if added
+          if (testAdded && testVariantId) {
+            try {
+              await fetch('/cart/change.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  id: testVariantId,
+                  quantity: 0
+                })
+              });
+            } catch (e) {
+              // Item removal failed, continue
+            }
+          }
+          // Use fallback rates
+          Object.keys(FALLBACK_RATES).forEach(curr => {
+            if (curr !== baseCurrency) {
+              rates[curr] = FALLBACK_RATES[curr];
+            }
+          });
+          return rates;
+        }
+        // Step 5: Fetch cart in each currency to calculate Shopify's rate
+        for (const currencyCode of Object.keys(CURRENCY_CONFIG)) {
+          if (currencyCode === baseCurrency) continue;
+          try {
+            // Fetch cart with currency parameter
+            const response = await fetch(`/cart.js?currency=${currencyCode}`);
+            if (!response.ok) {
+              continue;
+            }
+            const cartData = await response.json();
+            const currencyTotal = cartData.total_price;
+            if (baseTotal > 0 && currencyTotal > 0) {
+              // Calculate rate: how many currency units per 1 EUR
+              // Both are in cents, so the ratio is direct
+              rates[currencyCode] = currencyTotal / baseTotal;
+            }
+          } catch (e) {
+            // Error fetching currency
+          }
+        }
+        // Fill in missing rates with fallback rates
+        let usedFallback = false;
+        Object.keys(FALLBACK_RATES).forEach(curr => {
+          if (curr !== baseCurrency && !rates[curr]) {
+            rates[curr] = FALLBACK_RATES[curr];
+            usedFallback = true;
+          }
+        });
+        // Step 6: Remove test item (only if we added it)
+        if (testAdded && testVariantId) {
+          try {
+            await fetch('/cart/change.js', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                id: testVariantId,
+                quantity: 0
+              })
+            });
+          } catch (e) {
+          }
+        }
+        return rates;
+      }
+      // Alternative: Get rates using a product endpoint
+      async function fetchRatesViaProduct() {
+        const rates = {};
+        rates[baseCurrency] = 1;
+        // Find first variant ID on page
+        const priceEl = document.querySelector('[data-variant-id]');
+        if (!priceEl) return rates;
+        const variantId = priceEl.dataset.variantId;
+        for (const currencyCode of Object.keys(CURRENCY_CONFIG)) {
+          if (currencyCode === baseCurrency) continue;
+          try {
+            // Use products recommendations endpoint which returns prices in requested currency
+            const url = `/recommendations/products?product_id=${variantId}&section_id=main&currency=${currencyCode}`;
+            const response = await fetch(url);
+            if (response.ok) {
+              // Parse and extract price
+              const text = await response.text();
+              // Try to find price in the response
+              const priceMatch = text.match(/data-price="([^"]+)"/);
+              if (priceMatch) {
+                // Store rate
+              }
+            }
+          } catch (e) {
+            // Skip
+          }
+        }
+        return rates;
+      }
+      // Format number with correct decimals and symbol
+      function formatAmount(amount, currencyCode) {
+        const config = CURRENCY_CONFIG[currencyCode] || CURRENCY_CONFIG.EUR;
+        // Guard against NaN
+        if (isNaN(amount) || amount === null || amount === undefined) {
+          amount = 0;
+        }
+        // Always round to whole number (no decimals for this store)
+        const rounded = Math.round(amount);
+        const formatted = rounded.toLocaleString();
+        if (config.symbolPosition === 'before') {
+          return config.symbol + formatted;
+        } else {
+          return formatted + ' ' + config.symbol;
+        }
+      }
+      // Currency Manager API
+      window.CurrencyManager = {
+        // Get current currency
+        getCurrentCurrency: function() {
+          return currentCurrency;
+        },
+        // Set current currency (needed for external updates)
+        setCurrentCurrency: function(currencyCode) {
+          if (CURRENCY_CONFIG[currencyCode]) {
+            currentCurrency = currencyCode;
+          }
+        },
+        // Get currency config
+        getCurrencyConfig: function(currencyCode) {
+          return CURRENCY_CONFIG[currencyCode] || CURRENCY_CONFIG.EUR;
+        },
+        // Get current rates (for external checking)
+        getRates: function() {
+          return shopifyRates;
+        },
+        // Convert price from EUR to target currency using Shopify's rate
+        convertPrice: function(priceInEUR, targetCurrency) {
+          // Guard against invalid input
+          if (isNaN(priceInEUR) || priceInEUR === null || priceInEUR === undefined) {
+            return 0;
+          }
+          if (targetCurrency === baseCurrency) {
+            return priceInEUR;
+          }
+          // Get the rate - use shopifyRates first, then FALLBACK_RATES
+          let rate = shopifyRates && shopifyRates[targetCurrency];
+          let rateSource = 'shopifyRates';
+          if (!rate || isNaN(rate)) {
+            // Use fallback rate if shopifyRates doesn't have it
+            rate = FALLBACK_RATES && FALLBACK_RATES[targetCurrency];
+            rateSource = 'FALLBACK_RATES';
+          }
+          if (!rate || isNaN(rate)) {
+            // No rate available, return original EUR price
+            return priceInEUR;
+          }
+          const converted = priceInEUR * rate;
+          return isNaN(converted) ? priceInEUR : converted;
+        },
+        // Format price in EUR to display in current (or specified) currency
+        formatPrice: function(priceInEUR, currencyCode) {
+          const currency = currencyCode || currentCurrency;
+          // Convert using Shopify's rate
+          const convertedPrice = this.convertPrice(priceInEUR, currency);
+          // Format with symbol
+          const result = formatAmount(convertedPrice, currency);
+          return result;
+        },
+        // Format price directly (already converted)
+        formatPriceDirect: function(amount, currencyCode) {
+          const currency = currencyCode || currentCurrency;
+          return formatAmount(amount, currency);
+        },
+        // Change currency (no reload, SPA - no page refresh)
+        changeCurrency: async function(currencyCode) {
+          if (!CURRENCY_CONFIG[currencyCode]) {
+            return false;
+          }
+          const oldCurrency = currentCurrency;
+          currentCurrency = currencyCode;
+          // NOTE: Skipping /localization/update due to 401 error (store password protected)
+          // For SPA, we update display only. Cart fetched with ?currency= parameter
+          // Update header display
+          const headerEl = document.getElementById('current-currency');
+          if (headerEl) {
+            const config = this.getCurrencyConfig(currencyCode);
+            headerEl.textContent = currencyCode + ' ' + config.symbol;
+          }
+          // Update dropdown active state
+          this.updateDropdownState(currencyCode);
+          // Dispatch event
+          window.dispatchEvent(new CustomEvent('currencyChanged', {
+            detail: { from: oldCurrency, to: currencyCode }
+          }));
+          // Update all prices on page
+          this.updateAllPrices();
+          // Update cart - fetches with explicit ?currency= parameter
+          if (typeof updateCartUI === 'function') {
+            updateCartUI();
+          }
+          // Save to localStorage
+          localStorage.setItem('selectedCurrency', currencyCode);
+          localStorage.setItem('currencyManuallySelected', 'true');
+          // Close currency dropdown (same pattern as setLanguage)
+          const dropdown = document.getElementById('currency-dropdown');
+          if (dropdown) dropdown.classList.add('hidden');
+          return true;
+        },
+        // Update dropdown visual state
+        updateDropdownState: function(currencyCode) {
+          // First, clear all checkmarks and highlights
+          document.querySelectorAll('#currency-dropdown button').forEach(btn => {
+            btn.classList.remove('bg-accent', 'text-accent-foreground', 'font-semibold');
+            const checkIndicator = btn.querySelector('.currency-check');
+            if (checkIndicator) {
+              checkIndicator.innerHTML = '';
+            }
+          });
+          // Find the button for this currency (search by onclick attribute)
+          const activeBtn = document.querySelector(`#currency-dropdown button[onclick="changeCurrency('${currencyCode}')"]`);
+          if (activeBtn) {
+            activeBtn.classList.add('bg-accent', 'text-accent-foreground', 'font-semibold');
+            const checkIndicator = activeBtn.querySelector('.currency-check');
+            if (checkIndicator) {
+              checkIndicator.innerHTML = '<i class="fas fa-check text-xs"></i>';
+            }
+          }
+        },
+        // Update all price elements on page
+        updateAllPrices: function(targetCurrencyOverride) {
+          // Allow overriding the target currency (for external calls)
+          const targetCurrency = targetCurrencyOverride || currentCurrency;
+          let count = 0;
+          let skipped = 0;
+          // Update elements with data-price-eur attribute (EUR base prices)
+          document.querySelectorAll('[data-price-eur]').forEach(el => {
+            let eurPrice = parseFloat(el.dataset.priceEur);
+            // Guard against NaN from parseFloat
+            if (isNaN(eurPrice)) {
+              // Try cleaning the value (remove currency symbols, etc.)
+              const cleaned = el.dataset.priceEur.replace(/[^0-9.]/g, '');
+              eurPrice = parseFloat(cleaned);
+            }
+            // Skip if still invalid (preserve original text instead of showing 0)
+            if (isNaN(eurPrice) || eurPrice <= 0) {
+              skipped++;
+              return; // Keep original text, don't update
+            }
+            const formatted = this.formatPrice(eurPrice, targetCurrency);
+            // Only update if formatted price is not €0 or $0 (flicker protection)
+            if (formatted && !formatted.match(/^[\€\$£¥]\s*0$/)) {
+              el.textContent = formatted;
+            }
+            count++;
+          });
+          // Update elements with data-price-usd (need to convert USD to EUR first)
+          document.querySelectorAll('[data-price-usd]').forEach(el => {
+            if (el.hasAttribute('data-price-eur')) return; // Skip if already handled
+            const usdPrice = parseFloat(el.dataset.priceUsd);
+            if (!isNaN(usdPrice) && usdPrice > 0) {
+              // Convert USD to EUR (base currency)
+              // USD to EUR rate = 1 / (EUR to USD rate)
+              const usdToEurRate = shopifyRates.USD ? (1 / shopifyRates.USD) : 0.92; // 0.92 is approximate fallback
+              const eurPrice = usdPrice * usdToEurRate;
+              // Store EUR price for future updates
+              el.dataset.priceEur = eurPrice.toString();
+              const formatted = this.formatPrice(eurPrice, targetCurrency);
+              el.textContent = formatted;
+            }
+          });
+          // Also check for data-price attribute (legacy, assume EUR)
+          document.querySelectorAll('[data-price]:not([data-price-eur]):not([data-price-usd])').forEach(el => {
+            let eurPrice = parseFloat(el.dataset.price);
+            // Skip if invalid (preserve original text instead of showing 0)
+            if (isNaN(eurPrice) || eurPrice <= 0) {
+              return;
+            }
+            el.textContent = this.formatPrice(eurPrice, targetCurrency);
+          });
+        },
+        // Fetch Shopify's rates (with 6-hour cache)
+        fetchExchangeRates: async function() {
+          // Cache version - increment this to invalidate old caches
+          const CACHE_VERSION = 'v2';
+          const cacheKey = 'shopifyRates_' + CACHE_VERSION;
+          // Check if we have cached rates that are still valid
+          const cachedRates = localStorage.getItem(cacheKey);
+          const cacheTimestamp = localStorage.getItem('ratesTimestamp_' + CACHE_VERSION);
+          if (cachedRates && cacheTimestamp) {
+            const cacheAge = Date.now() - parseInt(cacheTimestamp);
+            if (cacheAge < RATES_CACHE_DURATION) {
+              // Use cached rates
+              shopifyRates = JSON.parse(cachedRates);
+              // Fill in any missing rates with fallback (handles incomplete caches)
+              let missingFilled = false;
+              Object.keys(FALLBACK_RATES).forEach(curr => {
+                if (curr !== baseCurrency && !shopifyRates[curr]) {
+                  shopifyRates[curr] = FALLBACK_RATES[curr];
+                  missingFilled = true;
+                }
+              });
+              if (missingFilled) {
+                // Save the completed rates back to cache
+                localStorage.setItem(cacheKey, JSON.stringify(shopifyRates));
+              }
+              // Update prices with cached rates
+              this.updateAllPrices();
+              return;
+            } else {
+              // Clear expired cache
+              localStorage.removeItem(cacheKey);
+              localStorage.removeItem('ratesTimestamp_' + CACHE_VERSION);
+            }
+          }
+          // Also clear old version cache keys
+          localStorage.removeItem('shopifyRates');
+          localStorage.removeItem('ratesTimestamp');
+          // Wait for hero-banner price fetch to complete first
+          // This avoids race condition where both try to use cart simultaneously
+          const maxWait = 5000; // 5 seconds max wait
+          const startTime = Date.now();
+          while (Date.now() - startTime < maxWait) {
+            const heroPriceEl = document.querySelector('.hero-add-to-cart .price');
+            if (heroPriceEl && heroPriceEl.dataset.priceEur && heroPriceEl.dataset.priceEur !== 'loading') {
+              break;
+            }
+            await new Promise(resolve => setTimeout(resolve, 100));
+          }
+          // Fetch actual Shopify rates
+          shopifyRates = await fetchShopifyRates();
+          // Cache the rates for 6 hours (with version key)
+          localStorage.setItem('shopifyRates_' + CACHE_VERSION, JSON.stringify(shopifyRates));
+          localStorage.setItem('ratesTimestamp_' + CACHE_VERSION, Date.now().toString());
+          // Update prices with the newly fetched rates
+          this.updateAllPrices();
+          // If there was a pending currency change (before CurrencyManager loaded), apply it now
+          if (window._pendingCurrencyChange) {
+            const pending = window._pendingCurrencyChange;
+            window._pendingCurrencyChange = null;
+            window.changeCurrency(pending);
+          }
+        },
+        // Clear cached rates (for testing or admin use)
+        clearRatesCache: function() {
+          const CACHE_VERSION = 'v2';
+          localStorage.removeItem('shopifyRates_' + CACHE_VERSION);
+          localStorage.removeItem('ratesTimestamp_' + CACHE_VERSION);
+          localStorage.removeItem('shopifyRates');  // Old version
+          localStorage.removeItem('ratesTimestamp');  // Old version
+          shopifyRates = {};
+        },
+        // Initialize
+        init: function() {
+          if (isInitialized) return;
+          // Log Hero Banner product specifically
+          const heroPriceEl = document.querySelector('.hero-add-to-cart .price');
+          if (heroPriceEl) {
+            const eurPrice = heroPriceEl.dataset.priceEur;
+          }
+          // ============================================================
+          // CURRENCY SELECTION LOGIC (Priority Order)
+          // ============================================================
+          const saved = localStorage.getItem('selectedCurrency');
+          const userManuallySelected = localStorage.getItem('currencyManuallySelected') === 'true';
+          if (saved && CURRENCY_CONFIG[saved]) {
+            // Priority 1: User's previous selection (always respect)
+            currentCurrency = saved;
+          } else {
+            // Priority 2: Default to EUR (admin default)
+            currentCurrency = baseCurrency;
+          }
+          // Update header display
+          const headerEl = document.getElementById('current-currency');
+          if (headerEl) {
+            const config = this.getCurrencyConfig(currentCurrency);
+            headerEl.textContent = currentCurrency + ' ' + config.symbol;
+          }
+          // Update dropdown state
+          this.updateDropdownState(currentCurrency);
+          // Fetch Shopify rates (no auto-switch, just get rates)
+          // This will call updateAllPrices() when complete
+          this.fetchExchangeRates();
+          // Note: updateAllPrices() is called inside fetchExchangeRates after rates are fetched
+          // No need to call it here (would run with empty rates otherwise)
+          setTimeout(() => {
+            if (heroPriceEl) {
+            }
+          }, 100);
+          isInitialized = true;
+        }
+      };
+      // Listen for currency changes to update dropdown indicators
+      window.addEventListener('currencyChanged', function(e) {
+        const currency = e.detail.to;
+        document.querySelectorAll('.currency-check').forEach(el => {
+          el.innerHTML = el.dataset.currency === currency ? '<i class="fas fa-check text-xs"></i>' : '';
+        });
+        // Mark that user manually selected currency
+        localStorage.setItem('currencyManuallySelected', 'true');
+        // Log hero banner price after currency change
+        setTimeout(() => {
+          const heroPriceEl = document.querySelector('.hero-add-to-cart .price');
+          if (heroPriceEl) {
+          }
+        }, 100);
+      });
+      // Initialize on DOM ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => window.CurrencyManager.init());
+      } else {
+        window.CurrencyManager.init();
+      }
+    })();
+    // ============================================================
+    // CENTRALIZED EUR PRICE CACHE - 6 Hour Cache
+    // Reduces API calls by fetching all variant prices in one batch
+    // ============================================================
+    (function() {
+      const CACHE_KEY = 'eurVariantPrices';
+      const CACHE_TIMESTAMP_KEY = 'eurVariantPricesTimestamp';
+      const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours
+      // Get all EUR prices from cache or fetch them
+      window.EURPriceCache = {
+        _cache: {},
+        _initialized: false,
+        _fetching: false,
+        _callbacks: [],
+        // Check if cache is valid
+        isCacheValid: function() {
+          const timestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
+          if (!timestamp) return false;
+          const cacheAge = Date.now() - parseInt(timestamp);
+          return cacheAge < CACHE_DURATION;
+        },
+        // Load from localStorage
+        loadFromCache: function() {
+          const cached = localStorage.getItem(CACHE_KEY);
+          if (cached) {
+            try {
+              this._cache = JSON.parse(cached);
+              return true;
+            } catch (e) {
+            }
+          }
+          return false;
+        },
+        // Save to localStorage
+        saveToCache: function() {
+          try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(this._cache));
+            localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
+          } catch (e) {
+          }
+        },
+        // Get price for a variant (returns object with price and compareAtPrice, or just price for backward compat)
+        getPrice: function(variantId, isCompare = false) {
+          const id = String(variantId).replace('-compare', '');
+          const cached = this._cache[id];
+          if (!cached) return null;
+          // Handle both old format (number) and new format (object)
+          if (typeof cached === 'number') {
+            return cached; // Backward compatibility
+          }
+          return isCompare ? cached.compareAtPrice : cached.price;
+        },
+        // Get regular price
+        getRegularPrice: function(variantId) {
+          return this.getPrice(variantId, false);
+        },
+        // Get compare at price
+        getComparePrice: function(variantId) {
+          return this.getPrice(variantId, true);
+        },
+        // Batch fetch all EUR prices from the page
+        fetchAllPrices: async function() {
+          if (this._fetching) {
+            return new Promise(resolve => {
+              this._callbacks.push(resolve);
+            });
+          }
+          if (this._initialized) {
+            return this._cache;
+          }
+          this._fetching = true;
+          // Try to load from cache first
+          if (this.isCacheValid() && this.loadFromCache()) {
+            this._initialized = true;
+            this._fetching = false;
+            this._notifyCallbacks();
+            return this._cache;
+          }
+          // Collect all variant IDs from the page
+          const variantIds = new Set();
+          document.querySelectorAll('[data-variant-id]').forEach(el => {
+            const id = el.dataset.variantId;
+            if (id && !id.includes('-compare')) {
+              variantIds.add(String(id));
+            }
+          });
+          // Also check for data-product-id (some buttons use this)
+          document.querySelectorAll('[data-product-id]').forEach(el => {
+            const id = el.dataset.productId;
+            if (id && id !== 'null' && id !== '') {
+              variantIds.add(String(id));
+            }
+          });
+          const uniqueIds = Array.from(variantIds);
+          if (uniqueIds.length === 0) {
+            this._fetching = false;
+            this._initialized = true;
+            return this._cache;
+          }
+          try {
+            // Add all items to cart at once (with EUR currency)
+            const items = uniqueIds.map(id => ({ id: parseInt(id), quantity: 1 }));
+            const addResponse = await fetch('/cart/add.js?currency=EUR', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ items: items })
+            });
+            if (!addResponse.ok) {
+              throw new Error('Failed to add items for price fetch');
+            }
+            // Fetch cart to get EUR prices
+            const cartResponse = await fetch('/cart.js?currency=EUR');
+            const cart = await cartResponse.json();
+            // Extract prices from cart items (including compare_at_price)
+            cart.items.forEach(item => {
+              const variantId = String(item.variant_id);
+              this._cache[variantId] = {
+                price: item.price / 100,
+                compareAtPrice: item.compare_at_price ? item.compare_at_price / 100 : null
+              };
+            });
+            // Remove all items from cart
+            await fetch('/cart/update.js', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ updates: uniqueIds.map(() => 0) })
+            });
+            // Save to cache
+            this.saveToCache();
+            this._initialized = true;
+            // Update all price elements on page
+            this.updatePriceElements();
+            // Also update formatted prices once CurrencyManager is ready
+            this.waitForCurrencyManagerAndUpdate();
+          } catch (error) {
+            // Fetch error
+          } finally {
+            this._fetching = false;
+            this._notifyCallbacks();
+          }
+          return this._cache;
+        },
+        // Wait for CurrencyManager and update formatted prices
+        waitForCurrencyManagerAndUpdate: function() {
+          if (typeof window.CurrencyManager === 'undefined') {
+            setTimeout(() => this.waitForCurrencyManagerAndUpdate(), 100);
+            return;
+          }
+          // Wait for rates to be loaded
+          const checkInterval = setInterval(() => {
+            const rates = window.CurrencyManager.getRates();
+            const currentCurrency = window.CurrencyManager.getCurrentCurrency();
+            if (rates && (Object.keys(rates).length > 1 || rates.EUR === 1)) {
+              clearInterval(checkInterval);
+              // Update ALL price elements with formatted prices (including compare prices)
+              document.querySelectorAll('[data-variant-id]').forEach(el => {
+                if (el.dataset.priceEur) {
+                  const formattedPrice = window.CurrencyManager.formatPrice(parseFloat(el.dataset.priceEur), currentCurrency);
+                  el.textContent = formattedPrice;
+                  el.classList.remove('price-loading');
+                }
+              });
+            }
+          }, 50);
+          // Timeout fallback after 3 seconds
+          setTimeout(() => {
+            clearInterval(checkInterval);
+            // Force update all prices (including compare prices)
+            const currentCurrency = window.CurrencyManager.getCurrentCurrency();
+            document.querySelectorAll('[data-variant-id]').forEach(el => {
+              if (el.dataset.priceEur) {
+                const formattedPrice = window.CurrencyManager.formatPrice(parseFloat(el.dataset.priceEur), currentCurrency);
+                el.textContent = formattedPrice;
+                el.classList.remove('price-loading');
+              }
+            });
+          }, 3000);
+        },
+        _notifyCallbacks: function() {
+          this._callbacks.forEach(cb => cb(this._cache));
+          this._callbacks = [];
+        },
+        // Update all price elements with cached EUR prices
+        updatePriceElements: function() {
+          document.querySelectorAll('[data-variant-id]').forEach(el => {
+            const variantId = el.dataset.variantId;
+            const isCompare = variantId.includes('-compare');
+            const baseVariantId = String(variantId).replace('-compare', '');
+
+            // Get the appropriate price from cache
+            const cached = this._cache[baseVariantId];
+            if (!cached) return;
+
+            let eurPrice = null;
+            if (typeof cached === 'number') {
+              // Old format - just a number
+              eurPrice = isCompare ? null : cached;
+            } else {
+              // New format - object with price and compareAtPrice
+              eurPrice = isCompare ? cached.compareAtPrice : cached.price;
+            }
+
+            if (eurPrice && eurPrice > 0) {
+              el.dataset.priceEur = eurPrice;
+              el.dataset.priceBase = 'EUR';
+              el.classList.remove('price-loading');
+            } else {
+              el.classList.remove('price-loading');
+            }
+          });
+          // Now update all text content with CurrencyManager - ALWAYS update, not just price-loading
+          if (typeof window.CurrencyManager !== 'undefined') {
+            const currentCurrency = window.CurrencyManager.getCurrentCurrency();
+            document.querySelectorAll('[data-variant-id]').forEach(el => {
+              if (el.dataset.priceEur) {
+                const formattedPrice = window.CurrencyManager.formatPrice(parseFloat(el.dataset.priceEur), currentCurrency);
+                el.textContent = formattedPrice;
+                el.classList.remove('price-loading');
+              }
+            });
+          }
+        },
+        // Public API - get EUR price (can be called from sections)
+        get: function(variantId, callback) {
+          variantId = String(variantId).replace('-compare', '');
+          const cached = this._cache[variantId];
+          if (cached) {
+            // Return just the price for backward compatibility (sections expect a number)
+            return typeof cached === 'number' ? cached : cached.price;
+          }
+          // If not initialized, fetch and call callback
+          if (!this._initialized && !this._fetching) {
+            this.fetchAllPrices().then(() => {
+              const result = this._cache[variantId];
+              if (callback) callback(typeof result === 'number' ? result : (result ? result.price : null));
+            });
+          } else if (this._fetching) {
+            this._callbacks.push(() => {
+              const result = this._cache[variantId];
+              if (callback) callback(typeof result === 'number' ? result : (result ? result.price : null));
+            });
+          }
+          return null;
+        }
+      };
+      // Auto-fetch on page load
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => window.EURPriceCache.fetchAllPrices());
+      } else {
+        // Small delay to let sections render first
+        setTimeout(() => window.EURPriceCache.fetchAllPrices(), 100);
+      }
+    })();
+  </script>
+  <!-- Global Dropdown Functions (must be defined before HTML) -->
+  <script>
+    // Dropdown toggle function
+    window.toggleDropdown = function(id) {
+      const dropdown = document.getElementById(id);
+      if (!dropdown) return;
+      const allDropdowns = document.querySelectorAll('.dropdown-menu');
+      // Close all other dropdowns
+      allDropdowns.forEach(d => {
+        if (d.id !== id) {
+          d.classList.add('hidden');
+        }
+      });
+      // Toggle current dropdown
+      dropdown.classList.toggle('hidden');
+    };
+    // Change currency function (placeholder - full definition in body)
+    // Global currency change function - handles CurrencyManager loading state
+    window.changeCurrency = function(currencyCode) {
+      const symbols = { USD: '$', EUR: '€', GBP: '£', CAD: 'C$', AUD: 'A$', JPY: '¥', CHF: 'CHF', SEK: 'kr', NOK: 'kr', DKK: 'kr', PLN: 'zł', INR: '₹' };
+      // Update header immediately for instant feedback
+      const headerEl = document.getElementById('current-currency');
+      if (headerEl) {
+        headerEl.textContent = currencyCode + ' ' + (symbols[currencyCode] || '');
+      }
+      // Close dropdown
+      const dropdown = document.getElementById('currency-dropdown');
+      if (dropdown) dropdown.classList.add('hidden');
+      // Update dropdown visual state
+      document.querySelectorAll('#currency-dropdown button').forEach(btn => {
+        btn.classList.remove('bg-accent', 'text-accent-foreground', 'font-semibold');
+      });
+      document.querySelectorAll('#currency-dropdown button .currency-check').forEach(el => {
+        el.innerHTML = '';
+      });
+      const activeBtn = document.querySelector(`#currency-dropdown button[onclick*="'${currencyCode}'"]`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-accent', 'text-accent-foreground', 'font-semibold');
+        const checkEl = activeBtn.querySelector('.currency-check');
+        if (checkEl) checkEl.innerHTML = '<i class="fas fa-check text-xs"></i>';
+      }
+      // Save to localStorage
+      localStorage.setItem('selectedCurrency', currencyCode);
+      localStorage.setItem('currencyManuallySelected', 'true');
+
+      // Set current currency FIRST so sections get the correct value when they read it
+      if (typeof window.CurrencyManager !== 'undefined' && window.CurrencyManager.setCurrentCurrency) {
+        window.CurrencyManager.setCurrentCurrency(currencyCode);
+      }
+
+      // Dispatch event so sections can update their data-price-eur attributes and format prices
+      window.dispatchEvent(new CustomEvent('currencyChanged', {
+        detail: { from: 'EUR', to: currencyCode }
+      }));
+
+      // Then update any remaining prices (after sections have had a chance to update)
+      setTimeout(function() {
+        if (typeof window.CurrencyManager !== 'undefined' && window.CurrencyManager.updateAllPrices) {
+          window.CurrencyManager.updateAllPrices(currencyCode);
+        }
+      }, 100);
+
+      // Update cart
+      if (typeof updateCartUI === 'function') {
+        updateCartUI();
+      }
+    };
+    // Set up event delegation for currency dropdown (runs after DOM ready)
+    document.addEventListener('DOMContentLoaded', function() {
+      const currencyDropdown = document.getElementById('currency-dropdown');
+      if (currencyDropdown) {
+        currencyDropdown.addEventListener('click', function(e) {
+          const btn = e.target.closest('button[onclick]');
+          if (btn) {
+            const match = btn.getAttribute('onclick').match(/changeCurrency\('([^']+)'\)/);
+            if (match) {
+              e.preventDefault();
+              window.changeCurrency(match[1]);
+            }
+          }
+        });
+      }
+    });
+    // Fallback: Display prices when rates aren't available
+    function updatePricesWithEURDisplay() {
+      const currentCurrency = localStorage.getItem('selectedCurrency') || 'EUR';
+      const symbols = { USD: '$', EUR: '€', GBP: '£', CAD: 'C$', AUD: 'A$', JPY: '¥', CHF: 'CHF', SEK: 'kr', NOK: 'kr', DKK: 'kr', PLN: 'zł', INR: '₹' };
+      const targetSymbol = symbols[currentCurrency] || currentCurrency;
+      document.querySelectorAll('[data-price-eur]').forEach(el => {
+        const eurPrice = parseFloat(el.dataset.priceEur);
+        if (!isNaN(eurPrice)) {
+          if (targetSymbol === 'CHF' || currentCurrency === 'EUR') {
+            el.textContent = Math.round(eurPrice) + ' ' + targetSymbol;
+          } else {
+            el.textContent = targetSymbol + Math.round(eurPrice);
+          }
+        }
+      });
+    }
+    // ============================================================
+    // SHOPIFY AJAX CART (No localStorage, proper currency support)
+    // ============================================================
+    // Cart drawer toggle with body scroll lock
+    window.toggleCart = function() {
+      const sidebar = document.getElementById('cart-sidebar');
+      const overlay = document.getElementById('cart-overlay');
+      const isOpen = sidebar.classList.contains('open');
+      if (isOpen) {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.classList.remove('cart-open');
+        document.body.style.overflow = '';
+      } else {
+        sidebar.classList.add('open');
+        overlay.classList.add('open');
+        document.body.classList.add('cart-open');
+        document.body.style.overflow = 'hidden';
+        // Load upsell products when cart opens
+        if (typeof loadCartUpsell === 'function') {
+          loadCartUpsell();
+        }
+      }
+    };
+    // Add to cart function - uses Shopify AJAX
+    window.addToCart = function(variantId, quantity = 1) {
+      // Get translatable texts
+      const lang = localStorage.getItem('selectedLanguage') || 'en';
+      const t = (typeof translations !== 'undefined' && translations[lang]) || {};
+      const addingText = window.getTranslation ? (window.getTranslation('upsell_adding') || 'Adding...') : (t.upsell_adding || 'Adding...');
+      // Show loading state on button - check multiple selector patterns
+      let cartBtn = document.querySelector(`button[onclick*="${variantId}"]`);
+      if (!cartBtn) {
+        cartBtn = document.querySelector(`button[data-product-id="${variantId}"]`);
+      }
+      let originalText = '';
+      if (cartBtn) {
+        originalText = cartBtn.innerHTML;
+        cartBtn.dataset.originalText = originalText;
+        cartBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${addingText}`;
+        cartBtn.disabled = true;
+        cartBtn.style.opacity = '0.7';
+      }
+      const currentCurrencyCode = window.CurrencyManager.getCurrentCurrency();
+      return fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: variantId,
+          quantity: quantity
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.text().then(text => {
+            throw new Error(`Failed to add to cart: ${response.status} ${response.statusText}`);
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Fetch full cart to get updated items (same request, no extra delay)
+        return fetch(`/cart.js?currency=${currentCurrencyCode}`);
+      })
+      .then(response => response.json())
+      .then(cart => {
+        // Update UI directly with cart data
+        updateCartFromData(cart);
+        // Open cart drawer immediately (no setTimeout delay)
+        toggleCart();
+        // Restore button state
+        if (cartBtn && cartBtn.dataset.originalText) {
+          cartBtn.innerHTML = cartBtn.dataset.originalText;
+          cartBtn.disabled = false;
+          cartBtn.style.opacity = '1';
+          delete cartBtn.dataset.originalText;
+        }
+        return cart;
+      })
+      .catch(error => {
+        // Restore button state on error
+        if (cartBtn && cartBtn.dataset.originalText) {
+          cartBtn.innerHTML = cartBtn.dataset.originalText;
+          cartBtn.disabled = false;
+          cartBtn.style.opacity = '1';
+          delete cartBtn.dataset.originalText;
+        }
+        const addErrorMsg = window.getTranslation ? (window.getTranslation('cart_add_failed') || 'Failed to add item to cart. Please try again.') : 'Failed to add item to cart. Please try again.';
+        alert(addErrorMsg);
+        throw error;
+      });
+    };
+    // Remove item from cart - uses Shopify AJAX
+    window.removeFromCart = function(key) {
+      const currentCurrencyCode = window.CurrencyManager.getCurrentCurrency();
+      // Find and update the remove button
+      const removeBtn = document.querySelector(`button[data-remove-key="${key}"]`);
+      const originalBtnContent = removeBtn ? removeBtn.innerHTML : '';
+      if (removeBtn) {
+        removeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        removeBtn.disabled = true;
+        removeBtn.style.opacity = '0.6';
+        removeBtn.style.cursor = 'not-allowed';
+      }
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: key,
+          quantity: 0
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Fetch full cart to get updated items (same request chain)
+        return fetch(`/cart.js?currency=${currentCurrencyCode}`);
+      })
+      .then(response => response.json())
+      .then(cart => {
+        // Update UI directly with cart data
+        updateCartFromData(cart);
+      })
+      .catch(error => {
+        // Restore button on error
+        if (removeBtn) {
+          removeBtn.innerHTML = originalBtnContent;
+          removeBtn.disabled = false;
+          removeBtn.style.opacity = '1';
+          removeBtn.style.cursor = 'pointer';
+        }
+      });
+    };
+    // Change variant in cart - remove current variant and add new variant
+    window.changeCartVariant = function(buttonElement) {
+      const itemKey = buttonElement.getAttribute('data-item-key');
+      const newVariantId = parseInt(buttonElement.getAttribute('data-new-variant'));
+      const currentVariantId = parseInt(buttonElement.getAttribute('data-current-variant'));
+      // Don't do anything if same variant selected
+      if (newVariantId === currentVariantId) return;
+      // Find the cart item to get quantity
+      const cartItemElement = buttonElement.closest('.cart-item');
+      const quantity = parseInt(cartItemElement?.getAttribute('data-item-quantity')) || 1;
+      const productTitle = cartItemElement.querySelector('h4')?.textContent || '';
+      // Find all variant badges in this container
+      const badgesContainer = buttonElement.closest('.cart-variant-badges');
+      const allBadges = badgesContainer ? badgesContainer.querySelectorAll('.cart-variant-badge') : [];
+      // Store original state for potential revert
+      const originalState = {
+        currentVariantId: currentVariantId,
+        badgeStates: []
+      };
+      allBadges.forEach(btn => {
+        originalState.badgeStates.push({
+          element: btn,
+          variantId: parseInt(btn.getAttribute('data-new-variant')),
+          wasSelected: btn.classList.contains('selected')
+        });
+      });
+      // IMMEDIATE UI UPDATE - show the change instantly
+      allBadges.forEach(btn => {
+        const btnVariantId = parseInt(btn.getAttribute('data-new-variant'));
+        const isSelected = btnVariantId === newVariantId;
+        btn.classList.toggle('selected', isSelected);
+        btn.disabled = isSelected;
+        btn.style.background = isSelected ? 'var(--primary)' : 'transparent';
+        btn.style.color = isSelected ? 'white' : 'var(--foreground)';
+        btn.style.borderColor = isSelected ? 'var(--primary)' : 'var(--border)';
+        btn.style.cursor = isSelected ? 'not-allowed' : 'pointer';
+        // Update data attributes
+        btn.setAttribute('data-current-variant', newVariantId);
+      });
+      const currentCurrencyCode = window.CurrencyManager.getCurrentCurrency();
+      // Backend sync - do this silently in background
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: itemKey, quantity: 0 })
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to remove current variant');
+        return response.json();
+      })
+      .then(() => {
+        return fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: newVariantId, quantity: quantity })
+        });
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to add new variant');
+        return response.json();
+      })
+      .then(addedItem => {
+        // Update item key and variant ID from backend response
+        cartItemElement.setAttribute('data-item-key', addedItem.key);
+        cartItemElement.setAttribute('data-variant-id', addedItem.variant_id);
+        // Update all badges with new item key
+        allBadges.forEach(btn => {
+          btn.setAttribute('data-item-key', addedItem.key);
+        });
+        // Update remove button with new key
+        const removeBtn = cartItemElement.querySelector('button[data-remove-key]');
+        if (removeBtn) {
+          removeBtn.setAttribute('data-remove-key', addedItem.key);
+          removeBtn.setAttribute('onclick', `removeFromCart('${addedItem.key}')`);
+        }
+        // Update price and title from backend response
+        const newVariantPrice = addedItem.price / 100;
+        const newVariantTitle = addedItem.variant_title;
+        const formattedPrice = window.CurrencyManager.formatPriceDirect(newVariantPrice, currentCurrencyCode);
+        const formattedTotal = window.CurrencyManager.formatPriceDirect(newVariantPrice * quantity, currentCurrencyCode);
+        const titleEl = cartItemElement.querySelector('h4');
+        if (titleEl) {
+          titleEl.textContent = newVariantTitle ? productTitle.split(' - ')[0] + ' - ' + newVariantTitle : productTitle;
+        }
+        const priceEl = cartItemElement.querySelector('p[style*="muted-foreground"]');
+        if (priceEl) {
+          priceEl.textContent = `${formattedPrice} × ${quantity}`;
+        }
+        const totalEl = cartItemElement.querySelectorAll('p')[1];
+        if (totalEl) {
+          totalEl.textContent = formattedTotal;
+        }
+        // Update cart total
+        return fetch(`/cart.js?currency=${currentCurrencyCode}`);
+      })
+      .then(response => response.json())
+      .then(cart => {
+        const cartTotalEl = document.getElementById('cart-total');
+        const cartCountEl = document.getElementById('cart-count');
+        if (cartTotalEl) {
+          cartTotalEl.textContent = window.CurrencyManager.formatPriceDirect(cart.total_price / 100, currentCurrencyCode);
+        }
+        if (cartCountEl) {
+          const totalItems = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+          cartCountEl.textContent = totalItems;
+          cartCountEl.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
+      })
+      .catch(error => {
+        // Revert UI on error
+        originalState.badgeStates.forEach(state => {
+          const btn = state.element;
+          btn.classList.toggle('selected', state.wasSelected);
+          btn.disabled = state.wasSelected;
+          btn.style.background = state.wasSelected ? 'var(--primary)' : 'transparent';
+          btn.style.color = state.wasSelected ? 'white' : 'var(--foreground)';
+          btn.style.borderColor = state.wasSelected ? 'var(--primary)' : 'var(--border)';
+          btn.style.cursor = state.wasSelected ? 'not-allowed' : 'pointer';
+          btn.setAttribute('data-current-variant', originalState.currentVariantId);
+        });
+        const changeErrorMsg = window.getTranslation ? (window.getTranslation('cart_change_failed') || 'Failed to change variant. Please try again.') : 'Failed to change variant. Please try again.';
+        alert(changeErrorMsg);
+      });
+    };
+    // Update item quantity - uses Shopify AJAX
+    window.updateCartItem = function(key, quantity) {
+      const currentCurrencyCode = window.CurrencyManager.getCurrentCurrency();
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: key,
+          quantity: quantity
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Fetch full cart to get updated items (same request chain)
+        return fetch(`/cart.js?currency=${currentCurrencyCode}`);
+      })
+      .then(response => response.json())
+      .then(cart => {
+        // Update UI directly with cart data
+        updateCartFromData(cart);
+      })
+      .catch(() => {
+        // Error loading cart, silent fail
+      });
+    };
+    // Get price in EUR from Shopify price (in cents)
+    function getEURPrice(priceInCents) {
+      return priceInCents / 100;
+    }
+    // Update cart UI from cart data (no fetch needed - faster!)
+    window.updateCartFromData = function(cart) {
+      const cartItems = document.getElementById('cart-items');
+      const cartCount = document.getElementById('cart-count');
+      const cartFooter = document.getElementById('cart-footer');
+      const cartTotal = document.getElementById('cart-total');
+      if (!cartItems || !cartCount || !cartFooter || !cartTotal) {
+        return;
+      }
+      // Get current currency with fallback
+      let currentCurrencyCode = 'EUR'; // Default fallback
+      if (typeof window.CurrencyManager !== 'undefined' && window.CurrencyManager.getCurrentCurrency) {
+        currentCurrencyCode = window.CurrencyManager.getCurrentCurrency();
+      } else {
+      }
+      // Update count
+      const totalItems = cart.item_count;
+      cartCount.textContent = totalItems;
+      cartCount.classList.toggle('hidden', totalItems === 0);
+      cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
+      // Update items
+      if (cart.items.length === 0) {
+        const emptyText = (typeof translations !== 'undefined' && translations[localStorage.getItem('selectedLanguage') || 'en'])?.cart_empty || 'Your cart is empty';
+        cartItems.innerHTML = `<div class="cart-empty">${emptyText}</div>`;
+        cartFooter.classList.remove('show');
+        // Hide upsell section when cart is empty
+        const upsellSection = document.getElementById('cart-upsell');
+        if (upsellSection) upsellSection.style.display = 'none';
+      } else {
+        let html = '';
+        cart.items.forEach((item, index) => {
+          const itemPrice = item.price / 100;
+          const itemTotal = itemPrice * item.quantity;
+          const formattedPrice = window.CurrencyManager.formatPriceDirect(itemPrice, currentCurrencyCode);
+          const formattedTotal = window.CurrencyManager.formatPriceDirect(itemTotal, currentCurrencyCode);
+          html += `
+            <div class="cart-item" data-product-id="${item.product_id}" data-item-key="${item.key}" data-variant-id="${item.variant_id}" data-item-quantity="${item.quantity}" style="display: flex; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); position: relative;">
+              <div style="flex: 1;">
+                <h4 style="font-size: 0.75rem; font-weight: 600; margin-bottom: 0.1rem; line-height: 1.2;">${item.variant_title ? item.product_title : item.product_title}</h4>
+                <div id="variant-selector-${index}" class="cart-variant-selector" style="margin-bottom: 0.25rem;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
+                <p style="color: var(--muted-foreground); font-size: 0.7rem; margin: 0;">${formattedPrice} × ${item.quantity}</p>
+              </div>
+              <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem;">
+                <p style="font-weight: 600; font-size: 0.8rem; margin: 0;">${formattedTotal}</p>
+                <button data-remove-key="${item.key}" onclick="removeFromCart('${item.key}')" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; cursor: pointer; padding: 0.25rem 0.4rem; font-size: 0.7rem; border-radius: 4px; transition: all 0.2s;" title="Remove item" onmouseover="this.style.background='rgba(239, 68, 68, 0.25)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.15)'">
+                  <i class="fas fa-trash-alt" style="font-size: 0.65rem;"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        cartItems.innerHTML = html;
+        // Fetch all variants for each unique product and display variant badges
+        const processedProducts = new Set();
+        cart.items.forEach((item, index) => {
+          if (processedProducts.has(item.product_id)) return;
+          processedProducts.add(item.product_id);
+          fetch(`/products/${item.handle}.js`)
+            .then(response => response.json())
+            .then(product => {
+              if (product.variants && product.variants.length > 1) {
+                // Filter out "Default Title" variants
+                const validVariants = product.variants.filter(v =>
+                  v.title !== 'Default Title' && v.title !== null && v.title !== undefined && v.title !== ''
+                );
+                if (validVariants.length > 1) {
+                  // Create variant badges
+                  let badgesHtml = '<div class="cart-variant-badges" style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.15rem;">';
+                  validVariants.forEach(variant => {
+                    const isSelected = variant.id === item.variant_id;
+                    const price = window.CurrencyManager.formatPriceDirect(variant.price / 100, currentCurrencyCode);
+                    const selectedStyle = isSelected
+                      ? 'background: var(--primary); color: white; border-color: var(--primary);'
+                      : 'background: transparent; color: var(--foreground); border-color: var(--border);';
+                    badgesHtml += `
+                      <button type="button"
+                              class="cart-variant-badge ${isSelected ? 'selected' : ''}"
+                              data-item-key="${item.key}"
+                              data-current-variant="${item.variant_id}"
+                              data-new-variant="${variant.id}"
+                              data-product-id="${product.id}"
+                              onclick="changeCartVariant(this)"
+                              style="padding: 0.15rem 0.4rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.65rem; font-weight: 600; cursor: pointer; transition: all 0.2s; ${selectedStyle}"
+                              ${isSelected ? 'disabled' : ''}>
+                        ${variant.title}
+                      </button>
+                    `;
+                  });
+                  badgesHtml += '</div>';
+                  // Update all cart items for this product
+                  cart.items.forEach((cartItem, cartIndex) => {
+                    if (cartItem.product_id === product.id) {
+                      const selectorEl = document.getElementById(`variant-selector-${cartIndex}`);
+                      if (selectorEl) {
+                        selectorEl.innerHTML = badgesHtml;
+                      }
+                    }
+                  });
+                } else {
+                  // Only 1 valid variant - hide the selector
+                  cart.items.forEach((cartItem, cartIndex) => {
+                    if (cartItem.product_id === product.id) {
+                      const selectorEl = document.getElementById(`variant-selector-${cartIndex}`);
+                      if (selectorEl) {
+                        selectorEl.innerHTML = '';
+                      }
+                    }
+                  });
+                }
+              } else {
+                // Only 1 variant or "Default Title" - hide the selector
+                cart.items.forEach((cartItem, cartIndex) => {
+                  if (cartItem.product_id === product.id) {
+                    const selectorEl = document.getElementById(`variant-selector-${cartIndex}`);
+                    if (selectorEl) {
+                      selectorEl.innerHTML = '';
+                    }
+                  }
+                });
+              }
+            })
+            .catch(err => {
+              // Remove loading state on error
+              const selectorEl = document.getElementById(`variant-selector-${index}`);
+              if (selectorEl) selectorEl.innerHTML = '';
+            });
+        });
+        const cartTotalAmount = cart.total_price / 100;
+        const formattedTotal = window.CurrencyManager.formatPriceDirect(cartTotalAmount, currentCurrencyCode);
+        cartTotal.textContent = formattedTotal;
+        cartFooter.classList.add('show');
+        // Load upsell products when cart has items
+        if (cart.items.length > 0 && typeof loadCartUpsell === 'function') {
+          loadCartUpsell();
+        }
+      }
+    };
+    // Update cart UI - fetches from Shopify AJAX in current currency
+    window.updateCartUI = function() {
+      const cartItems = document.getElementById('cart-items');
+      const cartCount = document.getElementById('cart-count');
+      const cartFooter = document.getElementById('cart-footer');
+      const cartTotal = document.getElementById('cart-total');
+      if (!cartItems || !cartCount || !cartFooter || !cartTotal) {
+        return;
+      }
+      // Get current currency and fetch cart with explicit currency parameter
+      let currentCurrencyCode = 'EUR'; // Default fallback
+      if (typeof window.CurrencyManager !== 'undefined' && window.CurrencyManager.getCurrentCurrency) {
+        currentCurrencyCode = window.CurrencyManager.getCurrentCurrency();
+      } else {
+      }
+      const cartUrl = `/cart.js?currency=${currentCurrencyCode}`;
+      fetch(cartUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('HTTP ' + response.status);
+          }
+          return response.json();
+        })
+        .then(cart => {
+          if (cart.items.length > 0) {
+            const item = cart.items[0];
+          }
+          // Use the shared update function
+          updateCartFromData(cart);
+        })
+        .catch(error => {
+          // Show error in cart
+          const loadErrorMsg = window.getTranslation ? (window.getTranslation('cart_load_error') || 'Error loading cart. Please refresh.') : 'Error loading cart. Please refresh.';
+          cartItems.innerHTML = `<div class="cart-empty" style="color: #ef4444;">${loadErrorMsg}</div>`;
+        });
+    };
+    // Checkout - redirect to Shopify checkout
+    window.checkout = function() {
+      window.location.href = '/checkout';
+    };
+    // Load and display upsell products in cart
+    window.loadCartUpsell = async function() {
+      const upsellSection = document.getElementById('cart-upsell');
+      const upsellContainer = document.getElementById('upsell-products');
+      if (!upsellSection || !upsellContainer) {
+        return;
+      }
+      // Get translatable texts
+      const lang = localStorage.getItem('selectedLanguage') || 'en';
+      const t = (typeof translations !== 'undefined' && translations[lang]) || {};
+      const addToCartText = t.upsell_add_to_cart || 'Add to cart';
+      // Get current cart to exclude items already in cart
+      let cartProductIds = [];
+      try {
+        const cartResponse = await fetch('/cart.js');
+        const cart = await cartResponse.json();
+        cartProductIds = cart.items.map(item => item.product_id);
+      } catch (error) {
+      }
+      // Upsell product handles (these should match bundles-2 section)
+      const upsellHandles = ['2026-planner', 'games-activities'];
+      let productsHtml = '';
+      for (const handle of upsellHandles) {
+        try {
+          const response = await fetch(`/products/${handle}.js`);
+          if (!response.ok) continue;
+          const product = await response.json();
+          // Skip if product is already in cart
+          if (cartProductIds.includes(product.id)) {
+            continue;
+          }
+          if (product && product.variants && product.variants.length > 0) {
+            const variant = product.variants[0]; // Use first variant
+            const price = (variant.price / 100).toFixed(2);
+            const imageUrl = product.featured_image ? product.featured_image.replace(/\.jpg|\.png|\.gif/g, '_small.webp') : '';
+            productsHtml += `
+              <div class="upsell-product" data-product-id="${product.id}" data-variant-id="${variant.id}">
+                ${imageUrl ? `<img src="${imageUrl}" alt="${product.title}" loading="lazy">` : '<div style="width: 48px; height: 48px; background: var(--border); border-radius: 0.375rem; display: flex; align-items: center; justify-content: center;"><i class="fas fa-box" style="color: var(--muted-foreground);"></i></div>'}
+                <div class="upsell-product-info">
+                  <div class="upsell-product-title">${product.title}</div>
+                  <div class="upsell-product-price" data-upsell-price="${variant.price}">$${price}</div>
+                  <button class="upsell-product-btn" data-translate="upsell_add_to_cart" onclick="addUpsellToCart(this, ${variant.id}, '${product.title.replace(/'/g, "\\'")}', ${variant.price})">
+                    ${addToCartText}
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+        } catch (error) {
+        }
+      }
+      if (productsHtml) {
+        upsellContainer.innerHTML = productsHtml;
+        upsellSection.style.display = 'block';
+        // Update prices with currency
+        if (typeof window.CurrencyManager !== 'undefined') {
+          document.querySelectorAll('.upsell-product-price').forEach(priceEl => {
+            const price = parseFloat(priceEl.dataset.upsellPrice) / 100;
+            const currency = window.CurrencyManager.getCurrentCurrency();
+            priceEl.textContent = window.CurrencyManager.formatPrice(price, currency);
+          });
+        }
+      } else {
+        // No products to show, hide upsell section
+        upsellSection.style.display = 'none';
+      }
+    };
+    // Close upsell section
+    window.closeUpsell = function() {
+      const upsellSection = document.getElementById('cart-upsell');
+      if (upsellSection) {
+        upsellSection.style.display = 'none';
+      }
+    };
+    // Add upsell product to cart
+    window.addUpsellToCart = function(btn, variantId, title, price) {
+      // Get translatable texts
+      const lang = localStorage.getItem('selectedLanguage') || 'en';
+      const t = (typeof translations !== 'undefined' && translations[lang]) || {};
+      const addingText = window.getTranslation ? (window.getTranslation('upsell_adding') || 'Adding...') : (t.upsell_adding || 'Adding...');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${addingText}`;
+      btn.disabled = true;
+      if (typeof addToCart === 'function') {
+        addToCart(variantId).then(() => {
+          // Remove the upsell product card immediately
+          const upsellCard = btn.closest('.upsell-product');
+          if (upsellCard) {
+            upsellCard.style.transition = 'all 0.3s ease';
+            upsellCard.style.opacity = '0';
+            upsellCard.style.transform = 'translateX(20px)';
+            setTimeout(() => {
+              upsellCard.remove();
+              // Check if any upsell products remain
+              const upsellContainer = document.getElementById('upsell-products');
+              if (upsellContainer && upsellContainer.children.length === 0) {
+                closeUpsell();
+              }
+            }, 300);
+          }
+        }).catch(() => {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        });
+      }
+    };
+  </script>
+  <!-- ============================================================
+  CLIENT-SIDE TRANSLATION SYSTEM (JSON-based)
+  - Uses en.json and nl.json for all translations
+  - Dynamically loads translation files via fetch
+  - No page reload required
+  - setLanguage() function available globally
+  ============================================================ -->
+  <script>
+  (function() {
+    'use strict';
+    // Store original English text
+    const originalTexts = {};
+    // Capture original text on page load
+    function captureOriginalTexts() {
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.dataset.translate;
+        // Capture innerHTML for elements with HTML tags, textContent for plain text
+        if (el.innerHTML.includes('<') && el.innerHTML.includes('>')) {
+          originalTexts[key] = el.innerHTML;
+        } else {
+          originalTexts[key] = el.textContent.trim();
+        }
+      });
+    }
+    // Get current language from localStorage
+    function getCurrentLanguage() {
+      return localStorage.getItem('selectedLanguage') || 'en';
+    }
+    // Initialize dropdown active state
+    function initializeDropdownState(langCode) {
+      // Remove checkmark and active class from all buttons
+      document.querySelectorAll('#lang-dropdown button').forEach(btn => {
+        btn.classList.remove('bg-accent', 'text-accent-foreground', 'font-semibold');
+        const checkIndicator = btn.querySelector('.check-indicator');
+        if (checkIndicator) {
+          checkIndicator.innerHTML = '';
+        }
+      });
+      // Add active class and checkmark to current language button
+      const activeBtn = document.querySelector(`#lang-dropdown button[data-lang="${langCode}"]`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-accent', 'text-accent-foreground', 'font-semibold');
+        const checkIndicator = activeBtn.querySelector('.check-indicator');
+        if (checkIndicator) {
+          checkIndicator.innerHTML = '<i class="fas fa-check text-xs"></i>';
+        }
+      }
+    }
+    // Set language (global function - called from header dropdown)
+    window.setLanguage = async function(langCode, flag, name) {
+      // Save to localStorage
+      localStorage.setItem('selectedLanguage', langCode);
+      if (flag) localStorage.setItem('selectedLanguageFlag', flag);
+      if (name) localStorage.setItem('selectedLanguageName', name);
+      // Update header display with provided flag and name
+      const flagEl = document.getElementById('current-flag');
+      const nameEl = document.getElementById('current-lang');
+      if (flagEl) flagEl.textContent = flag || '🌐';
+      if (nameEl) nameEl.textContent = name || langCode.toUpperCase();
+      // Update all translatable elements (await the async function)
+      await updateTranslations(langCode);
+      // Close dropdown
+      const dropdown = document.getElementById('lang-dropdown');
+      if (dropdown) dropdown.classList.add('hidden');
+      // Update active state in dropdown
+      initializeDropdownState(langCode);
+      // Dispatch event for other scripts
+      window.dispatchEvent(new CustomEvent('languageChanged', {
+        detail: { language: langCode, flag: flag, name: name }
+      }));
+    };
+    // Helper function to replace placeholders in translation strings
+    function replacePlaceholders(element, text) {
+      // Replace {productTitle} with data-product-title attribute value
+      // Check the element first, then check parent elements (for nested spans)
+      let productTitle = element.dataset.productTitle;
+      if (!productTitle) {
+        // Check parent elements up to 3 levels
+        let parent = element.parentElement;
+        let depth = 0;
+        while (parent && depth < 3) {
+          if (parent.dataset.productTitle) {
+            productTitle = parent.dataset.productTitle;
+            break;
+          }
+          parent = parent.parentElement;
+          depth++;
+        }
+      }
+      if (productTitle) {
+        text = text.replace(/\{productTitle\}/g, productTitle);
+      }
+      return text;
+    }
+    // Update all translatable text (async - loads JSON if needed)
+    async function updateTranslations(langCode) {
+      // Load translations using TranslationLoader
+      const langTranslations = await TranslationLoader.load(langCode);
+      if (!langTranslations || Object.keys(langTranslations).length === 0) {
+        return;
+      }
+      let translated = 0;
+      let notFound = [];
+      const elements = document.querySelectorAll('[data-translate]');
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.dataset.translate;
+        const translation = langTranslations[key];
+        if (translation) {
+          // Replace any placeholders in the translation
+          let finalTranslation = replacePlaceholders(el, translation);
+          // Check if translation contains HTML tags
+          if (finalTranslation.includes('<') && finalTranslation.includes('>')) {
+            el.innerHTML = finalTranslation;
+          } else {
+            el.textContent = finalTranslation;
+          }
+          translated++;
+        } else if (langCode === 'en') {
+          // Use original English text if no translation found in en.json
+          const original = originalTexts[key];
+          if (original) {
+            // Replace any placeholders in the original text
+            let finalOriginal = replacePlaceholders(el, original);
+            // Check if original contains HTML
+            if (finalOriginal.includes('<') && finalOriginal.includes('>')) {
+              el.innerHTML = finalOriginal;
+            } else {
+              el.textContent = finalOriginal;
+            }
+          }
+        } else {
+          notFound.push(key);
+        }
+      });
+    }
+    // Update header dropdown display
+    function updateHeaderDisplay(langCode) {
+      const languageData = {
+        'en': { flag: '🇺🇸', name: 'EN' },
+        'en-gb': { flag: '🇬🇧', name: 'EN' },
+        'de': { flag: '🇩🇪', name: 'DE' },
+        'nl': { flag: '🇳🇱', name: 'NL' },
+        'fr': { flag: '🇫🇷', name: 'FR' },
+        'it': { flag: '🇮🇹', name: 'IT' },
+        'es': { flag: '🇪🇸', name: 'ES' },
+        'pt': { flag: '🇵🇹', name: 'PT' },
+        'da': { flag: '🇩🇰', name: 'DA' },
+        'sv': { flag: '🇸🇪', name: 'SV' },
+        'no': { flag: '🇳🇴', name: 'NO' },
+        'pl': { flag: '🇵🇱', name: 'PL' },
+        'ja': { flag: '🇯🇵', name: 'JA' },
+        'hi': { flag: '🇮🇳', name: 'HI' },
+        'zh': { flag: '🇨🇳', name: 'ZH' },
+        'ko': { flag: '🇰🇷', name: 'KO' },
+        'ru': { flag: '🇷🇺', name: 'RU' }
+      };
+      const data = languageData[langCode] || { flag: '🇺🇸', name: 'EN' };
+      const flagEl = document.getElementById('current-flag');
+      const nameEl = document.getElementById('current-lang');
+      if (flagEl) flagEl.textContent = data.flag;
+      if (nameEl) nameEl.textContent = data.name;
+    }
+    // Initialize on page load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        captureOriginalTexts();
+        const currentLang = getCurrentLanguage();
+        // Update header display
+        updateHeaderDisplay(currentLang);
+        // Set dropdown active state
+        initializeDropdownState(currentLang);
+        // Always apply translations
+        updateTranslations(currentLang);
+      });
+    } else {
+      captureOriginalTexts();
+      const currentLang = getCurrentLanguage();
+      // Update header display
+      updateHeaderDisplay(currentLang);
+      // Set dropdown active state
+      initializeDropdownState(currentLang);
+      // Always apply translations (even for 'en' to ensure consistency)
+      updateTranslations(currentLang);
+    }
+    // Debug test function - call from console: testTranslations()
+    window.testTranslations = async function(langCode = 'hi') {
+      await updateTranslations(langCode);
+    };
+    // Global helper function for getting translations in JavaScript
+    window.getTranslation = function(key, fallback) {
+      const lang = getCurrentLanguage();
+      const langTranslations = TranslationLoader.translations[lang];
+      if (langTranslations && langTranslations[key]) {
+        return langTranslations[key];
+      }
+      // Return fallback or the key itself
+      return fallback || key;
+    };
+  })();
+  </script>
+  <!-- Geolocation Auto-Switch Script -->
+  <script>
+  (function() {
+    'use strict';
+    // Configuration
+    const CONFIG = {
+      defaultMarket: {
+        country: 'US',    // Default fallback
+        currency: 'USD',
+        language: 'en'
+      },
+      autoSwitch: true,   // Auto-switch based on geolocation
+      skipIfPreference: true // Skip if user has previously selected
+    };
+    // Check if user has already made a selection
+    function hasUserPreference() {
+      return sessionStorage.getItem('market-selected') === 'true' ||
+             localStorage.getItem('shopify-market') !== null;
+    }
+    // Get geolocation data from Shopify
+    async function getGeolocation() {
+      try {
+        const response = await fetch('/b/suggestions/localization.json', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (!response.ok) throw new Error('Geolocation API failed');
+        const data = await response.json();
+        return data.detected_values;
+      } catch (error) {
+        return null;
+      }
+    }
+    // Find best matching market based on detected country
+    function findBestMarket(detectedCountry) {
+      if (!detectedCountry) return null;
+      const availableMarkets = window.Shopify.markets.available;
+      const exactMatch = availableMarkets.find(m => m.iso_code === detectedCountry);
+      return exactMatch || null;
+    }
+    // Switch to a different market immediately
+    async function switchMarket(countryCode) {
+      try {
+        const formData = new FormData();
+        formData.append('country_code', countryCode);
+        const response = await fetch('/localization/update', {
+          method: 'POST',
+          body: formData
+        });
+        if (response.ok) {
+          window.location.reload();
+        }
+      } catch (error) {
+      }
+    }
+    // Main initialization
+    async function initGeolocation() {
+      // Skip if user already has preference
+      if (CONFIG.skipIfPreference && hasUserPreference()) {
+        return;
+      }
+      // Skip if auto-switch is disabled
+      if (!CONFIG.autoSwitch) {
+        return;
+      }
+      // Get geolocation data
+      const detected = await getGeolocation();
+      if (!detected || !detected.country) {
+        return;
+      }
+      // Find best market
+      const suggestedMarket = findBestMarket(detected.country.iso_code);
+      if (suggestedMarket) {
+        // Check if already on suggested market
+        const currentMarket = window.Shopify.country;
+        if (currentMarket === suggestedMarket.iso_code) {
+          return;
+        }
+        // Auto-switch immediately
+        switchMarket(suggestedMarket.iso_code);
+        sessionStorage.setItem('market-selected', 'true');
+      }
+    }
+    // Run on DOM ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initGeolocation);
+    } else {
+      initGeolocation();
+    }
+  })();
+  </script>
+</head>
+<body class="bg-background text-foreground">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-card/30 backdrop-blur-md border-b border-border/30">
+    <div class="container mx-auto px-6">
+      <div class="flex items-center justify-between h-16">
+        <a href="#" class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="2" width="14" height="20" rx="2" fill="white" fill-opacity="0.9"/>
+              <rect x="5" y="5" width="10" height="1.5" rx="0.75" fill="#FF6B35"/>
+              <rect x="5" y="8" width="8" height="1" rx="0.5" fill="#999"/>
+              <rect x="5" y="10.5" width="10" height="1" rx="0.5" fill="#999"/>
+              <rect x="5" y="13" width="6" height="1" rx="0.5" fill="#999"/>
+              <circle cx="18" cy="7" r="5" fill="white"/>
+              <text x="18" y="10" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#FF6B35" text-anchor="middle">e</text>
+            </svg>
+          </div>
+          <span class="text-lg font-bold hidden sm:block">e-ink Lab</span>
+        </a>
+        <nav class="hidden lg:flex items-center gap-8">
+          <a href="#bundles" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors" data-translate="nav_bundles">Bundles</a>
+          <a href="#2026-planner" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"><span data-translate="planner_2026_title">2026 Planner</span></a>
+          <a href="#products" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors" data-translate="nav_products">Products</a>
+          <a href="#faq" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors" data-translate="faq_title">FAQ</a>
+        </nav>
+        <div class="flex items-center gap-3">
+          <!-- Language Dropdown (EN & NL only) -->
+          <div class="relative dropdown-container">
+            <button onclick="toggleDropdown('lang-dropdown')" class="flex h-10 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background" style="min-width: 80px; width: auto;" type="button">
+              <span style="pointer-events: none; white-space: nowrap;">
+                <span id="current-flag">🇺🇸</span>
+                <span id="current-lang">EN</span>
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down h-4 w-4 opacity-50" aria-hidden="true">
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </button>
+            <div id="lang-dropdown" class="dropdown-menu hidden absolute right-0 mt-2 rounded-md border border-input bg-popover text-popover-foreground shadow-md z-[9999]" style="min-width: 140px;">
+              <div class="max-h-[300px] overflow-y-auto p-1">
+                <button type="button" onclick="setLanguage('en', '🇺🇸', 'English')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="en">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="en"></span>
+                    <span>🇺🇸 English</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('de', '🇩🇪', 'Deutsch')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="de">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="de"></span>
+                    <span>🇩🇪 Deutsch</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('nl', '🇳🇱', 'Nederlands')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="nl">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="nl"></span>
+                    <span>🇳🇱 Nederlands</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('fr', '🇫🇷', 'Français')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="fr">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="fr"></span>
+                    <span>🇫🇷 Français</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('it', '🇮🇹', 'Italiano')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="it">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="it"></span>
+                    <span>🇮🇹 Italiano</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('es', '🇪🇸', 'Español')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="es">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="es"></span>
+                    <span>🇪🇸 Español</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('pt', '🇵🇹', 'Português')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="pt">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="pt"></span>
+                    <span>🇵🇹 Português</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('da', '🇩🇰', 'Dansk')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="da">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="da"></span>
+                    <span>🇩🇰 Dansk</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('sv', '🇸🇪', 'Svenska')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="sv">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="sv"></span>
+                    <span>🇸🇪 Svenska</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('no', '🇳🇴', 'Norsk')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="no">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="no"></span>
+                    <span>🇳🇴 Norsk</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('pl', '🇵🇱', 'Polski')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="pl">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="pl"></span>
+                    <span>🇵🇱 Polski</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('ja', '🇯🇵', '日本語')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="ja">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="ja"></span>
+                    <span>🇯🇵 日本語</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('hi', '🇮🇳', 'हिन्दी')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="hi">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="hi"></span>
+                    <span>🇮🇳 हिन्दी</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('zh', '🇨🇳', '中文')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="zh">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="zh"></span>
+                    <span>🇨🇳 中文</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('ko', '🇰🇷', '한국어')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="ko">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="ko"></span>
+                    <span>🇰🇷 한국어</span>
+                  </span>
+                </button>
+                <button type="button" onclick="setLanguage('ru', '🇷🇺', 'Русский')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-2 pr-2 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left" data-lang="ru">
+                  <span class="flex items-center gap-2">
+                    <span class="check-indicator" data-lang="ru"></span>
+                    <span>🇷🇺 Русский</span>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Currency Dropdown -->
+          <div class="relative dropdown-container">
+            <button onclick="toggleDropdown('currency-dropdown')" class="flex h-10 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background" style="min-width: 100px; width: auto; padding-right: 0.6rem;" type="button">
+              <span style="pointer-events: none; white-space: nowrap; padding-right: 0.5rem;">
+                <span id="current-currency">EUR €</span>
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down h-4 w-4 opacity-50" aria-hidden="true" style="flex-shrink: 0;">
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </button>
+            <div id="currency-dropdown" class="dropdown-menu hidden absolute right-0 mt-2 rounded-md border border-input bg-popover text-popover-foreground shadow-md z-[9999]" style="min-width: 140px;">
+              <div class="max-h-[340px] overflow-y-auto p-1">
+                <button type="button" onclick="changeCurrency('USD')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-3 pr-3 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left">
+                  <span class="flex items-center gap-2">
+                    <span class="currency-check" data-currency="USD"></span>
+                    <span>USD</span>
+                  </span>
+                  <span class="text-muted-foreground">$</span>
+                </button>
+                <button type="button" onclick="changeCurrency('EUR')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-3 pr-3 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left bg-accent text-accent-foreground font-semibold">
+                  <span class="flex items-center gap-2">
+                    <span class="currency-check" data-currency="EUR"><i class="fas fa-check text-xs"></i></span>
+                    <span>EUR</span>
+                  </span>
+                  <span class="text-muted-foreground">€</span>
+                </button>
+                <button type="button" onclick="changeCurrency('GBP')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-3 pr-3 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left">
+                  <span class="flex items-center gap-2">
+                    <span class="currency-check" data-currency="GBP"></span>
+                    <span>GBP</span>
+                  </span>
+                  <span class="text-muted-foreground">£</span>
+                </button>
+                <button type="button" onclick="changeCurrency('CAD')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-3 pr-3 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left">
+                  <span class="flex items-center gap-2">
+                    <span class="currency-check" data-currency="CAD"></span>
+                    <span>CAD</span>
+                  </span>
+                  <span class="text-muted-foreground">C$</span>
+                </button>
+                <button type="button" onclick="changeCurrency('AUD')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-3 pr-3 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left">
+                  <span class="flex items-center gap-2">
+                    <span class="currency-check" data-currency="AUD"></span>
+                    <span>AUD</span>
+                  </span>
+                  <span class="text-muted-foreground">A$</span>
+                </button>
+                <button type="button" onclick="changeCurrency('JPY')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-3 pr-3 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left">
+                  <span class="flex items-center gap-2">
+                    <span class="currency-check" data-currency="JPY"></span>
+                    <span>JPY</span>
+                  </span>
+                  <span class="text-muted-foreground">¥</span>
+                </button>
+                <button type="button" onclick="changeCurrency('CHF')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-3 pr-3 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left">
+                  <span class="flex items-center gap-2">
+                    <span class="currency-check" data-currency="CHF"></span>
+                    <span>CHF</span>
+                  </span>
+                  <span class="text-muted-foreground">CHF</span>
+                </button>
+                <button type="button" onclick="changeCurrency('SEK')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-3 pr-3 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left">
+                  <span class="flex items-center gap-2">
+                    <span class="currency-check" data-currency="SEK"></span>
+                    <span>SEK</span>
+                  </span>
+                  <span class="text-muted-foreground">kr</span>
+                </button>
+                <button type="button" onclick="changeCurrency('NOK')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-3 pr-3 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left">
+                  <span class="flex items-center gap-2">
+                    <span class="currency-check" data-currency="NOK"></span>
+                    <span>NOK</span>
+                  </span>
+                  <span class="text-muted-foreground">kr</span>
+                </button>
+                <button type="button" onclick="changeCurrency('DKK')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-3 pr-3 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left">
+                  <span class="flex items-center gap-2">
+                    <span class="currency-check" data-currency="DKK"></span>
+                    <span>DKK</span>
+                  </span>
+                  <span class="text-muted-foreground">kr</span>
+                </button>
+                <button type="button" onclick="changeCurrency('PLN')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-3 pr-3 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left">
+                  <span class="flex items-center gap-2">
+                    <span class="currency-check" data-currency="PLN"></span>
+                    <span>PLN</span>
+                  </span>
+                  <span class="text-muted-foreground">zł</span>
+                </button>
+                <button type="button" onclick="changeCurrency('INR')" class="dropdown-item relative flex w-full items-center justify-between rounded-sm py-1.5 pl-3 pr-3 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer border-0 bg-transparent text-left w-full text-left">
+                  <span class="flex items-center gap-2">
+                    <span class="currency-check" data-currency="INR"></span>
+                    <span>INR</span>
+                  </span>
+                  <span class="text-muted-foreground">₹</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <button onclick="toggleCart()" class="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 relative">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+              <circle cx="8" cy="21" r="1"></circle>
+              <circle cx="19" cy="21" r="1"></circle>
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+            </svg>
+            <span class="ml-2 hidden md:inline" data-translate="nav_cart">Cart</span>
+            <span id="cart-count" class="absolute -top-1.5 -right-1.5 bg-accent text-accent-foreground text-xs rounded-full w-5 h-5 items-center justify-center font-bold hidden">0</span>
+          </button>
+          <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-foreground">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="hidden lg:hidden py-4 border-t border-border">
+        <nav class="flex flex-col gap-4">
+          <a href="#bundles" class="text-sm font-medium text-foreground hover:text-primary transition-colors" data-translate="nav_bundles">Bundles</a>
+          <a href="#2026-planner" class="text-sm font-medium text-foreground hover:text-primary transition-colors"><span data-translate="planner_2026_title">2026 Planner</span></a>
+          <a href="#products" class="text-sm font-medium text-foreground hover:text-primary transition-colors" data-translate="nav_products">Products</a>
+          <a href="#faq" class="text-sm font-medium text-foreground hover:text-primary transition-colors" data-translate="faq_title">FAQ</a>
+        </nav>
+      </div>
+      <script>
+        window.toggleMobileMenu = function() {
+          const menu = document.getElementById('mobile-menu');
+          if (menu) {
+            menu.classList.toggle('hidden');
+          }
+        };
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+          const menu = document.getElementById('mobile-menu');
+          const menuButton = event.target.closest('button[onclick="toggleMobileMenu()"]');
+          if (menu && !menu.classList.contains('hidden') && !menu.contains(event.target) && !menuButton) {
+            menu.classList.add('hidden');
+          }
+        });
+      </script>
+    </div>
+  </header>
+  <main id="MainContent" class="main-content" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><div class="logo">e-ink <span style="color: var(--primary);">Lab</span></div><p data-translate="footer_description">Premium digital planners and templates for e-ink tablet enthusiasts.</p><div class="footer-social"><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-youtube"></i></a></div></div>
+        <div class="footer-col"><h4 data-translate="nav_products">Products</h4><ul><li><a href="#bundles" data-translate="nav_bundles">Bundles</a></li><li><a href="#products" data-translate="premium_templates">Templates</a></li><li><a href="#2026-planner"><span data-translate="planner_2026_title">2026 Planner</span></a></li></ul></div>
+        <div class="footer-col"><h4 data-translate="nav_support">Support</h4><ul><li><a href="#faq" data-translate="faq_title">FAQ</a></li><li><a href="#" data-translate="contact_us">Contact Us</a></li></ul></div>
+        <div class="footer-col"><h4 data-translate="footer_legal">Legal</h4><ul><li><a href="#" data-translate="privacy_policy">Privacy Policy</a></li><li><a href="#" data-translate="terms_of_service">Terms of Service</a></li><li><a href="#" data-translate="refund_policy">Refund Policy</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><p data-translate="footer_rights">&copy; 2026 e-ink Lab. All rights reserved.</p><div class="footer-dev-signature"><p>Developed By: <a href="https://giopio.com" target="_blank" rel="noopener">Giopio</a></p></div><div class="footer-payments"><span>Visa</span><span>Mastercard</span><span>PayPal</span><span>Stripe</span></div></div>
+    </div>
+  </footer>
+  <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+  <aside class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header"><h2><i class="fas fa-shopping-cart"></i> <span data-translate="nav_cart">Your Cart</span></h2><button onclick="toggleCart()"><i class="fas fa-times"></i></button></div>
+    <div class="cart-items" id="cart-items"><div class="cart-empty" data-translate="cart_empty">Your cart is empty</div></div>
+    <!-- Cart Upsell Section -->
+    <div class="cart-upsell" id="cart-upsell" style="display: none;">
+      <div style="border-top: 1px solid var(--border); padding: 1rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-fire" style="color: var(--primary);"></i>
+            <span style="font-weight: 600; font-size: 0.875rem;" data-translate="upsell_title">Frequently Bought Together</span>
+          </div>
+          <button onclick="closeUpsell()" style="background: none; border: none; color: var(--muted-foreground); cursor: pointer; padding: 0.25rem; font-size: 0.875rem;">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="upsell-products" id="upsell-products" style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <!-- Upsell products will be dynamically loaded here -->
+        </div>
+      </div>
+    </div>
+    <div class="cart-footer" id="cart-footer"><div class="cart-total"><span data-translate="cart_total">Total:</span><span id="cart-total">$0</span></div><button class="btn" onclick="checkout()"><i class="fas fa-lock"></i> <span data-translate="checkout_button">Proceed to Checkout</span></button></div>
+  </aside>
+  <script>
+    // Cart initialization will run at the end of page (after all scripts loaded)
+    // Bundle Carousel functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const bundleCarousels = document.querySelectorAll('.bundle-carousel .carousel-container');
+      bundleCarousels.forEach(container => {
+        let currentIndex = 0;
+        const items = container.querySelectorAll('.carousel-item');
+        const totalItems = items.length;
+        if (totalItems <= 1) return;
+        // Show current item
+        function showItem(index) {
+          items.forEach((item, i) => {
+            if (i === index) {
+              item.classList.add('active');
+            } else {
+              item.classList.remove('active');
+            }
+          });
+        }
+        // Store current index and functions on container
+        container.dataset.currentIndex = 0;
+        container.showItem = showItem;
+        // Initialize
+        showItem(0);
+      });
+      // Planner Carousel swipe functionality
+      const plannerCarousel = document.getElementById('planner-carousel');
+      if (plannerCarousel) {
+        const plannerItems = plannerCarousel.querySelectorAll('.carousel-item');
+        const plannerDots = document.getElementById('planner-dots');
+        let isScrolling = false;
+        let startX = 0;
+        let scrollLeft = 0;
+        // Function to update dots based on scroll position
+        function updateDots() {
+          const scrollPosition = plannerCarousel.scrollLeft;
+          const itemWidth = plannerCarousel.offsetWidth;
+          const currentIndex = Math.round(scrollPosition / itemWidth);
+          plannerDots.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+            if (index === currentIndex) {
+              dot.classList.add('active');
+            } else {
+              dot.classList.remove('active');
+            }
+          });
+        }
+        // Update dots on scroll
+        plannerCarousel.addEventListener('scroll', updateDots);
+        // Mouse drag support
+        plannerCarousel.addEventListener('mousedown', e => {
+          isScrolling = true;
+          startX = e.pageX - plannerCarousel.offsetLeft;
+          scrollLeft = plannerCarousel.scrollLeft;
+        });
+        plannerCarousel.addEventListener('mouseleave', () => {
+          isScrolling = false;
+        });
+        plannerCarousel.addEventListener('mouseup', () => {
+          isScrolling = false;
+        });
+        plannerCarousel.addEventListener('mousemove', e => {
+          if (!isScrolling) return;
+          e.preventDefault();
+          const x = e.pageX - plannerCarousel.offsetLeft;
+          const walk = (x - startX) * 2; // Scroll speed multiplier
+          plannerCarousel.scrollLeft = scrollLeft - walk;
+        });
+        // Global function to go to specific slide
+        window.goToSlide = function(index) {
+          const totalItems = plannerItems.length;
+          // Handle wrap-around
+          if (index < 0) index = totalItems - 1;
+          if (index >= totalItems) index = 0;
+          const itemWidth = plannerCarousel.offsetWidth;
+          plannerCarousel.scrollTo({
+            left: itemWidth * index,
+            behavior: 'smooth'
+          });
+        };
+        // Get current slide index
+        window.getCurrentSlide = function() {
+          const scrollPosition = plannerCarousel.scrollLeft;
+          const itemWidth = plannerCarousel.offsetWidth;
+          return Math.round(scrollPosition / itemWidth);
+        };
+        // Initialize dots on page load
+        updateDots();
+      }
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      const bundleCarousels = document.querySelectorAll('.bundle-carousel .carousel-container');
+      bundleCarousels.forEach(container => {
+        let currentIndex = 0;
+        const items = container.querySelectorAll('.carousel-item');
+        const totalItems = items.length;
+        if (totalItems <= 1) return;
+        // Show current item
+        function showItem(index) {
+          items.forEach((item, i) => {
+            if (i === index) {
+              item.classList.add('active');
+            } else {
+              item.classList.remove('active');
+            }
+          });
+        }
+        // Store current index and functions on container
+        container.dataset.currentIndex = 0;
+        container.showItem = showItem;
+        // Initialize
+        showItem(0);
+      });
+    });
+    // Global functions for carousel arrows
+    function bundleCarouselNext(button) {
+      const carousel = button.parentElement;
+      const container = carousel.querySelector('.carousel-container');
+      const items = container.querySelectorAll('.carousel-item');
+      const totalItems = items.length;
+      let currentIndex = parseInt(container.dataset.currentIndex || 0);
+      const oldIndex = currentIndex;
+      currentIndex = (currentIndex + 1) % totalItems;
+      container.dataset.currentIndex = currentIndex;
+      // Remove active from old item, add to new item
+      items[oldIndex].classList.remove('active');
+      items[currentIndex].classList.add('active');
+    }
+    function bundleCarouselPrev(button) {
+      const carousel = button.parentElement;
+      const container = carousel.querySelector('.carousel-container');
+      const items = container.querySelectorAll('.carousel-item');
+      const totalItems = items.length;
+      let currentIndex = parseInt(container.dataset.currentIndex || 0);
+      const oldIndex = currentIndex;
+      currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+      container.dataset.currentIndex = currentIndex;
+      // Remove active from old item, add to new item
+      items[oldIndex].classList.remove('active');
+      items[currentIndex].classList.add('active');
+    }
+    // ============================================================
+    // LANGUAGE SWITCHER - Multi-language with flags
+    // No page reload for language
+    ============================================================
+    // Initialize display
+    (function() {
+      const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+      const savedFlag = localStorage.getItem('selectedLanguageFlag');
+      const savedName = localStorage.getItem('selectedLanguageName');
+      const langData = {
+        'en': { flag: '🇺🇸', name: 'EN' },
+        'en-gb': { flag: '🇬🇧', name: 'EN' },
+        'de': { flag: '🇩🇪', name: 'DE' },
+        'nl': { flag: '🇳🇱', name: 'NL' },
+        'fr': { flag: '🇫🇷', name: 'FR' },
+        'it': { flag: '🇮🇹', name: 'IT' },
+        'es': { flag: '🇪🇸', name: 'ES' },
+        'pt': { flag: '🇵🇹', name: 'PT' },
+        'da': { flag: '🇩🇰', name: 'DA' },
+        'sv': { flag: '🇸🇪', name: 'SV' },
+        'no': { flag: '🇳🇴', name: 'NO' },
+        'pl': { flag: '🇵🇱', name: 'PL' },
+        'ja': { flag: '🇯🇵', name: 'JA' },
+        'hi': { flag: '🇮🇳', name: 'HI' },
+        'zh': { flag: '🇨🇳', name: 'ZH' },
+        'ko': { flag: '🇰🇷', name: 'KO' },
+        'ru': { flag: '🇷🇺', name: 'RU' }
+      };
+      const data = langData[savedLang] || { flag: '🇺🇸', name: 'EN' };
+      const flagEl = document.getElementById('current-flag');
+      const nameEl = document.getElementById('current-lang');
+      if (flagEl) flagEl.textContent = savedFlag || data.flag;
+      if (nameEl) nameEl.textContent = savedName || data.name;
+      // Highlight active language in dropdown
+      document.querySelectorAll('#lang-dropdown button').forEach(btn => {
+        btn.classList.remove('bg-accent', 'text-accent-foreground', 'font-semibold');
+        const checkIndicator = btn.querySelector('.check-indicator');
+        if (checkIndicator) {
+          checkIndicator.innerHTML = '';
+        }
+      });
+      const activeBtn = document.querySelector(`#lang-dropdown button[data-lang="${savedLang}"]`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-accent', 'text-accent-foreground', 'font-semibold');
+        const checkIndicator = activeBtn.querySelector('.check-indicator');
+        if (checkIndicator) {
+          checkIndicator.innerHTML = '<i class="fas fa-check text-xs"></i>';
+        }
+      }
+    })();
+    // Note: window.setLanguage is defined in hero-banner.liquid
+    // It handles: localStorage, translation updates, header display, dropdown close, and active state
+    // Note: window.toggleMobileMenu is defined inline in header (after mobile-menu div)
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdownContainers = document.querySelectorAll('.dropdown-container');
+      dropdownContainers.forEach(container => {
+        if (!container.contains(event.target)) {
+          const dropdown = container.querySelector('.dropdown-menu');
+          if (dropdown) {
+            dropdown.classList.add('hidden');
+          }
+        }
+      });
+    });
+  </script>
+  <!-- CART INITIALIZATION - Must run LAST after all other scripts -->
+  <script>
+    function initializeCart() {
+      if (typeof window.updateCartUI !== 'function') {
+        setTimeout(initializeCart, 100);
+        return;
+      }
+      // Call updateCartUI directly
+      window.updateCartUI();
+    }
+    // Wait for page to fully load, then initialize cart
+    if (document.readyState === 'complete') {
+      setTimeout(initializeCart, 100);
+    } else {
+      window.addEventListener('load', function() {
+        setTimeout(initializeCart, 200);
+      });
+    }
+    // Fallback: Force initialization after 2 seconds regardless
+    setTimeout(function() {
+      if (typeof window.updateCartUI === 'function') {
+        window.updateCartUI();
+      }
+    }, 2000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<section class="section" style="background: var(--background);">
+  <div class="container"><div class="max-w-6xl">
+    <div class="section-header"><span class="section-label" data-translate="transformation_section_label">{{ section.settings.section_label }}</span><h2 class="section-title" data-translate="transformation_section_title">{{ section.settings.trans_title }}</h2><p class="section-subtitle" data-translate="transformation_section_subtitle">{{ section.settings.subtitle }}</p></div>
+    <div class="beforeafter-grid">
+      <div class="ba-card before"><img src="{{ 'images/jp_before.webp' | asset_url }}" alt="{{ section.settings.before_alt }}" data-translate-alt="transformation_before_alt" loading="lazy"><div class="ba-badge"><i class="fas fa-times"></i> <span data-translate="label_before">{{ section.settings.trans_before_badge }}</span></div><div class="ba-content"><h3 data-translate="transformation_before_title">{{ section.settings.before_title }}</h3><ul><li><i class="fas fa-times"></i> <span data-translate="transformation_pain_point_1">{{ section.settings.trans_pain_point_1 }}</span></li><li><i class="fas fa-times"></i> <span data-translate="transformation_pain_point_2">{{ section.settings.trans_pain_point_2 }}</span></li><li><i class="fas fa-times"></i> <span data-translate="transformation_pain_point_3">{{ section.settings.trans_pain_point_3 }}</span></li><li><i class="fas fa-times"></i> <span data-translate="transformation_pain_point_4">{{ section.settings.trans_pain_point_4 }}</span></li></ul></div></div>
+      <div class="ba-card after"><img src="{{ 'images/jp_after.webp' | asset_url }}" alt="{{ section.settings.after_alt }}" data-translate-alt="transformation_after_alt" loading="lazy"><div class="ba-badge"><i class="fas fa-check"></i> <span data-translate="label_after">{{ section.settings.trans_after_badge }}</span></div><div class="ba-content"><h3 data-translate="transformation_after_title">{{ section.settings.after_title }}</h3><ul><li><i class="fas fa-check"></i> <span data-translate="transformation_benefit_1">{{ section.settings.trans_benefit_1 }}</span></li><li><i class="fas fa-check"></i> <span data-translate="transformation_benefit_2">{{ section.settings.trans_benefit_2 }}</span></li><li><i class="fas fa-check"></i> <span data-translate="transformation_benefit_3">{{ section.settings.trans_benefit_3 }}</span></li><li><i class="fas fa-check"></i> <span data-translate="transformation_benefit_4">{{ section.settings.trans_benefit_4 }}</span></li></ul></div></div>
+    </div>
+  </div></div>
+</section>
+
+{% schema %}
+{
+  "name": "Transformation",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "section_label",
+      "label": "Section Label",
+      "default": "Transformation"
+    },
+    {
+      "type": "text",
+      "id": "trans_title",
+      "label": "Title",
+      "default": "Before & After: The e-ink Lab Effect"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "See how our customers transformed their e-ink experience"
+    },
+    {
+      "type": "header",
+      "content": "Before State"
+    },
+    {
+      "type": "text",
+      "id": "trans_before_badge",
+      "label": "Before Badge",
+      "default": "BEFORE"
+    },
+    {
+      "type": "text",
+      "id": "before_title",
+      "label": "Before Title",
+      "default": "Struggling & Frustrated"
+    },
+    {
+      "type": "textarea",
+      "id": "trans_pain_point_1",
+      "label": "Pain Point 1",
+      "default": "Staring at blank pages"
+    },
+    {
+      "type": "textarea",
+      "id": "trans_pain_point_2",
+      "label": "Pain Point 2",
+      "default": "Wasting hours on setup"
+    },
+    {
+      "type": "textarea",
+      "id": "trans_pain_point_3",
+      "label": "Pain Point 3",
+      "default": "Notes scattered everywhere"
+    },
+    {
+      "type": "textarea",
+      "id": "trans_pain_point_4",
+      "label": "Pain Point 4",
+      "default": "Lost data after updates"
+    },
+    {
+      "type": "text",
+      "id": "before_alt",
+      "label": "Before Image Alt",
+      "default": "Before using e-ink Lab"
+    },
+    {
+      "type": "header",
+      "content": "After State"
+    },
+    {
+      "type": "text",
+      "id": "trans_after_badge",
+      "label": "After Badge",
+      "default": "AFTER"
+    },
+    {
+      "type": "text",
+      "id": "after_title",
+      "label": "After Title",
+      "default": "Organized & Productive"
+    },
+    {
+      "type": "textarea",
+      "id": "trans_benefit_1",
+      "label": "Benefit 1",
+      "default": "Ready-to-use templates"
+    },
+    {
+      "type": "textarea",
+      "id": "trans_benefit_2",
+      "label": "Benefit 2",
+      "default": "5-second setup complete"
+    },
+    {
+      "type": "textarea",
+      "id": "trans_benefit_3",
+      "label": "Benefit 3",
+      "default": "Everything in its place"
+    },
+    {
+      "type": "textarea",
+      "id": "trans_benefit_4",
+      "label": "Benefit 4",
+      "default": "Update-proof system"
+    },
+    {
+      "type": "text",
+      "id": "after_alt",
+      "label": "After Image Alt",
+      "default": "After using e-ink Lab"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Transformation",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}

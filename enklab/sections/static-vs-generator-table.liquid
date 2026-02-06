@@ -1,0 +1,327 @@
+<section class="section section-muted">
+  <div class="container"><div class="max-w-6xl">
+    <div class="section-header"><span class="section-label" data-translate="static_vs_generator_label">{{ section.settings.section_label }}</span><h2 class="section-title" data-translate="static_vs_generator_title">{{ section.settings.title }}</h2><p class="section-subtitle" data-translate="static_vs_generator_subtitle">{{ section.settings.subtitle }}</p></div>
+    <table class="comparison-table">
+      <thead><tr><th data-translate="static_vs_generator_header_feature">{{ section.settings.header_feature }}</th><th data-translate="static_vs_generator_header_static">{{ section.settings.header_static }}</th><th data-translate="static_vs_generator_header_generator">{{ section.settings.header_generator }}</th></tr></thead>
+      <tbody>
+        <tr><td data-translate="static_vs_generator_row1_feature">{{ section.settings.row_1_feature }}</td><td class="table-x"><i class="fas fa-times"></i> <span data-translate="static_vs_generator_row1_static">{{ section.settings.row_1_static }}</span></td><td class="table-check"><i class="fas fa-check"></i> <span data-translate="static_vs_generator_row1_generator">{{ section.settings.row_1_generator }}</span></td></tr>
+        <tr><td data-translate="static_vs_generator_row2_feature">{{ section.settings.row_2_feature }}</td><td class="table-x"><i class="fas fa-times"></i> <span data-translate="static_vs_generator_row2_static">{{ section.settings.row_2_static }}</span></td><td class="table-check"><i class="fas fa-check"></i> <span data-translate="static_vs_generator_row2_generator">{{ section.settings.row_2_generator }}</span></td></tr>
+        <tr><td data-translate="static_vs_generator_row3_feature">{{ section.settings.row_3_feature }}</td><td class="table-x"><i class="fas fa-times"></i> <span data-translate="static_vs_generator_row3_static">{{ section.settings.row_3_static }}</span></td><td class="table-check"><i class="fas fa-check"></i> <span data-translate="static_vs_generator_row3_generator">{{ section.settings.row_3_generator }}</span></td></tr>
+        <tr><td data-translate="static_vs_generator_row4_feature">{{ section.settings.row_4_feature }}</td><td class="table-x"><i class="fas fa-times"></i> <span data-translate="static_vs_generator_row4_static">{{ section.settings.row_4_static }}</span></td><td class="table-check"><i class="fas fa-check"></i> <span data-translate="static_vs_generator_row4_generator">{{ section.settings.row_4_generator }}</span></td></tr>
+        <tr><td data-translate="static_vs_generator_row5_feature">{{ section.settings.row_5_feature }}</td><td class="table-x"><i class="fas fa-times"></i> <span data-translate="static_vs_generator_row5_static">{{ section.settings.row_5_static }}</span></td><td class="table-check"><i class="fas fa-check"></i> <span data-translate="static_vs_generator_row5_generator">{{ section.settings.row_5_generator }}</span></td></tr>
+        <tr><td data-translate="static_vs_generator_row6_feature">{{ section.settings.row_6_feature }}</td><td class="table-x"><i class="fas fa-times"></i> <span data-translate="static_vs_generator_row6_static">{{ section.settings.row_6_static }}</span></td><td class="table-check"><i class="fas fa-check"></i> <span data-translate="static_vs_generator_row6_generator">{{ section.settings.row_6_generator }}</span></td></tr>
+      </tbody>
+    </table>
+    <div style="text-align: center;">
+      {% assign product_1 = all_products[section.settings.product_1] %}
+      {% assign product_2 = all_products[section.settings.product_2] %}
+      {% assign product_3 = all_products[section.settings.product_3] %}
+      {% if product_1 != blank and product_2 != blank and product_3 != blank %}
+        {% assign variant_1 = product_1.selected_or_first_available_variant %}
+        {% assign variant_2 = product_2.selected_or_first_available_variant %}
+        {% assign variant_3 = product_3.selected_or_first_available_variant %}
+        <button class="btn-primary generator-add-to-cart"
+          data-variant-1="{{ variant_1.id }}"
+          data-variant-2="{{ variant_2.id }}"
+          data-variant-3="{{ variant_3.id }}">
+          <span data-translate="static_vs_generator_cta_button">{{ section.settings.cta_button }}</span> <i class="fas fa-infinity"></i>
+        </button>
+      {% else %}
+        <button class="btn-primary" onclick="alert(window.getTranslation('static_vs_generator_admin_warning') || 'Please configure 3 products in section settings (Customize → Static vs Generator Table → Select Products)')">
+          <span data-translate="static_vs_generator_cta_button">{{ section.settings.cta_button }}</span> <i class="fas fa-infinity"></i>
+        </button>
+      {% endif %}
+      <p style="margin-top: 0.75rem; font-size: 0.875rem; color: var(--muted-foreground);" data-translate="static_vs_generator_cta_note">{{ section.settings.cta_note }}</p>
+    </div>
+  </div></div>
+</section>
+<script>
+(function() {
+  const addToCartButton = document.querySelector('.generator-add-to-cart');
+  if (!addToCartButton) {
+    return;
+  }
+  const productsToAdd = [
+    {% assign product_1 = all_products[section.settings.product_1] %}
+    {% if product_1 != blank %}
+      {
+        id: {{ product_1.selected_or_first_available_variant.id }},
+        name: "{{ product_1.title | escape }}"
+      },
+    {% endif %}
+    {% assign product_2 = all_products[section.settings.product_2] %}
+    {% if product_2 != blank %}
+      {
+        id: {{ product_2.selected_or_first_available_variant.id }},
+        name: "{{ product_2.title | escape }}"
+      },
+    {% endif %}
+    {% assign product_3 = all_products[section.settings.product_3] %}
+    {% if product_3 != blank %}
+      {
+        id: {{ product_3.selected_or_first_available_variant.id }},
+        name: "{{ product_3.title | escape }}"
+      }
+    {% endif %}
+  ].filter(p => p.id);
+  // Handle add to cart - add all 3 products
+  addToCartButton.addEventListener('click', async function(e) {
+    e.preventDefault();
+    const originalButtonText = this.innerHTML;
+    if (productsToAdd.length === 0) {
+      const warningMsg = window.getTranslation('static_vs_generator_configure_warning') || 'Please configure the products in section settings';
+      alert(warningMsg);
+      return;
+    }
+    // Show loading state
+    const addingText = window.getTranslation('static_vs_generator_adding') || 'Adding...';
+    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + addingText;
+    this.disabled = true;
+    try {
+      // Add all products sequentially
+      for (const product of productsToAdd) {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: product.id,
+            quantity: 1
+          })
+        });
+        if (!response.ok) {
+        }
+      }
+      // Update cart UI
+      if (typeof updateCartUI === 'function') {
+        updateCartUI();
+      }
+      // Show success state
+      const addedText = window.getTranslation('static_vs_generator_added') || 'Added!';
+      this.innerHTML = '<i class="fas fa-check"></i> ' + addedText;
+      // Open cart drawer
+      setTimeout(() => {
+        if (typeof toggleCart === 'function') {
+          toggleCart();
+        }
+      }, 100);
+      // Reset button after delay
+      setTimeout(() => {
+        this.innerHTML = originalButtonText;
+        this.disabled = false;
+      }, 2000);
+    } catch (error) {
+      const errorMsg = window.getTranslation('static_vs_generator_error') || 'Failed to add products to cart. Please try again.';
+      alert(errorMsg);
+      this.innerHTML = originalButtonText;
+      this.disabled = false;
+    }
+  });
+})();
+</script>
+{% schema %}
+{
+  "name": "Static vs Generator Table",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product Selection (3 Products)"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product 1",
+      "info": "First product to add to cart when CTA is clicked"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product 2",
+      "info": "Second product to add to cart when CTA is clicked"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product 3",
+      "info": "Third product to add to cart when CTA is clicked"
+    },
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "section_label",
+      "label": "Section Label",
+      "default": "The Difference"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Static Templates vs. e-ink Lab Generators"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "See why our technology is years ahead"
+    },
+    {
+      "type": "header",
+      "content": "Table Headers"
+    },
+    {
+      "type": "text",
+      "id": "header_feature",
+      "label": "Header Feature",
+      "default": "Feature"
+    },
+    {
+      "type": "text",
+      "id": "header_static",
+      "label": "Header Static",
+      "default": "Static Templates"
+    },
+    {
+      "type": "text",
+      "id": "header_generator",
+      "label": "Header Generator",
+      "default": "e-ink Lab Generators"
+    },
+    {
+      "type": "header",
+      "content": "Table Rows (6 items)"
+    },
+    {
+      "type": "text",
+      "id": "row_1_feature",
+      "label": "Row 1 Feature",
+      "default": "Times you can use it"
+    },
+    {
+      "type": "text",
+      "id": "row_1_static",
+      "label": "Row 1 Static",
+      "default": "Once"
+    },
+    {
+      "type": "text",
+      "id": "row_1_generator",
+      "label": "Row 1 Generator",
+      "default": "Unlimited ∞"
+    },
+    {
+      "type": "text",
+      "id": "row_2_feature",
+      "label": "Row 2 Feature",
+      "default": "Customization"
+    },
+    {
+      "type": "text",
+      "id": "row_2_static",
+      "label": "Row 2 Static",
+      "default": "None"
+    },
+    {
+      "type": "text",
+      "id": "row_2_generator",
+      "label": "Row 2 Generator",
+      "default": "Full control"
+    },
+    {
+      "type": "text",
+      "id": "row_3_feature",
+      "label": "Row 3 Feature",
+      "default": "Date ranges"
+    },
+    {
+      "type": "text",
+      "id": "row_3_static",
+      "label": "Row 3 Static",
+      "default": "Fixed (e.g., only 2024)"
+    },
+    {
+      "type": "text",
+      "id": "row_3_generator",
+      "label": "Row 3 Generator",
+      "default": "Any year, any range"
+    },
+    {
+      "type": "text",
+      "id": "row_4_feature",
+      "label": "Row 4 Feature",
+      "default": "Layout options"
+    },
+    {
+      "type": "text",
+      "id": "row_4_static",
+      "label": "Row 4 Static",
+      "default": "What you see is what you get"
+    },
+    {
+      "type": "text",
+      "id": "row_4_generator",
+      "label": "Row 4 Generator",
+      "default": "Multiple styles"
+    },
+    {
+      "type": "text",
+      "id": "row_5_feature",
+      "label": "Row 5 Feature",
+      "default": "Updates for new years"
+    },
+    {
+      "type": "text",
+      "id": "row_5_static",
+      "label": "Row 5 Static",
+      "default": "Buy again"
+    },
+    {
+      "type": "text",
+      "id": "row_5_generator",
+      "label": "Row 5 Generator",
+      "default": "Regenerate free"
+    },
+    {
+      "type": "text",
+      "id": "row_6_feature",
+      "label": "Row 6 Feature",
+      "default": "Cost over 5 years"
+    },
+    {
+      "type": "text",
+      "id": "row_6_static",
+      "label": "Row 6 Static",
+      "default": "$200+ (buying yearly)"
+    },
+    {
+      "type": "text",
+      "id": "row_6_generator",
+      "label": "Row 6 Generator",
+      "default": "One-time purchase"
+    },
+    {
+      "type": "header",
+      "content": "CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_button",
+      "label": "CTA Button",
+      "default": "Get Infinite Generators Now"
+    },
+    {
+      "type": "text",
+      "id": "cta_note",
+      "label": "CTA Note",
+      "default": "One purchase. Unlimited planners. Forever."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Static vs Generator Table",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}
