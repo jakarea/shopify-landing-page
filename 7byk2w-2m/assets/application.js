@@ -195,4 +195,169 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // ======================================================
+    // DYNAMIC PRICING - Fetches real prices from Shopify
+    // ======================================================
+    (async function() {
+        const DEFAULT_PRICES = {
+            'basic-bundle': { price: 29, original: 54 },
+            'premium-bundle': { price: 59, original: 140 }
+        };
+
+        const CURRENCY_SYMBOLS = {
+            'EUR': '€', 'USD': '$', 'GBP': '£', 'CAD': 'C$',
+            'AUD': 'A$', 'JPY': '¥', 'PLN': 'zł', 'RON': 'lei',
+            'HUF': 'Ft', 'CZK': 'Kč', 'SEK': 'kr', 'DKK': 'kr',
+            'NOK': 'kr', 'BGN': 'лв', 'CHF': 'Fr', 'TRY': '₺'
+        };
+
+        // Get currency from Liquid-injected global
+        const shopCurrency = window.SHOPIFY_CURRENCY || 'EUR';
+
+        function getBaseUrl() {
+            if (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) {
+                return window.Shopify.routes.root;
+            }
+            return '/';
+        }
+
+        async function fetchProductPrice(handle) {
+            try {
+                const baseUrl = getBaseUrl();
+                const url = baseUrl + `products/${handle}.js`;
+                console.log('==================================================');
+                console.log('Dynamic Pricing: Fetching product data');
+                console.log('Template/Pricing Section:', document.querySelector('[data-pricing-section]')?.id || 'Unknown section');
+                console.log('Product Handle:', handle);
+                console.log('Full URL:', url);
+                console.log('Current Currency:', shopCurrency);
+
+                const response = await fetch(url);
+                console.log('Response Status:', response.status, response.statusText);
+
+                if (response.ok) {
+                    const product = await response.json();
+                    console.log('Product Response:', {
+                        id: product.id,
+                        title: product.title,
+                        handle: product.handle,
+                        variants: product.variants?.map(v => ({
+                            id: v.id,
+                            price: v.price,
+                            compare_at_price: v.compare_at_price,
+                            available: v.available
+                        }))
+                    });
+
+                    if (product.variants && product.variants[0]) {
+                        const variant = product.variants[0];
+                        let priceNum = typeof variant.price === 'string' ? parseInt(variant.price) : variant.price;
+                        let compareNum = variant.compare_at_price ? (typeof variant.compare_at_price === 'string' ? parseInt(variant.compare_at_price) : variant.compare_at_price) : null;
+
+                        const finalPrice = (priceNum / 100).toFixed(2);
+                        const finalCompare = compareNum ? (compareNum / 100).toFixed(2) : null;
+
+                        console.log(`✅ SUCCESS: ${handle} = ${finalPrice} ${shopCurrency} (original: ${finalCompare || 'N/A'})`);
+
+                        return {
+                            price: finalPrice,
+                            compareAtPrice: finalCompare,
+                            currency: shopCurrency
+                        };
+                    } else {
+                        console.log('❌ ERROR: No variants found for', handle);
+                    }
+                } else {
+                    console.log('❌ ERROR: Response not OK', response.status, response.statusText);
+                    console.log('This is expected on localhost. Deploy to live store for dynamic pricing.');
+                }
+            } catch (error) {
+                console.log('❌ EXCEPTION: Fetch error for', handle, error);
+                console.log('Error details:', error.message);
+            }
+            return null;
+        }
+
+        function formatPrice(amount, currency) {
+            const symbol = CURRENCY_SYMBOLS[currency] || currency + ' ';
+            // Always round to full number, no decimals
+            const roundedAmount = Math.round(parseFloat(amount));
+            return symbol + roundedAmount;
+        }
+
+        function calculateDiscountPercent(original, current) {
+            if (!original || original <= current) return 0;
+            return Math.round(((original - current) / original) * 100);
+        }
+
+        // Find ALL pricing sections on the page
+        const pricingContainers = document.querySelectorAll('[data-pricing-section]');
+        console.log(`Dynamic Pricing: Found ${pricingContainers.length} pricing sections`);
+
+        if (pricingContainers.length === 0) return;
+
+        // Fetch prices for both bundles
+        const shopifyPrices = {};
+        for (const handle of ['basic-bundle', 'premium-bundle']) {
+            const data = await fetchProductPrice(handle);
+            if (data) {
+                shopifyPrices[handle] = data;
+            }
+        }
+
+        console.log('Dynamic Pricing: Fetched prices:', shopifyPrices);
+
+        // Update ALL pricing sections
+        pricingContainers.forEach(container => {
+            for (const [bundleKey, defaults] of Object.entries(DEFAULT_PRICES)) {
+                const priceEl = container.querySelector(`[data-product-pricing="${bundleKey}"] .data-price`);
+                const originalEl = container.querySelector(`[data-product-pricing="${bundleKey}"] .data-original-price`);
+                const discountEl = container.querySelector(`[data-product-pricing="${bundleKey}"] .data-discount-badge`);
+
+                if (!priceEl) continue;
+
+                const shopifyData = shopifyPrices[bundleKey];
+                const currentPrice = shopifyData ? parseFloat(shopifyData.price) : defaults.price;
+                const originalPrice = shopifyData && shopifyData.compareAtPrice ? parseFloat(shopifyData.compareAtPrice) : defaults.original;
+                const currency = shopCurrency;
+                const discount = calculateDiscountPercent(originalPrice, currentPrice);
+
+                const formattedPrice = formatPrice(currentPrice, currency) + ' ';
+                const formattedOriginal = formatPrice(originalPrice, currency);
+
+                priceEl.textContent = formattedPrice;
+                if (originalEl) {
+                    originalEl.textContent = formattedOriginal;
+                    // Hide original price if no discount
+                    if (!shopifyData || !shopifyData.compareAtPrice || parseFloat(shopifyData.compareAtPrice) <= currentPrice) {
+                        originalEl.style.display = 'none';
+                    } else {
+                        originalEl.style.display = '';
+                    }
+                }
+                if (discountEl) {
+                    if (discount > 0) {
+                        discountEl.textContent = '-' + discount + '%';
+                        discountEl.style.display = '';
+                    } else {
+                        // Hide discount badge if no discount
+                        discountEl.style.display = 'none';
+                    }
+                }
+
+                console.log(`Dynamic Pricing: Updated ${bundleKey} -> ${formattedPrice}, discount: ${discount}%`);
+            }
+        });
+
+        // Update standalone prices (like in guarantee section)
+        const guaranteePriceEl = document.getElementById('guarantee-price');
+        if (guaranteePriceEl && shopifyPrices['premium-bundle']) {
+            const premiumPrice = parseFloat(shopifyPrices['premium-bundle'].price);
+            guaranteePriceEl.textContent = formatPrice(premiumPrice, shopCurrency);
+            console.log(`Dynamic Pricing: Updated guarantee price -> ${formatPrice(premiumPrice, shopCurrency)}`);
+        }
+
+        console.log('Dynamic Pricing: Complete!');
+    })();
 });

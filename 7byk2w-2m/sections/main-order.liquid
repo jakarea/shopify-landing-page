@@ -1,3 +1,24 @@
+{# Assign shared secret for code generation #}
+{% assign SHOPIFY_CODE_SECRET = 'a3f8b2c1d4e5f6789012345678901234567890abcdef1234567890abcdef12' %}
+
+{# Detect Premium Bundle purchase #}
+{% assign has_premium_bundle = false %}
+{% assign premium_code = '' %}
+{% assign registration_url = '' %}
+
+{% for line_item in order.line_items %}
+  {% assign product_title_downcase = line_item.title | downcase %}
+  {% if product_title_downcase contains 'premium' %}
+    {% assign has_premium_bundle = true %}
+    {% assign order_number = order.order_number %}
+    {% assign tier_code = 'P' %}
+    {% assign data_to_sign = tier_code | append: '-' | append: order_number %}
+    {% assign checksum = data_to_sign | hmac_sha256: SHOPIFY_CODE_SECRET | slice: 0, 8 | upcase %}
+    {% assign premium_code = 'VT-' | append: tier_code | append: '-' | append: order_number | append: '-' | append: checksum %}
+    {% assign registration_url = 'https://vintedtracker.com/register-with-code?code=' | append: premium_code %}
+  {% endif %}
+{% endfor %}
+
 <div class="page-width page-content">
   <div class="max-w-3xl mx-auto py-16 px-4">
     {# Order Confirmation Header #}
@@ -12,9 +33,52 @@
       <p class="text-lg text-gray-600">Thank you for your purchase! Your order has been confirmed.</p>
     </div>
 
-    {# Digital Downloads Section #}
-    {% if order.attributes.digital_downloads_loaded != 'true' %}
-      {% render 'digital-downloads-badge' %}
+    {# Premium Bundle Registration Code Section #}
+    {% if has_premium_bundle %}
+      <div class="bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl p-6 sm:p-8 mb-8 text-white">
+        <div class="flex items-center gap-3 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 9H3v6h12l6-6-6-6Z"></path>
+            <path d="M9 17h6"></path>
+            <path d="M9 13h6"></path>
+          </svg>
+          <h2 class="text-2xl font-bold">Premium Bundle - Activate Your Account</h2>
+        </div>
+        <p class="text-purple-100 mb-6">You've purchased the Premium Bundle! Use your registration code below to activate your Vinted Tracker Pro account.</p>
+
+        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-6">
+          <p class="text-sm text-purple-100 mb-2">Your Registration Code:</p>
+          <div class="flex items-center justify-between gap-4 bg-white rounded-xl p-4">
+            <code class="text-2xl sm:text-3xl font-black text-purple-600 tracking-wider">{{ premium_code }}</code>
+            <button onclick="navigator.clipboard.writeText('{{ premium_code }}').then(() => alert('Code copied!'))" class="flex-shrink-0 p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Copy code">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-600">
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <a href="{{ registration_url }}" target="_blank" class="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-white text-purple-600 hover:bg-purple-50 font-bold px-8 py-4 rounded-xl transition-colors text-lg">
+          Activate Your Account Now
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" x2="21" y1="14" y2="3"></line>
+          </svg>
+        </a>
+
+        <p class="text-sm text-purple-200 mt-4">
+          💡 Save this code! You'll also receive it in your email.
+        </p>
+      </div>
+    {% endif %}
+
+    {# Digital Downloads Section (for Basic Bundle) #}
+    {% if has_premium_bundle == false %}
+      {% if order.attributes.digital_downloads_loaded != 'true' %}
+        {% render 'digital-downloads-badge' %}
+      {% endif %}
     {% endif %}
 
     {# Order Details #}
@@ -73,29 +137,31 @@
       </div>
     </div>
 
-    {# Download Instructions #}
-    <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 sm:p-8 mb-8">
-      <h3 class="text-xl font-bold text-gray-900 mb-4">📥 How to Download Your Files</h3>
-      <ol class="space-y-3 text-gray-700">
-        <li class="flex items-start gap-3">
-          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-purple-600 text-white text-sm font-bold flex-shrink-0">1</span>
-          <span>Check your email for the download link sent to <strong>{{ order.customer.email }}</strong></span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-purple-600 text-white text-sm font-bold flex-shrink-0">2</span>
-          <span>Click the download button below or use the link in your email</span>
-        </li>
-        <li class="flex items-start gap-3">
-          <span class="flex items-center justify-center w-6 h-6 rounded-full bg-purple-600 text-white text-sm font-bold flex-shrink-0">3</span>
-          <span>Save the PDF files to your device</span>
-        </li>
-      </ol>
+    {# Download Instructions (Basic Bundle only) #}
+    {% if has_premium_bundle == false %}
+      <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 sm:p-8 mb-8">
+        <h3 class="text-xl font-bold text-gray-900 mb-4">📥 How to Download Your Files</h3>
+        <ol class="space-y-3 text-gray-700">
+          <li class="flex items-start gap-3">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-purple-600 text-white text-sm font-bold flex-shrink-0">1</span>
+            <span>Check your email for the download link sent to <strong>{{ order.customer.email }}</strong></span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-purple-600 text-white text-sm font-bold flex-shrink-0">2</span>
+            <span>Click the download button below or use the link in your email</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-purple-600 text-white text-sm font-bold flex-shrink-0">3</span>
+            <span>Save the PDF files to your device</span>
+          </li>
+        </ol>
 
-      {# Digital Downloads App Integration #}
-      <div class="mt-6" id="digital-downloads-container">
-        <p class="text-sm text-gray-600 mb-3">Your download links will appear below. If you don't see them, please check your email.</p>
+        {# Digital Downloads App Integration #}
+        <div class="mt-6" id="digital-downloads-container">
+          <p class="text-sm text-gray-600 mb-3">Your download links will appear below. If you don't see them, please check your email.</p>
+        </div>
       </div>
-    </div>
+    {% endif %}
 
     {# Support #}
     <div class="text-center">

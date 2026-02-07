@@ -1,0 +1,6 @@
+{# Render product price data as JSON for JavaScript to consume #}
+<script>
+// Store currency and shop info
+window.SHOPIFY_CURRENCY = '{{ cart.currency.iso_code }}';
+window.SHOPIFY_SHOP_URL = '{{ request.host }}';
+</script>
