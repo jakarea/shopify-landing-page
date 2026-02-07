@@ -1,0 +1,112 @@
+<div class="max-w-4xl mx-auto py-12 px-4">
+  <h1 class="text-3xl font-bold text-gray-900 mb-8">My Account</h1>
+
+  <div class="grid md:grid-cols-3 gap-8">
+    {# Account Navigation #}
+    <div class="md:col-span-1">
+      <div class="bg-gray-50 rounded-2xl p-4">
+        <nav class="space-y-2">
+          <a href="/account" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-purple-600 text-white font-semibold">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Orders
+          </a>
+          <a href="/account/addresses" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            Addresses
+          </a>
+          <a href="/account/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-100 font-semibold">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" x2="9" y1="12" y2="12"></line>
+            </svg>
+            Sign Out
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    {# Orders List #}
+    <div class="md:col-span-2">
+      <div class="bg-gray-50 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-gray-900 mb-6">Order History</h2>
+
+        {% if customer.orders.size > 0 %}
+          <div class="space-y-4">
+            {% for order in customer.orders %}
+              <div class="bg-white rounded-xl p-4 sm:p-6 border border-gray-200">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                  <div>
+                    <h3 class="font-semibold text-gray-900">Order {{ order.name }}</h3>
+                    <p class="text-sm text-gray-500">{{ order.created_at | date: "%B %d, %Y" }}</p>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 rounded-full text-sm font-medium
+                      {% if order.financial_status == 'paid' %}
+                        bg-green-100 text-green-800
+                      {% else %}
+                        bg-yellow-100 text-yellow-800
+                      {% endif %}">
+                      {{ order.financial_status | capitalize }}
+                    </span>
+                    <span class="text-lg font-bold text-gray-900">{{ order.total_price | money }}</span>
+                  </div>
+                </div>
+
+                {# Order Items #}
+                <div class="space-y-2 mb-4">
+                  {% for line_item in order.line_items %}
+                    <div class="flex items-center justify-between text-sm">
+                      <span class="text-gray-700">{{ line_item.title }} × {{ line_item.quantity }}</span>
+                      <span class="text-gray-900 font-medium">{{ line_item.final_price | money }}</span>
+                    </div>
+                  {% endfor %}
+                </div>
+
+                {# Download Button for Digital Products #}
+                <a href="{{ order.customer_url }}" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors text-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" x2="12" y1="15" y2="3"></line>
+                  </svg>
+                  View Downloads
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+
+          {# Pagination #}
+          {% if paginate.pages > 1 %}
+            <div class="mt-8 flex justify-center gap-2">
+              {% if paginate.previous %}
+                <a href="{{ paginate.previous.url }}" class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50">Previous</a>
+              {% endif %}
+              {% if paginate.next %}
+                <a href="{{ paginate.next.url }}" class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 hover:bg-gray-50">Next</a>
+              {% endif %}
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="text-center py-12">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gray-300 mx-auto mb-4">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+              <path d="M3 6h18"></path>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <p class="text-gray-500 mb-4">You haven't placed any orders yet.</p>
+            <a href="/" class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors">
+              Start Shopping
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

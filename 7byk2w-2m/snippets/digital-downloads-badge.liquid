@@ -1,0 +1,109 @@
+{# Digital Downloads App Integration - This works with Shopify Digital Downloads app #}
+{# The app automatically injects download links. This snippet provides a styled container. #}
+
+<script>
+  {# Mark that digital downloads section should load #}
+  window.digitalDownloadsOrderName = {{ order.name | json }};
+  window.digitalDownloadsOrderEmail = {{ order.customer.email | json }};
+</script>
+
+<div class="bg-white rounded-2xl border-2 border-green-200 p-6 sm:p-8 mb-8" id="digital-downloads-section">
+  <div class="flex items-start gap-4">
+    <div class="flex-shrink-0">
+      <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" x2="12" y1="15" y2="3"></line>
+        </svg>
+      </div>
+    </div>
+    <div class="flex-1">
+      <h3 class="text-xl font-bold text-gray-900 mb-2">Your Digital Downloads Are Ready!</h3>
+      <p class="text-gray-600 mb-4">Your files are available for download immediately. A download link has also been sent to your email.</p>
+
+      {# Download links will be injected here by the Digital Downloads app #}
+      <div class="digital-downloads-download-list" data-order-id="{{ order.id }}">
+        <p class="text-sm text-gray-500 italic">Loading download links...</p>
+      </div>
+
+      {# Fallback link if app doesn't inject #}
+      <noscript>
+        <div class="mt-4 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+          <p class="text-sm text-yellow-800">Please enable JavaScript to see your download links, or check your email for the download link.</p>
+        </div>
+      </noscript>
+    </div>
+  </div>
+</div>
+
+{# Script to poll for digital downloads from the app #}
+<script>
+  (function() {
+    const MAX_RETRIES = 10;
+    const RETRY_DELAY = 1000;
+
+    function checkForDownloads() {
+      const downloadContainer = document.querySelector('.digital-downloads-download-list');
+      if (!downloadContainer) return;
+
+      let retries = 0;
+
+      const pollInterval = setInterval(function() {
+        retries++;
+
+        {# Check if Shopify Digital Downloads has injected the links #}
+        const appLinks = document.querySelector('[data-digital-downloads]') ||
+                        document.querySelector('.digital-download-item') ||
+                        document.querySelector('.download-link');
+
+        if (appLinks || retries >= MAX_RETRIES) {
+          clearInterval(pollInterval);
+
+          if (!appLinks && retries >= MAX_RETRIES) {
+            {# Fallback: Show manual message #}
+            downloadContainer.innerHTML = `
+              <div class="flex flex-col sm:flex-row gap-3">
+                <a href="/account/orders" class="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" x2="12" y1="15" y2="3"></line>
+                  </svg>
+                  View Order & Downloads
+                </a>
+              </div>
+              <p class="text-sm text-gray-500 mt-3">
+                Can't see the links? Check your email at <strong>{{ order.customer.email }}</strong>
+              </p>
+            `;
+          }
+        }
+      }, RETRY_DELAY);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', checkForDownloads);
+    } else {
+      checkForDownloads();
+    }
+  })();
+</script>
+
+<style>
+  .digital-downloads-download-list a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(to right, #10b981, #059669);
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.2s;
+  }
+  .digital-downloads-download-list a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  }
+</style>
