@@ -1,6 +1,46 @@
 {# Render product price data as JSON for JavaScript to consume #}
 <script>
+// Detect visitor's currency from browser locale
+function detectVisitorCurrency() {
+    // Try to get from browser's locale (e.g., 'sv-SE' -> SEK, 'it-IT' -> EUR)
+    const locale = navigator.language || navigator.userLanguage || 'en-US';
+    const country = locale.split('-')[1] || locale.toUpperCase();
+
+    // Map countries to currencies
+    const countryToCurrency = {
+        'US': 'USD', 'CA': 'CAD', 'AU': 'AUD', 'JP': 'JP',
+        'GB': 'GBP', 'PL': 'PL', 'RO': 'RO', 'HU': 'HU',
+        'CZ': 'CZK', 'SE': 'SE', 'DK': 'DK', 'NO': 'NO',
+        'BG': 'BGN', 'CH': 'CHF', 'TR': 'TRY', 'BD': 'BDT',
+        'IT': 'EUR', 'FR': 'EUR', 'DE': 'EUR', 'ES': 'EUR',
+        'PT': 'EUR', 'NL': 'EUR', 'IE': 'EUR', 'AT': 'EUR',
+        'BE': 'EUR', 'FI': 'EUR', 'GR': 'EUR', 'SK': 'EUR',
+        'SI': 'EUR', 'LT': 'EUR', 'LV': 'EUR', 'EE': 'EUR',
+        'LU': 'EUR', 'CY': 'EUR', 'MT': 'EUR'
+    };
+
+    return countryToCurrency[country] || 'EUR';
+}
+
 // Store currency and shop info
-window.SHOPIFY_CURRENCY = '{{ cart.currency.iso_code }}';
-window.SHOPIFY_SHOP_URL = '{{ request.host }}';
+// Use saved currency from localStorage if available, otherwise detect from browser
+const savedCurrency = localStorage.getItem('selected_currency');
+console.log('product-price-data: savedCurrency from localStorage =', savedCurrency);
+console.log('product-price-data: detected currency =', detectVisitorCurrency());
+window.SHOPIFY_CURRENCY = savedCurrency || detectVisitorCurrency();
+console.log('product-price-data: final SHOPIFY_CURRENCY =', window.SHOPIFY_CURRENCY);
+window.SHOPIFY_CURRENCY_SYMBOL = "{{ cart.currency.symbol }}";
+window.SHOPIFY_SHOP_URL = "{{ request.host }}";
+// Store shop base currency (the currency products are priced in)
+window.SHOPIFY_BASE_CURRENCY = "{{ shop.currency }}";
+
+// Store exchange rates from Shopify Markets (relative to base currency)
+window.SHOPIFY_EXCHANGE_RATES = {
+    {% for currency in shop.enabled_currencies %}
+    '{{ currency.iso_code }}': {
+        rate: {{ currency.rate | default: 1 }},
+        symbol: "{{ currency.symbol }}"
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+};
 </script>
