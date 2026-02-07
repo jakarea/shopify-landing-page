@@ -22,147 +22,26 @@
       <li><span class="icon"><i class="fas fa-check"></i></span><span data-translate="feature_4">{{ section.settings.feature_4 }}</span></li>
     </ul>
     <div>
-      {% assign product_1 = all_products[section.settings.product_1] %}
-      {% assign product_2 = all_products[section.settings.product_2] %}
-      {% assign product_3 = all_products[section.settings.product_3] %}
-      {% if product_1 != blank and product_2 != blank and product_3 != blank %}
-        {% assign variant_1 = product_1.selected_or_first_available_variant %}
-        {% assign variant_2 = product_2.selected_or_first_available_variant %}
-        {% assign variant_3 = product_3.selected_or_first_available_variant %}
-        <button type="button" class="btn-primary hero-add-to-cart"
-          data-variant-1="{{ variant_1.id }}"
-          data-variant-2="{{ variant_2.id }}"
-          data-variant-3="{{ variant_3.id }}">
-          <i class="fas fa-download"></i> <span data-translate="cta_button">{{ section.settings.cta_button }}</span> <i class="fas fa-arrow-right"></i>
-        </button>
-      {% else %}
-        <div style="background: #fee; border: 2px solid #c00; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
-          <div style="color: #c00; font-weight: bold; margin-bottom: 0.5rem;">
-            <i class="fas fa-exclamation-triangle"></i> <span data-translate="hero_banner_admin_warning_title">Admin: Products Not Selected</span>
-          </div>
-          <p style="color: #900; margin: 0;">
-            <span data-translate="hero_banner_admin_warning_desc">Please select 3 products in the section settings. Go to</span> <strong><span data-translate="hero_banner_admin_warning_path">Customize → Hero Banner → Select Products</span></strong>
-          </p>
-        </div>
-        <button class="btn-primary" onclick="alert(window.getTranslation('hero_banner_alert_configure_products') || 'Please configure 3 products in section settings (Customize → Hero Banner → Select Products)')">
-          <i class="fas fa-download"></i> <span data-translate="cta_button">{{ section.settings.cta_button }}</span> <i class="fas fa-arrow-right"></i>
-        </button>
-      {% endif %}
+      <button type="button" class="btn-primary hero-scroll-to-bundles" onclick="scrollToBundles(event)">
+        <i class="fas fa-gift"></i> <span data-translate="cta_button">{{ section.settings.cta_button }}</span> <i class="fas fa-arrow-right"></i>
+      </button>
     </div>
     <div class="hero-social"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><div class="text"><strong data-translate="social_proof_count">{{ section.settings.social_proof_count }}</strong> <span data-translate="social_proof_text">{{ section.settings.social_proof_text }}</span></div></div>
   </div>
 </section>
 <script>
-(function() {
-  const addToCartButton = document.querySelector('.hero-add-to-cart');
-  if (!addToCartButton) {
-    return;
+function scrollToBundles(e) {
+  e.preventDefault();
+  const bundlesSection = document.getElementById('bundles');
+  if (bundlesSection) {
+    bundlesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-  // Get product IDs from button data attributes
-  const variant1Id = parseInt(addToCartButton.dataset.variant1);
-  const variant2Id = parseInt(addToCartButton.dataset.variant2);
-  const variant3Id = parseInt(addToCartButton.dataset.variant3);
-  const productsToAdd = [
-    {% assign product_1 = all_products[section.settings.product_1] %}
-    {% if product_1 != blank %}
-      {
-        id: {{ product_1.selected_or_first_available_variant.id }},
-        name: "{{ product_1.title | escape }}"
-      },
-    {% endif %}
-    {% assign product_2 = all_products[section.settings.product_2] %}
-    {% if product_2 != blank %}
-      {
-        id: {{ product_2.selected_or_first_available_variant.id }},
-        name: "{{ product_2.title | escape }}"
-      },
-    {% endif %}
-    {% assign product_3 = all_products[section.settings.product_3] %}
-    {% if product_3 != blank %}
-      {
-        id: {{ product_3.selected_or_first_available_variant.id }},
-        name: "{{ product_3.title | escape }}"
-      }
-    {% endif %}
-  ].filter(p => p.id);
-  // Handle add to cart - add all 3 products
-  addToCartButton.addEventListener('click', async function(e) {
-    e.preventDefault();
-    const originalButtonText = this.innerHTML;
-    if (productsToAdd.length === 0) {
-      alert(window.getTranslation('hero_banner_alert_configure_products') || 'Please configure the products in section settings');
-      return;
-    }
-    // Show loading state
-    const addingText = window.getTranslation('hero_banner_adding') || 'Adding...';
-    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + addingText;
-    this.disabled = true;
-    try {
-      // Add all products sequentially
-      for (const product of productsToAdd) {
-        const response = await fetch('/cart/add.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            id: product.id,
-            quantity: 1
-          })
-        });
-        if (!response.ok) {
-        }
-      }
-      // Update cart UI
-      if (typeof updateCartUI === 'function') {
-        updateCartUI();
-      }
-      // Show success state
-      const addedText = window.getTranslation('hero_banner_added') || 'Added!';
-      this.innerHTML = '<i class="fas fa-check"></i> ' + addedText;
-      // Open cart drawer
-      setTimeout(() => {
-        if (typeof toggleCart === 'function') {
-          toggleCart();
-        }
-      }, 100);
-      // Reset button after delay
-      setTimeout(() => {
-        this.innerHTML = originalButtonText;
-        this.disabled = false;
-      }, 2000);
-    } catch (error) {
-      alert(window.getTranslation('hero_banner_alert_add_failed') || 'Failed to add products to cart. Please try again.');
-      this.innerHTML = originalButtonText;
-      this.disabled = false;
-    }
-  });
-})();
+}
 </script>
 {% schema %}
 {
   "name": "Hero Banner",
   "settings": [
-    {
-      "type": "header",
-      "content": "Product Selection (3 Products)"
-    },
-    {
-      "type": "product",
-      "id": "product_1",
-      "label": "Product 1",
-      "info": "First product to add to cart when CTA is clicked"
-    },
-    {
-      "type": "product",
-      "id": "product_2",
-      "label": "Product 2",
-      "info": "Second product to add to cart when CTA is clicked"
-    },
-    {
-      "type": "product",
-      "id": "product_3",
-      "label": "Product 3",
-      "info": "Third product to add to cart when CTA is clicked"
-    },
     {
       "type": "header",
       "content": "Hero Image"
