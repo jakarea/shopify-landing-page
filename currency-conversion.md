@@ -324,7 +324,156 @@ currencySelector.value = window.SHOPIFY_CURRENCY || 'EUR';
 ## Future Improvements
 
 1. Fetch live exchange rates from an API
-2. Add more currencies (NOK, BGN, CHF, TRY, etc.)
-3. Store user's currency in Shopify customer profile (if logged in)
-4. Add currency flag icons to dropdown options
-5. Implement geolocation API as fallback for country detection
+2. Store user's currency in Shopify customer profile (if logged in)
+3. Add currency flag icons to dropdown options
+
+---
+
+# Currency Detection Methods
+
+There are **two main approaches** to detect visitor's local currency. Developers can choose either method based on their requirements.
+
+## Method 1: Browser Locale Detection (Simple, Client-Side Only)
+
+**Best for:** Quick implementation, no external API calls, lightweight
+
+**How it works:**
+- Detects visitor's browser language setting (e.g., `it-IT`, `en-US`, `sv-SE`)
+- Extracts country code from locale string
+- Maps country to currency using predefined mapping
+
+**Pros:**
+- Fast, no external API calls
+- Works offline
+- Privacy-friendly (no data sent to external services)
+- Free, no rate limits
+
+**Cons:**
+- Not always accurate (browser language ≠ physical location)
+- Travelers see wrong currency
+- Users with English browser see USD even if in Europe
+
+**Implementation:**
+```javascript
+function detectVisitorCurrency() {
+    const locale = navigator.language || navigator.userLanguage || 'en-US';
+    const country = locale.split('-')[1] || locale.toUpperCase();
+
+    const countryToCurrency = {
+        'US': 'USD', 'IT': 'EUR', 'SE': 'SEK', 'GB': 'GBP'
+        // ... more mappings
+    };
+
+    return countryToCurrency[country] || 'EUR';
+}
+```
+
+---
+
+## Method 2: IP Geolocation API (Accurate, Based on Physical Location)
+
+**Best for:** Accurate location-based pricing, international stores
+
+**How it works:**
+- Fetches visitor's IP-based country code from external API
+- Maps detected country to local currency
+- Shows correct currency regardless of browser settings
+
+**Pros:**
+- Accurate detection based on physical location
+- Works for travelers (shows local currency of where they are)
+- Better user experience
+
+**Cons:**
+- Requires external API call (small delay)
+- Free APIs have rate limits
+- Sends visitor IP to external service
+
+**Implementation with ipapi.co (Free):**
+```javascript
+(async function detectCountryAndInit() {
+    let countryCode = "{{ request.country_code }}" || null;
+
+    // If Shopify detected country, use it
+    if (countryCode && countryCode !== '' && countryCode !== 'null') {
+        initCurrency(countryCode);
+        return;
+    }
+
+    // Otherwise fetch from IP geolocation API
+    try {
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+        countryCode = data.country_code;
+        initCurrency(countryCode);
+    } catch (error) {
+        // Fallback to browser locale
+        const locale = navigator.language || navigator.userLanguage || 'en-US';
+        countryCode = locale.split('-')[1] || locale.toUpperCase();
+        initCurrency(countryCode);
+    }
+})();
+
+function initCurrency(countryCode) {
+    const countryToCurrency = {
+        'US': 'USD', 'MY': 'MYR', 'JP': 'JPY', 'BD': 'BDT'
+        // ... more mappings
+    };
+
+    const detectedCurrency = countryToCurrency[countryCode] || 'EUR';
+    updatePricesWithCurrency(detectedCurrency);
+}
+```
+
+**Free IP Geolocation APIs:**
+| API | Free Requests/Day | Response Format |
+|-----|-------------------|-----------------|
+| ipapi.co | 1,000 | JSON |
+| ip-api.com | 45/minute | JSON |
+| ipify | None (paid) | JSON |
+
+---
+
+## Which Method to Choose?
+
+| Scenario | Recommended Method |
+|----------|-------------------|
+| Single country store | Either (both work) |
+| European store (EU mostly uses EUR) | Method 1 (Browser Locale) |
+| Global store with many currencies | Method 2 (IP Geolocation) |
+| Privacy-focused audience | Method 1 (Browser Locale) |
+| Travelers common | Method 2 (IP Geolocation) |
+| Quick implementation needed | Method 1 (Browser Locale) |
+| Need accurate location | Method 2 (IP Geolocation) |
+
+---
+
+## Current Implementation (This Project)
+
+**Method:** IP Geolocation (Method 2) with fallback
+
+**Flow:**
+1. Try Shopify's `{{ request.country_code }}` first (most reliable)
+2. If empty, fetch from `ipapi.co/json/`
+3. Fallback to browser locale if API fails
+
+**Countries Supported:** 60+ countries across Europe, Americas, Asia, Middle East, Africa
+
+**Currencies Supported:** EUR, USD, GBP, CAD, AUD, JPY, PLN, RON, HUF, CZK, SEK, DKK, NOK, BGN, CHF, TRY, BDT, MYR, THB, VND, IDR, PHP, SGD, INR, PKR, LKR, NPR, CNY, TWD, HKD, KRW, BND, KHR, LAK, MMK, NZD, ILS, AED, SAR, QAR, KWD, BHD, JOD, EGP, MAD, DZD, TND, LYD, NGN, KES, GHS, ZAR, BRL, ARS, MXN, COP, PEN, CLP, UYU, PYG, BOB, CRC, GTQ, HNL, NIO, DOP, JMD, TTD, BBD, BSD, XCD, RUB, UAH, BYN, KZT, ISK, MKD, ALL, BAM
+
+**Flag Display:** Dynamic country flag in hero section based on detected location
+
+**Console Output Example:**
+```
+=== CURRENCY DETECTION ===
+Location: Malaysia (MY)
+Currency: MYR
+Currency Symbol: RM
+Original Prices (EUR):
+  - Basic Bundle: €29
+  - Premium Bundle: €59
+Converted Prices (MYR):
+  - Basic Bundle: RM132
+  - Premium Bundle: RM268
+======================
+```
