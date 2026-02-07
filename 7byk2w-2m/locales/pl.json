@@ -1,11 +1,11 @@
 {
   "hero": {
-    "location_detected": "Twoja lokalizacja została wykryta",
+    "location_detected": "Lokalizacja wykryta",
     "title": "Kupuj świadomie, sprzedawaj bez stresu 💰",
-    "subtitle": "Metoda Świadomego Zakupu Elise Rowan uczy cię, jak robić zakupy w sposób zrównoważony i przekształcać to, czego nie potrzebujesz, w budżet na zakupy.",
-    "created_by": "Stworzone przez Elise Rowan - Przedsiębiorczyni, specjalistkę od marketingu cyfrowego i mamę",
-    "cta_button": "Odkryj Metodę",
+    "subtitle": "Metoda Świadomego Zakupu Elise Rowan uczy ci świadomych zakupów i zamianianie tego, czego nie potrzebujesz, na pieniądze na zakupy.",
+    "created_by": "Stworzona przez Elise Rowan - Przedsiębiorczyni, specjalistka od marketingu cyfrowego i mama",
+    "cta_button": "Poznaj metodę",
     "satisfied_users": "Ponad 5 000 zadowolonych użytkowników",
-    "rating": "4.9/5"
+    "rating": "4,9/5"
   }
 }

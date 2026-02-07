@@ -1,11 +1,11 @@
 {
   "hero": {
-    "location_detected": "La tua posizione è stata rilevata",
-    "title": "Acquista consapevolmente, vendi senza stress 💰",
-    "subtitle": "Il Mindful Shopping Method di Elise Rowan ti insegna a fare acquisti sostenibili e trasformare ciò che non ti serve più in un budget per lo shopping.",
+    "location_detected": "Posizione rilevata",
+    "title": "Acquista in modo consapevole, vendi senza stress 💰",
+    "subtitle": "Il Mindful Shopping Method di Elise Rowan ti insegna a fare acquisti sostenibili e a trasformare ciò che non usi più in soldi per lo shopping.",
     "created_by": "Creato da Elise Rowan - Imprenditrice, digital marketer e mamma",
     "cta_button": "Scopri il Metodo",
     "satisfied_users": "Oltre 5.000 utenti soddisfatti",
-    "rating": "4.9/5"
+    "rating": "4,9/5"
   }
 }

@@ -1,11 +1,11 @@
 {
   "hero": {
-    "location_detected": "Tu ubicación ha sido detectada",
-    "title": "Compra con conciencia, vende sin estrés 💰",
-    "subtitle": "El Método de Compra Consciente de Elise Rowan te enseña a comprar de manera sostenible y convertir lo que ya no necesitas en un presupuesto para compras.",
-    "created_by": "Creado por Elise Rowan - Emprendedora, especialista en marketing digital y madre",
-    "cta_button": "Descubre el Método",
-    "satisfied_users": "Más de 5,000 usuarios satisfechos",
-    "rating": "4.9/5"
+    "location_detected": "Ubicación detectada",
+    "title": "Compra con consciencia, vende sin estrés 💰",
+    "subtitle": "El Método de Compra Consciente de Elise Rowan te enseña a comprar de forma sostenible y convertir lo que ya no necesitas en dinero para compras.",
+    "created_by": "Creado por Elise Rowan - Emprendedora, marketera digital y mamá",
+    "cta_button": "Descubre el método",
+    "satisfied_users": "Más de 5.000 usuarios satisfechos",
+    "rating": "4,9/5"
   }
 }

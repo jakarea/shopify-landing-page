@@ -1,11 +1,11 @@
 {
   "hero": {
-    "location_detected": "Din plats har upptäckts",
-    "title": "Handla medvetet, sälj utan stress 💰",
-    "subtitle": "Elise Rowans metod för medveten shopping lär dig att handla hållbart och förvandla det du inte längre behöver till en shoppingbudget.",
+    "location_detected": "Plats upptäckt",
+    "title": "Handla medveten, sälj utan stress 💰",
+    "subtitle": "Elise Rowans metod för medveten shopping lär dig att handla hållbart och förvandla det du inte längre behöver till shoppingspengar.",
     "created_by": "Skapad av Elise Rowan - Entreprenör, digital marknadsförare och mamma",
-    "cta_button": "Upptäck Metoden",
+    "cta_button": "Upptäck metoden",
     "satisfied_users": "Över 5 000 nöjda användare",
-    "rating": "4.9/5"
+    "rating": "4,9/5"
   }
 }

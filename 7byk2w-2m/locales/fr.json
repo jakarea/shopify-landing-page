@@ -1,11 +1,11 @@
 {
   "hero": {
-    "location_detected": "Votre localisation a été détectée",
-    "title": "Achetez consciemment, vendez sans stress 💰",
-    "subtitle": "La méthode d'achat consciente d'Elise Rowan vous apprend à faire du shopping durable et à transformer ce dont vous n'avez plus besoin en budget shopping.",
+    "location_detected": "Localisation détectée",
+    "title": "Achete de manière consciente, vendez sans stress 💰",
+    "subtitle": "La méthode d'achat conscient d'Elise Rowan vous apprend à faire du shopping durable et à transformer ce dont vous n'avez plus besoin en argent de shopping.",
     "created_by": "Créé par Elise Rowan - Entrepreneure, spécialiste du marketing digital et maman",
-    "cta_button": "Découvrir la Méthode",
+    "cta_button": "Découvrir la méthode",
     "satisfied_users": "Plus de 5 000 clients satisfaits",
-    "rating": "4.9/5"
+    "rating": "4,9/5"
   }
 }
