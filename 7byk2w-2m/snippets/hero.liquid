@@ -13,19 +13,19 @@
 										<path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
 										<path d="M2 12h20"></path>
 									</svg>
-									<div class="inline-flex items-center rounded-full border transition-colors glass-card shadow-soft text-xs sm:text-sm px-3 sm:px-4 py-1 sm:py-1.5 border-white/30 dark:border-white/10 font-semibold text-slate-700 dark:text-slate-200"><span class="detected-flag">🇮🇹</span> Your location detected</div>
+									<div class="inline-flex items-center rounded-full border transition-colors glass-card shadow-soft text-xs sm:text-sm px-3 sm:px-4 py-1 sm:py-1.5 border-white/30 dark:border-white/10 font-semibold text-slate-700 dark:text-slate-200"><span class="detected-flag">🇮🇹</span> {{ 'hero.location_detected' | t }}</div>
 								</div>
-								<h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-heading font-black leading-[1.05] tracking-tight" ><span class="bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 dark:from-rose-400 dark:via-pink-400 dark:to-purple-400 bg-clip-text text-transparent drop-shadow-sm">Buy consciously, sell without stress 💰</span></h1>
-								<p class="text-lg sm:text-xl md:text-2xl lg:text-3xl text-slate-600 dark:text-slate-300 font-light leading-relaxed max-w-2xl" >Elise Rowan's Mindful Shopping Method teaches you to shop sustainably and turn what you no longer need into a shopping budget.</p>
+								<h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-heading font-black leading-[1.05] tracking-tight" ><span class="bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 dark:from-rose-400 dark:via-pink-400 dark:to-purple-400 bg-clip-text text-transparent drop-shadow-sm">{{ 'hero.title' | t }}</span></h1>
+								<p class="text-lg sm:text-xl md:text-2xl lg:text-3xl text-slate-600 dark:text-slate-300 font-light leading-relaxed max-w-2xl" >{{ 'hero.subtitle' | t }}</p>
 								<div class="inline-flex items-center gap-3 px-5 sm:px-6 py-3 glass-card shadow-medium rounded-full border-white/40 dark:border-white/20 smooth-transition hover:shadow-strong" >
 									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart w-5 h-5 text-rose-500 fill-rose-500 flex-shrink-0">
 										<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
 									</svg>
-									<span class="text-sm sm:text-base font-semibold text-slate-700 dark:text-slate-200">Created by Elise Rowan - Entrepreneur, digital marketer, and mom</span>
+									<span class="text-sm sm:text-base font-semibold text-slate-700 dark:text-slate-200">{{ 'hero.created_by' | t }}</span>
 								</div>
 								<div class="pt-4" >
 									<a href="#pricing-early" class="inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors bg-primary hover:bg-primary/90 h-11 w-full sm:w-auto bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white px-8 sm:px-10 py-6 sm:py-7 text-lg sm:text-xl font-bold rounded-2xl shadow-strong smooth-transition hover:-translate-y-1 hover:shadow-[0_35px_65px_-25px_rgba(244,114,182,0.6)] cursor-pointer">
-										Discover the Method
+										{{ 'hero.cta_button' | t }}
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right ml-2 w-5 h-5 sm:w-6 sm:h-6">
 											<path d="M5 12h14"></path>
 											<path d="m12 5 7 7-7 7"></path>
@@ -35,7 +35,7 @@
 								<div class="pt-4 sm:pt-6 flex flex-col xs:flex-row items-start xs:items-center gap-4 sm:gap-8 flex-wrap" style="opacity: 1;">
 									<div class="flex items-center gap-3">
 										<div class="flex -space-x-3"><img src="{{ 'img/happy-client-1.webp' | asset_url }}" alt="User" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-3 border-white dark:border-gray-900 object-cover shadow-md ring-1 ring-slate-200/50 dark:ring-slate-700/50"><img src="{{ 'img/happy-client-2.webp' | asset_url }}" alt="User" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-3 border-white dark:border-gray-900 object-cover shadow-md ring-1 ring-slate-200/50 dark:ring-slate-700/50"><img src="{{ 'img/happy-client-3.webp' | asset_url }}" alt="User" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-3 border-white dark:border-gray-900 object-cover shadow-md ring-1 ring-slate-200/50 dark:ring-slate-700/50"><img src="{{ 'img/happy-client-4.webp' | asset_url }}" alt="User" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-3 border-white dark:border-gray-900 object-cover shadow-md ring-1 ring-slate-200/50 dark:ring-slate-700/50"></div>
-										<span class="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-semibold">Over 5,000 satisfied users</span>
+										<span class="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-semibold">{{ 'hero.satisfied_users' | t }}</span>
 									</div>
 									<div class="flex items-center gap-1.5 glass-card shadow-soft px-4 py-2 rounded-full">
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 fill-yellow-400">
@@ -53,7 +53,7 @@
 										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 fill-yellow-400">
 											<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
 										</svg>
-										<span class="ml-2 text-sm sm:text-base font-bold text-slate-900 dark:text-white">4.9/5</span>
+										<span class="ml-2 text-sm sm:text-base font-bold text-slate-900 dark:text-white">{{ 'hero.rating' | t }}</span>
 									</div>
 								</div>
 							</div>
