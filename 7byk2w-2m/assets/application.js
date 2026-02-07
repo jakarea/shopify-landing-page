@@ -128,10 +128,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Language selector (client-side - placeholder for future Shopify integration)
+    // Language selector - client-side translation switching
     const languageSelector = document.getElementById('language-selector');
     if (languageSelector) {
         languageSelector.addEventListener('change', function() {
+            if (typeof switchLanguage === 'function') {
+                switchLanguage(this.value);
+            }
         });
     }
 

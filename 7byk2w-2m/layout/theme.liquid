@@ -40,6 +40,9 @@
     {{ content_for_layout }}
   </div>
 
+  <!-- Translations JS - must load before application.js -->
+  {{ 'translations.js' | asset_url | script_tag }}
+
   <!-- Theme JS - loaded after content for proper DOM access -->
   {{ 'application.js' | asset_url | script_tag }}
 </body>
