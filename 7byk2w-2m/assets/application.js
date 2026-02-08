@@ -51,42 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // FAQ accordion functionality
-    document.querySelectorAll('.faq-toggle').forEach(button => {
-        button.addEventListener('click', () => {
-            const content = button.nextElementSibling;
-            const chevron = button.querySelector('.faq-chevron');
-            const isExpanded = button.getAttribute('aria-expanded') === 'true';
-
-            // Close all other FAQs
-            document.querySelectorAll('.faq-toggle').forEach(otherButton => {
-                if (otherButton !== button) {
-                    otherButton.setAttribute('aria-expanded', 'false');
-                    otherButton.nextElementSibling.classList.add('hidden');
-                    const otherChevron = otherButton.querySelector('.faq-chevron');
-                    if (otherChevron) {
-                        otherChevron.style.transform = 'rotate(0deg)';
-                    }
-                }
-            });
-
-            // Toggle current FAQ
-            if (isExpanded) {
-                button.setAttribute('aria-expanded', 'false');
-                content.classList.add('hidden');
-                if (chevron) {
-                    chevron.style.transform = 'rotate(0deg)';
-                }
-            } else {
-                button.setAttribute('aria-expanded', 'true');
-                content.classList.remove('hidden');
-                if (chevron) {
-                    chevron.style.transform = 'rotate(180deg)';
-                }
-            }
-        });
-    });
-
     // Countdown Timer
     const COUNTDOWN_DURATION = 9720; // 2h 42m in seconds
     let timeLeft = COUNTDOWN_DURATION;
@@ -200,3 +164,92 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Custom Language Dropdown
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdownBtn = document.getElementById('language-dropdown-btn');
+    const dropdownMenu = document.getElementById('language-dropdown-menu');
+    const languageCurrent = document.getElementById('language-current');
+    const languageSelector = document.getElementById('language-selector');
+    const languageOptions = document.querySelectorAll('.language-option');
+
+    // Toggle dropdown
+    dropdownBtn?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('hidden');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function() {
+        dropdownMenu?.classList.add('hidden');
+    });
+
+    // Prevent dropdown from closing when clicking inside
+    dropdownMenu?.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+
+    // Handle language selection
+    languageOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const value = this.getAttribute('data-value');
+            const text = this.textContent;
+
+            // Update current display
+            languageCurrent.textContent = text;
+
+            // Update hidden select
+            languageSelector.value = value;
+
+            // Trigger change event for translations
+            languageSelector.dispatchEvent(new Event('change'));
+
+            // Close dropdown
+            dropdownMenu.classList.add('hidden');
+        });
+    });
+});
+
+// Prevent page scroll on currency dropdown (if exists)
+document.addEventListener('DOMContentLoaded', function() {
+    const currencySelector = document.getElementById('currency-selector');
+    if (currencySelector) {
+        let scrollPos = 0;
+        currencySelector.addEventListener('mousedown', function() {
+            scrollPos = window.scrollY;
+        });
+        currencySelector.addEventListener('change', function() {
+            setTimeout(() => window.scrollTo(0, scrollPos), 0);
+        });
+    }
+});
+
+// FAQ accordion functionality
+window.toggleFaq = function(button) {
+    const card = button.parentElement;
+    const answer = card.querySelector('.faq-answer');
+    const icon = button.querySelector('.faq-icon');
+
+    if (!answer || !icon) return;
+
+    const isOpen = !answer.classList.contains('hidden');
+
+    // Close all other FAQs
+    document.querySelectorAll('.faq-card').forEach(otherCard => {
+        if (otherCard !== card) {
+            const otherAnswer = otherCard.querySelector('.faq-answer');
+            const otherIcon = otherCard.querySelector('.faq-icon');
+            if (otherAnswer) otherAnswer.classList.add('hidden');
+            if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+        }
+    });
+
+    // Toggle current FAQ
+    if (isOpen) {
+        answer.classList.add('hidden');
+        icon.style.transform = 'rotate(0deg)';
+    } else {
+        answer.classList.remove('hidden');
+        icon.style.transform = 'rotate(180deg)';
+    }
+};

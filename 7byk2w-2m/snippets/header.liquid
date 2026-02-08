@@ -4,28 +4,30 @@
 							<div class="flex items-center gap-2 sm:gap-3 header-animate">
 								<div class="p-0.5 bg-white/20 rounded-xl backdrop-blur-sm animate-gentle-pulse"><img src="{{ 'img/logo.webp' | asset_url }}" alt="Vinted Tracker" class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg object-cover shadow-md"></div>
 								<div class="hidden sm:block">
-									<span class="text-white font-bold text-lg sm:text-xl tracking-tight">Vinted Tracker</span>
-									<div class="text-white/80 text-xs font-medium">Pro Edition</div>
+									<span class="text-white font-bold text-lg sm:text-xl tracking-tight" data-i18n="header.title">Vinted Tracker</span>
+									<div class="text-white/80 text-xs font-medium" data-i18n="header.edition">Pro Edition</div>
 								</div>
 							</div>
 							<div class="flex items-center gap-2 sm:gap-3">
-								<div class="relative group header-animate">
+								<!-- Custom Language Dropdown -->
+								<div class="relative group header-animate" style="z-index: 100;">
 									<div class="absolute -inset-0.5 bg-white/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition duration-200"></div>
-									<div class="relative flex items-center gap-1 sm:gap-2 bg-white/25 backdrop-blur-md rounded-xl px-1.5 sm:px-2 py-1 border border-white/20 shadow-lg h-8 sm:h-10 md:h-12 overflow-hidden">
+									<div class="relative flex items-center gap-1 sm:gap-2 bg-white/25 backdrop-blur-md rounded-xl px-1.5 sm:px-2 py-1 border border-white/20 shadow-lg">
 										<div class="hidden md:flex items-center gap-1 text-white/90 text-[10px] sm:text-xs font-medium uppercase tracking-wide whitespace-nowrap">
 											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe w-3 h-3 sm:w-3.5 sm:h-3.5">
 												<circle cx="12" cy="12" r="10"></circle>
 												<path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
 												<path d="M2 12h20"></path>
 											</svg>
-											<span>Tongue</span>
+											<span data-i18n="header.language_label">Language</span>
 										</div>
-										<select id="language-selector" class="flex items-center justify-between rounded-md px-1.5 sm:px-2 py-1 pl-1.5 pr-5 w-[71px] sm:w-[99px] md:w-[105px] bg-white hover:bg-white/95 border-0 text-gray-900 font-semibold text-xs sm:text-sm shadow-sm transition-all appearance-none cursor-pointer h-full" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23666%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><path d=%22m6 9 6 6 6-6%22/></svg>'); background-repeat: no-repeat; background-position: right 6px center; background-size: 12px;">
+										<!-- Hidden native select for functionality -->
+										<select id="language-selector" class="sr-only absolute" tabindex="-1">
 											<option value="en">🇬🇧 English</option>
-											<option value="it" selected>🇮🇹 Italian</option>
+											<option value="it">🇮🇹 Italian</option>
 											<option value="fr">🇫🇷 Français</option>
 											<option value="de">🇩🇪 Deutsch</option>
-											<option value="es">🇪🇸 Español</option>
+											<option value="es">🇪🸸 Español</option>
 											<option value="pt">🇵🇹 Português</option>
 											<option value="nl">🇳🇱 Nederlands</option>
 											<option value="pl">🇵🇱 Polski</option>
@@ -40,6 +42,31 @@
 											<option value="fi">🇫🇮 Suomi</option>
 											<option value="da">🇩🇰 Dansk</option>
 										</select>
+										<!-- Custom dropdown button -->
+										<button id="language-dropdown-btn" type="button" class="flex items-center justify-between rounded-md px-1.5 sm:px-2 py-1 pl-1.5 pr-5 w-[85px] sm:w-[115px] md:w-[130px] bg-white hover:bg-white/95 border-0 text-gray-900 font-semibold text-xs sm:text-sm shadow-sm transition-all cursor-pointer h-full" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23666%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><path d=%22m6 9 6 6 6-6%22/></svg>'); background-repeat: no-repeat; background-position: right 6px center; background-size: 12px;">
+											<span id="language-current">🇬🇧 English</span>
+										</button>
+										<!-- Custom dropdown menu -->
+										<div id="language-dropdown-menu" class="hidden absolute top-full right-0 mt-1 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-1 max-h-80 overflow-y-auto">
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="en">🇬🇧 English</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="it">🇮🇹 Italian</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="fr">🇫🇷 Français</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="de">🇩🇪 Deutsch</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="es">🇪🸸 Español</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="pt">🇵🇹 Português</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="nl">🇳🇱 Nederlands</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="pl">🇵🇱 Polski</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="ro">🇷🇴 Română</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="hu">🇭🇺 Magyar</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="sk">🇸🇰 Slovenčina</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="cs">🇨🇿 Čeština</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="sv">🇸🇪 Svenska</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="lt">🇱🇹 Lietuvių</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="el">🇬🇷 Ελληνικά</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="hr">🇭🇷 Hrvatski</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="fi">🇫🇮 Suomi</button>
+											<button type="button" class="language-option w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2" data-value="da">🇩🇰 Dansk</button>
+										</div>
 									</div>
 								</div>
 								<a href="https://vintedtracker.com/auth" class="header-animate relative inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm bg-white hover:bg-white/95 text-purple-600 font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 border border-white/50 h-8 sm:h-10 px-3 sm:px-6 overflow-hidden" style="animation-delay: 0.2s">
@@ -49,7 +76,7 @@
 										<polyline points="10 17 15 12 10 7"></polyline>
 										<line x1="15" x2="3" y1="12" y2="12"></line>
 									</svg>
-									<span class="hidden sm:inline">Sign in</span>
+									<span class="hidden sm:inline" data-i18n="header.sign_in">Sign in</span>
 								</a>
 							</div>
 						</div>
