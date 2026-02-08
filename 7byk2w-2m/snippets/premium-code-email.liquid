@@ -1,0 +1,46 @@
+{# Premium Bundle Registration Code for Email Template
+   Use this snippet in Shopify email notification templates
+
+   Usage in Order Confirmation email:
+   {% render 'premium-code-email' %}
+
+#}
+
+{% assign SHOPIFY_CODE_SECRET = 'a3f8b2c1d4e5f6789012345678901234567890abcdef1234567890abcdef12' %}
+{% assign has_premium_bundle = false %}
+{% assign premium_code = '' %}
+{% assign registration_url = '' %}
+
+{% for line_item in line_items %}
+  {% assign product_title_downcase = line_item.title | downcase %}
+  {% if product_title_downcase contains 'premium' %}
+    {% assign has_premium_bundle = true %}
+    {% assign order_number = order_number %}
+    {% assign tier_code = 'P' %}
+    {% assign data_to_sign = tier_code | append: '-' | append: order_number %}
+    {% assign checksum = data_to_sign | hmac_sha256: SHOPIFY_CODE_SECRET | slice: 0, 8 | upcase %}
+    {% assign premium_code = 'VT-' | append: tier_code | append: '-' | append: order_number | append: '-' | append: checksum %}
+    {% assign registration_url = 'https://vintedtracker.com/register-with-code?code=' | append: premium_code %}
+  {% endif %}
+{% endfor %}
+
+{# Only show if Premium Bundle is in the order #}
+{% if has_premium_bundle %}
+
+  ======================================================
+     🎉 PREMIUM BUNDLE - ACTIVATE YOUR ACCOUNT
+  ======================================================
+
+  Thank you for purchasing the Premium Bundle! Use your
+  registration code below to activate your Vinted Tracker
+  Pro account.
+
+  Your Registration Code: {{ premium_code }}
+
+  Activate your account: {{ registration_url }}
+
+  💡 Save this code for future reference!
+
+  ======================================================
+
+{% endif %}

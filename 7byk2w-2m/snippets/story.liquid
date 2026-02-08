@@ -9,7 +9,7 @@
 						</div>
 						<div class="max-w-2xl mx-auto mb-20" >
 							<div class="relative">
-								<img src="{{ 'img/my-story.webp' | asset_url }}" alt="My Story" class="rounded-3xl shadow-[0_40px_80px_-40px_rgba(124,58,237,0.6)] dark:shadow-[0_40px_80px_-40px_rgba(0,0,0,0.8)] ring-1 ring-slate-200/50 dark:ring-white/10 w-full">
+								<img loading="lazy" src="{{ 'img/my-story.webp' | asset_url }}" alt="My Story" class="rounded-3xl shadow-[0_40px_80px_-40px_rgba(124,58,237,0.6)] dark:shadow-[0_40px_80px_-40px_rgba(0,0,0,0.8)] ring-1 ring-slate-200/50 dark:ring-white/10 w-full">
 								<div class="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-br from-rose-400 to-pink-600 rounded-full blur-2xl opacity-60" ></div>
 								<div class="absolute -top-6 -left-6 w-32 h-32 bg-gradient-to-br from-purple-400 to-indigo-600 rounded-full blur-2xl opacity-60" ></div>
 							</div>
@@ -74,8 +74,8 @@
 											</svg>
 										</div>
 										<div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 lg:p-10 border border-white/20">
-											<h3 class="text-2xl lg:text-3xl font-bold text-white mb-4" data-i18n="story.step3_heading">What is the Mindful Shopping Method?</h3>
-											<p class="text-lg lg:text-xl leading-[1.8] text-white font-medium" data-i18n="story.step3_text">The Mindful Shopping Method is a simple, practical, and comprehensive approach to learning how to shop mindfully, get rid of the unnecessary, and get a financial return on what you no longer need. It helps you better manage your budget, make more sustainable choices, and experience shopping with greater ease and peace of mind. Along with the method, you'll also find a practical guide to selling on Vinted, built on two fundamental pillars: Sales strategies that work – Turn what you don't use into a real source of income, saving time and effort. Security and well-being – Sell without stress, avoid scams and unpleasant situations, and always put your peace of mind first.</p>
+											<p class="text-lg lg:text-xl leading-[1.8] text-white font-medium mb-4" data-i18n="story.step3_heading">What is the Mindful Shopping Method?</p>
+											<p class="text-base lg:text-lg leading-[1.7] text-white/90" data-i18n="story.step3_text">The Mindful Shopping Method is a simple, practical, and comprehensive approach to learning how to shop mindfully, get rid of the unnecessary, and get a financial return on what you no longer need. It helps you better manage your budget, make more sustainable choices, and experience shopping with greater ease and peace of mind. Along with the method, you'll also find a practical guide to selling on Vinted, built on two fundamental pillars: Sales strategies that work – Turn what you don't use into a real source of income, saving time and effort. Security and well-being – Sell without stress, avoid scams and unpleasant situations, and always put your peace of mind first.</p>
 										</div>
 									</div>
 								</div>
@@ -100,14 +100,14 @@
 											</svg>
 										</div>
 										<p class="text-lg lg:text-xl leading-[1.8] text-slate-700 dark:text-slate-300" data-i18n="story.step4_text">I've already helped thousands of women revolutionize their shopping habits and become successful online sellers. Now I can't wait to accompany you on a journey that will transform your relationship with shopping, your home, and your finances—in a simple, sustainable way, without stress or sacrifices. Give yourself a gift that lasts. Invest in yourself, learn to manage your spending, and free up space for what really matters. Start your journey with the Mindful Shopping Method!</p>
+										<button onclick="document.getElementById('pricing-early').scrollIntoView({behavior: 'smooth'})" class="mt-8 ml-0 sm:ml-10 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer group">
+											<span class="text-sm uppercase tracking-wide" data-i18n="story.cta_button">Start your journey</span>
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-5 h-5 group-hover:translate-x-1 transition-transform" >
+												<path d="M5 12h14"></path>
+												<path d="m12 5 7 7-7 7"></path>
+											</svg>
+										</button>
 									</div>
-									<button onclick="document.getElementById('pricing-early').scrollIntoView({behavior: 'smooth'})" class="mt-8 ml-0 sm:ml-10 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer group">
-										<span class="text-sm uppercase tracking-wide" data-i18n="story.cta_button">Start your journey</span>
-										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-5 h-5 group-hover:translate-x-1 transition-transform" >
-											<path d="M5 12h14"></path>
-											<path d="m12 5 7 7-7 7"></path>
-										</svg>
-									</button>
 								</div>
 							</div>
 						</div>
