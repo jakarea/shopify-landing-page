@@ -5903,26 +5903,20 @@ window.TRANSLATIONS = {
  * Initialize client-side translations
  */
 function initTranslations() {
-  console.log('[Translations] Initializing...');
-
   // Get saved language from localStorage or detect from browser
   let savedLang = localStorage.getItem('selectedLanguage');
-  console.log('[Translations] Language from localStorage:', savedLang);
 
   if (!savedLang) {
     // Detect from browser language
     const browserLang = navigator.language || navigator.userLanguage || 'en';
     savedLang = browserLang.split('-')[0]; // Get 'en' from 'en-US'
-    console.log('[Translations] Browser language detected:', browserLang, '-> using:', savedLang);
 
     // Only use detected language if it's supported
     if (!window.TRANSLATIONS[savedLang]) {
-      console.log('[Translations] Language', savedLang, 'not supported, falling back to en');
       savedLang = 'en';
     }
   }
 
-  console.log('[Translations] Applying translations for language:', savedLang);
   // Apply translations
   applyTranslations(savedLang);
 
@@ -5930,9 +5924,6 @@ function initTranslations() {
   const selector = document.getElementById('language-selector');
   if (selector) {
     selector.value = savedLang;
-    console.log('[Translations] Dropdown value set to:', savedLang);
-  } else {
-    console.log('[Translations] WARNING: language-selector not found!');
   }
 }
 
@@ -5940,14 +5931,7 @@ function initTranslations() {
  * Apply translations to all elements with data-i18n attribute
  */
 function applyTranslations(lang) {
-  console.log('[Translations] applyTranslations called with lang:', lang);
-
   const translations = window.TRANSLATIONS[lang] || window.TRANSLATIONS.en;
-  console.log('[Translations] Available languages:', Object.keys(window.TRANSLATIONS));
-  console.log('[Translations] Using translations for:', lang, 'fallback to en?', !window.TRANSLATIONS[lang]);
-
-  let translatedCount = 0;
-  let missingCount = 0;
 
   // Update all elements with data-i18n attribute
   document.querySelectorAll('[data-i18n]').forEach(element => {
@@ -5961,14 +5945,8 @@ function applyTranslations(lang) {
 
     if (value !== undefined) {
       element.textContent = value;
-      translatedCount++;
-    } else {
-      missingCount++;
-      console.log('[Translations] Missing translation for key:', key);
     }
   });
-
-  console.log('[Translations] Translated:', translatedCount, 'elements. Missing:', missingCount, 'keys.');
 
   // Update HTML lang attribute
   document.documentElement.lang = lang;
@@ -5978,7 +5956,6 @@ function applyTranslations(lang) {
  * Switch language and save preference
  */
 function switchLanguage(lang) {
-  console.log('[Translations] switchLanguage called with:', lang);
   // Save to localStorage
   localStorage.setItem('selectedLanguage', lang);
 

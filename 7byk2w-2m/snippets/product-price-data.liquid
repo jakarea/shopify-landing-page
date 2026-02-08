@@ -249,19 +249,6 @@ function initCurrency(countryCode) {
     const basicPriceFormatted = formatPrice(basicPriceConverted, detectedCurrency);
     const premiumPriceFormatted = formatPrice(premiumPriceConverted, detectedCurrency);
 
-    // Console output
-    console.log('=== CURRENCY DETECTION ===');
-    console.log('Location:', countryName + ' (' + countryCode + ')');
-    console.log('Currency:', detectedCurrency);
-    console.log('Currency Symbol:', currencySymbol);
-    console.log('Original Prices (EUR):');
-    console.log('  - Basic Bundle: €' + basicPriceEur);
-    console.log('  - Premium Bundle: €' + premiumPriceEur);
-    console.log('Converted Prices (' + detectedCurrency + '):');
-    console.log('  - Basic Bundle: ' + basicPriceFormatted);
-    console.log('  - Premium Bundle: ' + premiumPriceFormatted);
-    console.log('======================');
-
     // Update flag in hero
     const detectedFlagEl = document.querySelector('.detected-flag');
     if (detectedFlagEl) {
