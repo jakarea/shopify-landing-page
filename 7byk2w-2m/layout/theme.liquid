@@ -7,17 +7,20 @@
   <meta name="description" content="{{ page_description | default: 'Vinted Tracker Pro - Sell Smart on Vinted. Track inventory, analytics, and profits with ease.' }}">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="{{ 'favicon.png' | asset_url }}">
+  <link rel="icon" type="image/png" href="{{ 'img/favicon.png' | asset_url }}">
 
-  <!-- Google Fonts -->
+  <!-- Preconnect to external domains -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+
+  <!-- Google Fonts - display=swap for instant rendering -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com" defer></script>
   <script>
-    tailwind.config = {
+    window.tailwindConfig = {
       darkMode: 'class',
       theme: {
         extend: {
@@ -33,17 +36,43 @@
   <!-- Theme CSS -->
   {{ 'application.css' | asset_url | stylesheet_tag }}
 
+  <!-- Skip to main content link for accessibility -->
+  <style>
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+    .sr-only:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      padding: inherit;
+      margin: inherit;
+      overflow: visible;
+      clip: auto;
+      white-space: normal;
+    }
+  </style>
+
   {{ content_for_header }}
 </head>
 <body>
-  <div class="flex flex-col min-h-screen">
+  <a href="#main-content" class="sr-only">Skip to main content</a>
+  <div id="main-content" class="flex flex-col min-h-screen">
     {{ content_for_layout }}
   </div>
 
-  <!-- Translations JS - must load before application.js -->
-  {{ 'translations.js' | asset_url | script_tag }}
+  <!-- Translations JS - deferred for performance -->
+  {{ 'translations.js' | asset_url | script_tag | default: '' }}
 
-  <!-- Theme JS - loaded after content for proper DOM access -->
-  {{ 'application.js' | asset_url | script_tag }}
+  <!-- Theme JS - deferred for performance -->
+  {{ 'application.js' | asset_url | script_tag | default: '' }}
 </body>
 </html>
