@@ -19,18 +19,18 @@
       </div>
     </div>
     <div class="flex-1">
-      <h3 class="text-xl font-bold text-gray-900 mb-2">Your Digital Downloads Are Ready!</h3>
-      <p class="text-gray-600 mb-4">Your files are available for download immediately. A download link has also been sent to your email.</p>
+      <h3 class="text-xl font-bold text-gray-900 mb-2" data-i18n="digitalDownloads.heading">Your Digital Downloads Are Ready!</h3>
+      <p class="text-gray-600 mb-4" data-i18n="digitalDownloads.subheading">Your files are available for download immediately. A download link has also been sent to your email.</p>
 
       {# Download links will be injected here by the Digital Downloads app #}
       <div class="digital-downloads-download-list" data-order-id="{{ order.id }}">
-        <p class="text-sm text-gray-500 italic">Loading download links...</p>
+        <p class="text-sm text-gray-500 italic" data-i18n="digitalDownloads.loading">Loading download links...</p>
       </div>
 
       {# Fallback link if app doesn't inject #}
       <noscript>
         <div class="mt-4 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
-          <p class="text-sm text-yellow-800">Please enable JavaScript to see your download links, or check your email for the download link.</p>
+          <p class="text-sm text-yellow-800" data-i18n="digitalDownloads.javascript_warning">Please enable JavaScript to see your download links, or check your email for the download link.</p>
         </div>
       </noscript>
     </div>
