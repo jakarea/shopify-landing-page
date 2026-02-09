@@ -31,23 +31,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Complete Index toggle functionality
+    // Complete Index toggle functionality with smooth slide animation
     window.toggleToc = function(tocId, button) {
         const tocContent = document.getElementById(tocId);
         const chevron = button.querySelector('.toc-chevron');
 
-        if (tocContent.hidden) {
-            // Expand
-            tocContent.hidden = false;
-            button.setAttribute('aria-expanded', 'true');
-            button.setAttribute('data-state', 'open');
-            chevron.style.transform = 'rotate(180deg)';
-        } else {
+        if (tocContent.classList.contains('toc-expanded')) {
             // Collapse
-            tocContent.hidden = true;
+            tocContent.style.maxHeight = '0px';
+            tocContent.style.opacity = '0';
+            tocContent.style.marginTop = '0px';
+            tocContent.classList.remove('toc-expanded');
             button.setAttribute('aria-expanded', 'false');
             button.setAttribute('data-state', 'closed');
             chevron.style.transform = 'rotate(0deg)';
+        } else {
+            // Expand
+            tocContent.style.maxHeight = tocContent.scrollHeight + 'px';
+            tocContent.style.opacity = '1';
+            tocContent.style.marginTop = '0.75rem';
+            tocContent.classList.add('toc-expanded');
+            button.setAttribute('aria-expanded', 'true');
+            button.setAttribute('data-state', 'open');
+            chevron.style.transform = 'rotate(180deg)';
         }
     };
 
