@@ -400,6 +400,19 @@ window.TRANSLATIONS = {
       edition: "Pro Edition",
       language_label: "Language",
       sign_in: "Sign in"
+    },
+    cart: {
+      title: "Your Cart",
+      remove: "Remove",
+      note_label: "Add a note to your order",
+      note_placeholder: "Special instructions for your order...",
+      subtotal: "Subtotal",
+      shipping_note: "Shipping & taxes calculated at checkout",
+      checkout: "Checkout",
+      continue_shopping: "Continue Shopping",
+      empty_title: "Your cart is empty",
+      empty_message: "Looks like you haven't added anything to your cart yet.",
+      start_shopping: "Start Shopping"
     }
   },
   it: {
@@ -803,6 +816,19 @@ window.TRANSLATIONS = {
     edition: "Edizione Pro",
     language_label: "Lingua",
     sign_in: "Accedi"
+  },
+  cart: {
+    title: "Il tuo carrello",
+    remove: "Rimuovi",
+    note_label: "Aggiungi una nota al tuo ordine",
+    note_placeholder: "Istruzioni speciali per il tuo ordine...",
+    subtotal: "Subtotale",
+    shipping_note: "Spedizione e tasse calcolate al checkout",
+    checkout: "Procedi al checkout",
+    continue_shopping: "Continua lo shopping",
+    empty_title: "Il tuo carrello è vuoto",
+    empty_message: "Sembra che tu non abbia ancora aggiunto nulla al carrello.",
+    start_shopping: "Inizia lo shopping"
   }
   },
 
@@ -1607,6 +1633,19 @@ window.TRANSLATIONS = {
       edition: "Pro-Edition",
       language_label: "Sprache",
       sign_in: "Anmelden"
+    },
+    cart: {
+      title: "Ihr Warenkorb",
+      remove: "Entfernen",
+      note_label: "Eine Anmerkung zu Ihrer Bestellung hinzufügen",
+      note_placeholder: "Besondere Anweisungen für Ihre Bestellung...",
+      subtotal: "Zwischensumme",
+      shipping_note: "Versand und Steuern werden an der Kasse berechnet",
+      checkout: "Zur Kasse",
+      continue_shopping: "Weiter einkaufen",
+      empty_title: "Ihr Warenkorb ist leer",
+      empty_message: "Sie haben anscheinend noch nichts in den Warenkorb gelegt.",
+      start_shopping: "Einkaufen beginnen"
     }
   },
 
@@ -1836,6 +1875,19 @@ window.TRANSLATIONS = {
     "edition": "Edición Pro",
     "language_label": "Idioma",
     "sign_in": "Iniciar sesión"
+  },
+  "cart": {
+    "title": "Tu carrito",
+    "remove": "Eliminar",
+    "note_label": "Añadir una nota a tu pedido",
+    "note_placeholder": "Instrucciones especiales para tu pedido...",
+    "subtotal": "Subtotal",
+    "shipping_note": "Envío e impuestos calculados en el pago",
+    "checkout": "Finalizar compra",
+    "continue_shopping": "Continuar comprando",
+    "empty_title": "Tu carrito está vacío",
+    "empty_message": "Parece que aún no has añadido nada a tu carrito.",
+    "start_shopping": "Empezar a comprar"
   },
   "testimonials": {
     "heading": "Resultados Reales de Mujeres Como Tú",

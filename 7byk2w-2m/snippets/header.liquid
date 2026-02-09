@@ -9,6 +9,21 @@
 								</div>
 							</div>
 							<div class="flex items-center gap-2 sm:gap-3">
+								<!-- Cart Button -->
+								<button
+									type="button"
+									id="cart-drawer-toggle"
+									class="header-animate relative p-2 sm:p-2.5 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-xl border border-white/20 transition-all duration-200"
+									aria-label="Open cart"
+								>
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-cart w-5 h-5 sm:w-6 sm:h-6 text-white">
+										<circle cx="8" cy="21" r="1"></circle>
+										<circle cx="19" cy="21" r="1"></circle>
+										<path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+									</svg>
+									<span id="cart-count" class="absolute -top-1 -right-1 bg-white text-purple-600 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+								</button>
+
 								<!-- Custom Language Dropdown -->
 								<div class="relative group header-animate" style="z-index: 100;">
 									<div class="absolute -inset-0.5 bg-white/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition duration-200"></div>

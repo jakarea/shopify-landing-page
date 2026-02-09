@@ -81,11 +81,234 @@ const countryNames = {
     'AE': 'United Arab Emirates', 'SA': 'Saudi Arabia', 'QA': 'Qatar', 'KW': 'Kuwait'
 };
 
-// Default prices in EUR
-const DEFAULT_PRICES_EUR = {
-    'basic-bundle': { price: 29, original: 54 },
-    'premium-bundle': { price: 59, original: 140 }
+// Map country codes to available languages
+// Falls back to 'en' if language not available
+const countryToLanguage = {
+    'IT': 'it', 'IT': 'it',
+    'FR': 'fr',
+    'DE': 'de',
+    'ES': 'es',
+    'PT': 'pt',
+    'NL': 'nl',
+    'PL': 'pl',
+    'RO': 'ro',
+    'HU': 'hu',
+    'SK': 'sk',
+    'CZ': 'cs',
+    'SE': 'sv',
+    'LT': 'lt',
+    'GR': 'el',
+    'HR': 'hr',
+    'FI': 'fi',
+    'DK': 'da',
+    'GB': 'en',
+    'US': 'en',
+    'IE': 'en',
+    'AT': 'de',
+    'BE': 'nl',
+    'CH': 'de',
+    'LU': 'de',
+    'BG': 'en',
+    'EE': 'en',
+    'LV': 'en',
+    'SI': 'en',
+    'CY': 'en',
+    'MT': 'en'
 };
+
+// Available languages in the header
+const availableLanguages = ['en', 'it', 'fr', 'de', 'es', 'pt', 'nl', 'pl', 'ro', 'hu', 'sk', 'cs', 'sv', 'lt', 'el', 'hr', 'fi', 'da'];
+
+// Get language for country (fallback to 'en' if not available)
+function getLanguageForCountry(countryCode) {
+    const lang = countryToLanguage[countryCode];
+    if (lang && availableLanguages.includes(lang)) {
+        return lang;
+    }
+    return 'en'; // Default to English
+}
+
+// DEBUG: Log Shopify settings first
+console.log('=== SHOPIFY SETTINGS DEBUG ===');
+console.log('Shop Currency:', "{{ shop.currency }}");
+console.log('Cart Currency:', "{{ cart.currency.iso_code }}");
+console.log('Request Country Code:', "{{ request.country_code }}");
+
+// Get products
+{% assign basic_product = all_products['basic-bundle'] %}
+{% assign premium_product = all_products['premium-bundle'] %}
+
+// Check if products exist
+{% if basic_product != blank %}
+console.log('Basic product found: TRUE');
+console.log('Basic product handle:', "{{ basic_product.handle }}");
+console.log('Basic product ID:', "{{ basic_product.id }}");
+{% else %}
+console.log('Basic product found: FALSE');
+{% endif %}
+
+{% if premium_product != blank %}
+console.log('Premium product found: TRUE');
+console.log('Premium product handle:', "{{ premium_product.handle }}");
+console.log('Premium product ID:', "{{ premium_product.id }}");
+{% else %}
+console.log('Premium product found: FALSE');
+{% endif %}
+
+// Store product IDs for fetching
+window.SHOPIFY_PRODUCT_IDS = {
+    {% if basic_product != blank %}
+    'basic-bundle': {{ basic_product.id }},
+    {% endif %}
+    {% if premium_product != blank %}
+    'premium-bundle': {{ premium_product.id }}
+    {% endif %}
+};
+
+console.log('Product IDs for API fetch:', window.SHOPIFY_PRODUCT_IDS);
+
+{% if premium_product != blank %}
+console.log('Premium product found: TRUE');
+console.log('Premium product handle:', "{{ premium_product.handle }}");
+console.log('Premium product price (raw):', {{ premium_product.price }});
+console.log('Premium product price (formatted):', "{{ premium_product.price | money }}");
+{% else %}
+console.log('Premium product found: FALSE');
+{% endif %}
+
+// Get prices from Shopify Admin dynamically via AJAX
+// Prices are fetched from Shopify AJAX API and converted from visitor currency to EUR
+// Then converted back to visitor's currency for display
+
+{% comment %} Get product handles for variant IDs {% endcomment %}
+{% assign basic_product = all_products['basic-bundle'] %}
+{% assign premium_product = all_products['premium-bundle'] %}
+
+{% comment %} Shop currency settings {% endcomment %}
+const SHOP_CURRENCY = "{{ shop.currency }}";
+const CART_CURRENCY = "{{ cart.currency.iso_code }}";
+
+{% comment %} Initialize prices object - will be populated by AJAX fetch {% endcomment %}
+const DEFAULT_PRICES_EUR = {
+    'basic-bundle': {
+        price: 0,
+        original: 0
+    },
+    'premium-bundle': {
+        price: 0,
+        original: 0
+    }
+};
+
+// Get Shopify variant IDs from products
+{% if basic_product != blank and basic_product.variants.first.id != blank %}
+window.SHOPIFY_VARIANT_BASIC = {{ basic_product.variants.first.id }};
+{% else %}
+window.SHOPIFY_VARIANT_BASIC = null;
+{% endif %}
+{% if premium_product != blank and premium_product.variants.first.id != blank %}
+window.SHOPIFY_VARIANT_PREMIUM = {{ premium_product.variants.first.id }};
+{% else %}
+window.SHOPIFY_VARIANT_PREMIUM = null;
+{% endif %}
+
+{% comment %} Zero-decimal currencies that don't use decimal places {% endcomment %}
+const ZERO_DECIMAL_CURRENCIES = ['HUF', 'JPY', 'KRW', 'CLP', 'PYG', 'VND', 'ISK', 'BIF', 'DJF', 'GNF', 'KMF', 'MGA', 'RWF', 'UGX'];
+
+{% comment %} Debug: Currency settings {% endcomment %}
+console.log('=== CURRENCY SETTINGS ===');
+console.log('Shop currency:', SHOP_CURRENCY);
+console.log('Cart currency:', CART_CURRENCY);
+
+{% comment %} Fetch prices AND variant IDs from Shopify Admin {% endcomment %}
+async function fetchPricesFromShopify() {
+    console.log('=== FETCHING PRICES FROM SHOPIFY ADMIN ===');
+    const productHandles = ['basic-bundle', 'premium-bundle'];
+
+    for (const handle of productHandles) {
+        try {
+            const response = await fetch(`/products/${handle}.js`);
+            if (response.ok) {
+                const product = await response.json();
+
+                console.log(`\n--- ${handle} ---`);
+                console.log('Raw price (from API):', product.price);
+                console.log('Cart currency:', CART_CURRENCY);
+
+                if (product.variants && product.variants[0]) {
+                    const variant = product.variants[0];
+
+                    {% comment %} Store variant ID {% endcomment %}
+                    if (handle === 'basic-bundle') {
+                        window.SHOPIFY_VARIANT_BASIC = variant.id;
+                    } else {
+                        window.SHOPIFY_VARIANT_PREMIUM = variant.id;
+                    }
+
+                    {% comment %} Get price and convert to EUR {% endcomment %}
+                    const priceInCartsCurrency = parseInt(variant.price);
+                    const comparePriceInCartsCurrency = variant.compare_at_price ? parseInt(variant.compare_at_price) : 0;
+
+                    console.log('Price in cart currency:', priceInCartsCurrency);
+
+                    {% comment %} Get exchange rate from cart currency to EUR {% endcomment %}
+                    const rateToEur = RATES_TO_EUR[CART_CURRENCY] || 1;
+                    console.log(`Exchange rate: 1 EUR = ${rateToEur} ${CART_CURRENCY}`);
+                    console.log(`Reverse rate: 1 ${CART_CURRENCY} = ${(1/rateToEur).toFixed(6)} EUR`);
+
+                    {% comment %} Check if this is a zero-decimal currency {% endcomment %}
+                    const isZeroDecimal = ZERO_DECIMAL_CURRENCIES.includes(CART_CURRENCY);
+
+                    {% comment %} Convert to EUR {% endcomment %}
+                    let priceEur, originalPriceEur;
+
+                    if (CART_CURRENCY === 'EUR') {
+                        {% comment %} Already in EUR {% endcomment %}
+                        priceEur = isZeroDecimal ? priceInCartsCurrency : priceInCartsCurrency / 100;
+                        originalPriceEur = isZeroDecimal ? comparePriceInCartsCurrency : comparePriceInCartsCurrency / 100;
+                    } else {
+                        {% comment %} Convert from cart currency to EUR {% endcomment %}
+                        if (isZeroDecimal) {
+                            {% comment %} Zero-decimal: HUF, JPY, etc. - price is already in whole units {% endcomment %}
+                            priceEur = Math.round(priceInCartsCurrency / rateToEur);
+                            originalPriceEur = comparePriceInCartsCurrency > 0 ? Math.round(comparePriceInCartsCurrency / rateToEur) : 0;
+                        } else {
+                            {% comment %} Decimal currency: Price from API is in cents, divide by 100 first {% endcomment %}
+                            const priceInDecimal = priceInCartsCurrency / 100;
+                            const comparePriceInDecimal = comparePriceInCartsCurrency > 0 ? comparePriceInCartsCurrency / 100 : 0;
+                            priceEur = Math.round(priceInDecimal / rateToEur);
+                            originalPriceEur = comparePriceInDecimal > 0 ? Math.round(comparePriceInDecimal / rateToEur) : 0;
+                        }
+                    }
+
+                    console.log(`Final EUR price: ${priceEur}`);
+                    console.log(`Original EUR price: ${originalPriceEur}`);
+
+                    {% comment %} Store in DEFAULT_PRICES_EUR {% endcomment %}
+                    DEFAULT_PRICES_EUR[handle] = {
+                        price: priceEur,
+                        original: originalPriceEur
+                    };
+
+                    console.log(`✅ ${handle} updated:`, DEFAULT_PRICES_EUR[handle]);
+                }
+            } else {
+                console.error(`Failed to fetch ${handle}:`, response.status);
+            }
+        } catch (error) {
+            console.error(`Error fetching ${handle}:`, error);
+        }
+    }
+
+    console.log('\n=== FINAL PRICES FROM SHOPIFY ADMIN ===');
+    console.log('DEFAULT_PRICES_EUR:', JSON.stringify(DEFAULT_PRICES_EUR, null, 2));
+
+    {% comment %} Re-render prices on page after fetch completes {% endcomment %}
+    if (window.SHOPIFY_CURRENCY) {
+        console.log('Re-rendering prices with currency:', window.SHOPIFY_CURRENCY);
+        updatePricesWithCurrency(window.SHOPIFY_CURRENCY);
+    }
+}
 
 // Exchange rates relative to EUR
 const RATES_TO_EUR = {
@@ -151,17 +374,25 @@ const CURRENCY_SYMBOLS = {
 function convertPriceFromEur(eurPrice, targetCurrency) {
     if (targetCurrency === 'EUR') return eurPrice;
     const rate = RATES_TO_EUR[targetCurrency] || 1;
-    return Math.round(eurPrice * rate);
+    const converted = Math.round(eurPrice * rate);
+    console.log(`convertPriceFromEur: ${eurPrice} EUR -> ${targetCurrency} (rate: ${rate}) = ${converted}`);
+    return converted;
 }
 
 // Format price with currency symbol
 function formatPrice(amount, currency) {
     const symbol = CURRENCY_SYMBOLS[currency] || currency + ' ';
-    return symbol + Math.round(amount);
+    const formatted = symbol + Math.round(amount);
+    console.log(`formatPrice: ${amount} ${currency} -> "${formatted}"`);
+    return formatted;
 }
 
 // Update all prices on the page
 function updatePricesWithCurrency(currency) {
+    console.log('=== updatePricesWithCurrency called ===');
+    console.log('Target currency:', currency);
+    console.log('Exchange rate for this currency:', RATES_TO_EUR[currency]);
+
     document.querySelectorAll('[data-pricing-section]').forEach(container => {
         ['basic-bundle', 'premium-bundle'].forEach(bundleKey => {
             const priceEl = container.querySelector(`[data-product-pricing="${bundleKey}"] .data-price`);
@@ -171,8 +402,12 @@ function updatePricesWithCurrency(currency) {
             if (!priceEl) return;
 
             const defaults = DEFAULT_PRICES_EUR[bundleKey];
+            console.log(`\n--- ${bundleKey} ---`);
+            console.log('Original EUR price:', defaults.price);
             const convertedPrice = convertPriceFromEur(defaults.price, currency);
             const formattedPrice = formatPrice(convertedPrice, currency) + ' ';
+            console.log('Final formatted price:', formattedPrice);
+
             priceEl.textContent = formattedPrice;
 
             if (originalEl) originalEl.style.display = 'none';
@@ -196,19 +431,13 @@ window.SHOPIFY_CURRENCY_SYMBOL = "{{ cart.currency.symbol }}";
 window.SHOPIFY_SHOP_URL = "{{ request.host }}";
 window.SHOPIFY_BASE_CURRENCY = "{{ shop.currency }}";
 
-// Store exchange rates from Shopify Markets (relative to base currency)
-window.SHOPIFY_EXCHANGE_RATES = {
-    {% for currency in shop.enabled_currencies %}
-    '{{ currency.iso_code }}': {
-        rate: {{ currency.rate | default: 1 }},
-        symbol: "{{ currency.symbol }}"
-    }{% unless forloop.last %},{% endunless %}
-    {% endfor %}
-};
-
 // Detect country and initialize prices
 (async function detectCountryAndInit() {
     let countryCode = "{{ request.country_code }}" || null;
+
+    // First, fetch prices from Shopify Admin
+    console.log('Fetching prices before initializing currency...');
+    await fetchPricesFromShopify();
 
     // If Shopify detected country, use it
     if (countryCode && countryCode !== '' && countryCode !== 'null') {
@@ -231,10 +460,17 @@ window.SHOPIFY_EXCHANGE_RATES = {
 })();
 
 function initCurrency(countryCode) {
+    console.log('\n=== initCurrency called ===');
+    console.log('Detected country code:', countryCode);
+
     const detectedCurrency = countryToCurrency[countryCode] || 'EUR';
     const detectedFlag = countryCodeToFlag[countryCode] || '🌍';
     const countryName = countryNames[countryCode] || countryCode;
     const currencySymbol = CURRENCY_SYMBOLS[detectedCurrency] || detectedCurrency + ' ';
+
+    console.log('Detected currency:', detectedCurrency);
+    console.log('Detected flag:', detectedFlag);
+    console.log('Currency symbol:', currencySymbol);
 
     // Update global variables
     window.SHOPIFY_CURRENCY = detectedCurrency;
@@ -244,10 +480,16 @@ function initCurrency(countryCode) {
     // Calculate converted prices
     const basicPriceEur = DEFAULT_PRICES_EUR['basic-bundle'].price;
     const premiumPriceEur = DEFAULT_PRICES_EUR['premium-bundle'].price;
+    console.log('Basic price (EUR base):', basicPriceEur);
+    console.log('Premium price (EUR base):', premiumPriceEur);
+
     const basicPriceConverted = convertPriceFromEur(basicPriceEur, detectedCurrency);
     const premiumPriceConverted = convertPriceFromEur(premiumPriceEur, detectedCurrency);
     const basicPriceFormatted = formatPrice(basicPriceConverted, detectedCurrency);
     const premiumPriceFormatted = formatPrice(premiumPriceConverted, detectedCurrency);
+
+    console.log('Basic converted & formatted:', basicPriceFormatted);
+    console.log('Premium converted & formatted:', premiumPriceFormatted);
 
     // Update flag in hero
     const detectedFlagEl = document.querySelector('.detected-flag');
@@ -257,5 +499,34 @@ function initCurrency(countryCode) {
 
     // Update prices with detected currency
     updatePricesWithCurrency(detectedCurrency);
+
+    // Auto-select language based on country (fallback to English)
+    const detectedLanguage = getLanguageForCountry(countryCode);
+    console.log('Auto-selecting language:', detectedLanguage, 'for country:', countryCode);
+
+    // Wait for translations.js to load, then switch language
+    const switchLanguageInterval = setInterval(() => {
+        if (typeof switchLanguage === 'function') {
+            clearInterval(switchLanguageInterval);
+            console.log('Calling switchLanguage with:', detectedLanguage);
+            switchLanguage(detectedLanguage);
+
+            // Update the dropdown display
+            const languageCurrent = document.getElementById('language-current');
+            const languageSelector = document.getElementById('language-selector');
+            if (languageCurrent) {
+                const selectedOption = document.querySelector(`.language-option[data-value="${detectedLanguage}"]`);
+                if (selectedOption) {
+                    languageCurrent.textContent = selectedOption.textContent;
+                }
+            }
+            if (languageSelector) {
+                languageSelector.value = detectedLanguage;
+            }
+        }
+    }, 100);
+
+    // Stop trying after 5 seconds
+    setTimeout(() => clearInterval(switchLanguageInterval), 5000);
 }
 </script>

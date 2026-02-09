@@ -127,45 +127,99 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Bundle direct checkout handlers
-    const CHECKOUT_URL = 'https://vinted-tracker.com';
-
-    // Product handles
-    const BUNDLE_PRODUCTS = {
-        'basic-bundle': 'basic-bundle',
-        'premium-bundle': 'premium-bundle'
+    // Bundle direct checkout handlers - using Shopify cart for multi-currency support
+    // Product variant IDs (set these in Shopify or fetch dynamically)
+    const SHOPIFY_VARIANT_IDS = {
+        'basic-bundle': window.SHOPIFY_VARIANT_BASIC || null,
+        'premium-bundle': window.SHOPIFY_VARIANT_PREMIUM || null
     };
 
-    // Handle bundle button clicks - redirect to checkout
+    // Helper: Clear cart
+    async function clearCart() {
+        try {
+            await fetch('/cart/clear.js', { method: 'POST' });
+            console.log('Cart cleared');
+        } catch (error) {
+            console.error('Error clearing cart:', error);
+        }
+    }
+
+    // Helper: Remove specific item from cart
+    async function removeItemFromCart(key) {
+        try {
+            await fetch('/cart/change.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: key, quantity: 0 })
+            });
+            console.log('Item removed:', key);
+        } catch (error) {
+            console.error('Error removing item:', error);
+        }
+    }
+
+    // Helper: Get cart contents
+    async function getCart() {
+        try {
+            const response = await fetch('/cart.js');
+            return await response.json();
+        } catch (error) {
+            console.error('Error getting cart:', error);
+            return { items: [] };
+        }
+    }
+
+    // Handle bundle button clicks - add to Shopify cart and redirect to checkout
     document.querySelectorAll('[data-bundle-handler]').forEach(button => {
         button.addEventListener('click', async function(e) {
             e.preventDefault();
             const bundleType = this.getAttribute('data-bundle-handler');
-            const productHandle = BUNDLE_PRODUCTS[bundleType];
+            const variantId = SHOPIFY_VARIANT_IDS[bundleType];
+
+            console.log('Button clicked:', bundleType, 'Variant ID:', variantId);
 
             // Add loading state
             const originalText = this.innerHTML;
             this.disabled = true;
             this.innerHTML = '<span class="animate-pulse">Loading...</span>';
 
-            if (productHandle) {
+            if (variantId) {
                 try {
-                    // Fetch product to get variant ID
-                    const response = await fetch(`${CHECKOUT_URL}/products/${productHandle}.js`);
-                    const product = await response.json();
+                    // Step 1: Clear entire cart first
+                    console.log('Step 1: Clearing cart...');
+                    const clearResponse = await fetch('/cart/clear.js', { method: 'POST' });
+                    console.log('Cart cleared:', clearResponse.ok);
 
-                    if (product && product.variants && product.variants[0]) {
-                        const variantId = product.variants[0].id;
-                        // Redirect to checkout with item
-                        window.location.href = `${CHECKOUT_URL}/cart/${variantId}:1`;
-                    } else {
-                        // Fallback to product page
-                        window.location.href = `${CHECKOUT_URL}/products/${productHandle}`;
-                    }
+                    // Small delay to ensure cart is cleared
+                    await new Promise(resolve => setTimeout(resolve, 100));
+
+                    // Step 2: Add the new item
+                    console.log('Step 2: Adding item to cart...', variantId);
+                    const addResponse = await fetch('/cart/add.js', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            items: [{ id: variantId, quantity: 1 }]
+                        })
+                    });
+                    console.log('Item added:', addResponse.ok);
+
+                    // Step 3: Redirect to checkout
+                    console.log('Step 3: Redirecting to checkout...');
+                    window.location.href = '/checkout';
                 } catch (error) {
-                    console.error('Error:', error);
-                    window.location.href = `${CHECKOUT_URL}/products/${productHandle}`;
+                    console.error('Error processing checkout:', error);
+                    // Restore button and fallback to product page
+                    this.disabled = false;
+                    this.innerHTML = originalText;
+                    window.location.href = `/products/${bundleType}`;
                 }
+            } else {
+                // Variant ID not set, redirect to product page
+                console.warn('Variant ID not set for:', bundleType);
+                this.disabled = false;
+                this.innerHTML = originalText;
+                window.location.href = `/products/${bundleType}`;
             }
         });
     });
